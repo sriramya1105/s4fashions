@@ -42,7 +42,7 @@ body {
 }
 
 /* ==========================================================================
-   S4 FASHIONS SPLASH SCREEN (COMPONENT-EXTRACTED, RESPONSIVE, ZERO CUTOFFS)
+   S4 FASHIONS COMPLETE ENVIRONMENT (LEAVES, CLOTHES STAND, SHELF, MODELS, CTA)
    ========================================================================== */
 #splash-screen {
     position: fixed;
@@ -59,7 +59,7 @@ body {
     visibility: visible;
     transition: opacity 0.8s ease-in-out, visibility 0.8s ease-in-out;
     overflow: hidden;
-    padding: 16px;
+    padding: 0;
 }
 
 #splash-screen.hidden {
@@ -68,44 +68,66 @@ body {
     pointer-events: none;
 }
 
-.s4-composed-container {
-    max-width: 980px;
+.s4-full-stage {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(circle at center, #ffffff 40%, #fbf5f2 100%);
+    overflow: hidden;
+}
+
+/* Left Clothes Stand & Hanging Shirts */
+.scene-decor.decor-left-rack {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+}
+
+.scene-decor.decor-left-rack img {
+    height: 95%;
+    max-width: 25vw;
+    object-fit: contain;
+    object-position: left center;
+}
+
+/* Right Plant Shelf & Folded Clothes */
+.scene-decor.decor-right-shelf {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+}
+
+.scene-decor.decor-right-shelf img {
+    height: 95%;
+    max-width: 25vw;
+    object-fit: contain;
+    object-position: right center;
+}
+
+/* Center Composition (Header, Models, CTA, Trust Badges) */
+.s4-center-composition {
+    max-width: 720px;
     width: 100%;
-    max-height: 94vh;
-    background: #ffffff;
-    border-radius: 20px;
-    box-shadow: 0 12px 36px rgba(110, 26, 79, 0.08);
-    border: 1px solid #f2e3ee;
-    padding: 24px 32px 20px 32px;
+    height: 94%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    position: relative;
-    overflow: hidden;
-}
-
-/* Corner Purple Decorative Drapes */
-.s4-corner-wave {
-    position: absolute;
-    width: 180px;
-    height: 180px;
-    pointer-events: none;
-    background: radial-gradient(circle at 100% 0%, #aa3688 0%, #7d1c5d 40%, transparent 70%);
-    opacity: 0.25;
-}
-
-.s4-corner-wave.top-right {
-    top: 0;
-    right: 0;
-    border-radius: 0 20px 0 100%;
-}
-
-.s4-corner-wave.bottom-left {
-    bottom: 0;
-    left: 0;
-    border-radius: 0 100% 0 20px;
-    background: radial-gradient(circle at 0% 100%, #aa3688 0%, #7d1c5d 40%, transparent 70%);
+    z-index: 5;
+    padding: 10px 0;
 }
 
 /* Brand Header */
@@ -114,12 +136,11 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    z-index: 2;
 }
 
 .s4-hanger-logo {
-    width: 48px;
-    height: 24px;
+    width: 46px;
+    height: 22px;
     margin-bottom: 2px;
 }
 
@@ -147,7 +168,7 @@ body {
 }
 
 .s4-dash {
-    width: 30px;
+    width: 32px;
     height: 1px;
     background: #bfa1b5;
 }
@@ -160,30 +181,28 @@ body {
     text-transform: uppercase;
 }
 
-/* Center Models Artwork */
+/* Center Models */
 .s4-models-stage {
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 10px 0;
-    z-index: 2;
+    flex: 1;
+    margin: 6px 0;
 }
 
 .s4-models-figure {
-    max-width: 680px;
-    width: 90%;
-    max-height: 320px;
+    max-width: 650px;
+    width: 95%;
+    max-height: 52vh;
     object-fit: contain;
-    border-radius: 12px;
     display: block;
-    filter: drop-shadow(0 6px 14px rgba(110, 26, 79, 0.08));
+    filter: drop-shadow(0 6px 16px rgba(110, 26, 79, 0.08));
 }
 
-/* Central Shop Now CTA */
+/* Single 'Shop Now' CTA Button */
 .s4-cta-wrapper {
-    z-index: 2;
-    margin: 6px 0 14px 0;
+    margin: 6px 0 12px 0;
 }
 
 .s4-shop-cta-btn {
@@ -191,8 +210,8 @@ body {
     color: #ffffff;
     font-size: 15px;
     font-weight: 700;
-    padding: 10px 38px;
-    border-radius: 26px;
+    padding: 11px 40px;
+    border-radius: 28px;
     border: none;
     cursor: pointer;
     box-shadow: 0 4px 16px rgba(110, 26, 79, 0.35);
@@ -203,22 +222,21 @@ body {
 .s4-shop-cta-btn:hover {
     background: #8e2366;
     transform: scale(1.05);
-    box-shadow: 0 6px 20px rgba(110, 26, 79, 0.55);
+    box-shadow: 0 6px 22px rgba(110, 26, 79, 0.55);
 }
 
 /* Trust Highlights Footer */
 .s4-trust-row {
     display: flex;
     justify-content: center;
-    gap: 24px;
+    gap: 22px;
     flex-wrap: wrap;
     font-size: 12px;
     font-weight: 600;
     color: #555555;
     padding-top: 10px;
-    border-top: 1px solid #f2e3ee;
+    border-top: 1px solid #f0e1ec;
     width: 100%;
-    z-index: 2;
 }
 
 .s4-trust-col {
