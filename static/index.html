@@ -3,258 +3,230 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ThreadCraft Apparel - Men, Women & Kids Wear</title>
+    <title>Online Shopping Site for Fashion - Men, Women & Kids Wear | ThreadCraft</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 
-    <!-- 1. LUXURY SPLASH SCREEN (Fades automatically on launch) -->
+    <!-- 1. MEESHO SPLASH SCREEN -->
     <div id="splash-screen">
-        <div class="splash-brand">ThreadCraft</div>
-        <div class="splash-tagline">Ethnic & Modern Apparel Curated for You</div>
-        <div class="splash-spinner"></div>
+        <div class="meesho-splash-logo">meesho</div>
+        <div class="meesho-splash-sub">Lowest Prices · Best Quality Fashion</div>
+        <div class="meesho-spinner"></div>
     </div>
 
-    <!-- 2. MAIN HEADER (FLIPKART STYLE) -->
-    <header class="main-header">
-        <div class="header-container">
-            <a href="/" class="logo-wrapper">
-                <span class="logo-text">ThreadCraft</span>
-                <span class="logo-subtext">Explore <span>Fashion</span></span>
+    <!-- 2. TOP HEADER (MEESHO REPLICA) -->
+    <header class="meesho-top-header">
+        <div class="header-inner">
+            <!-- Brand Logo -->
+            <a href="/" class="brand-meesho">
+                <span class="brand-title">meesho</span>
+                <span class="brand-subtitle">Fashion Mart</span>
             </a>
 
-            <!-- SMART SEARCH BAR -->
-            <div class="search-container">
-                <input type="text" id="store-search-input" class="search-input" placeholder="Search for Kurtas, Kurtis, Shirts, Tops, Jeans, Frocks, Sarees...">
+            <!-- Search Bar -->
+            <div class="meesho-search-wrapper">
+                <svg class="search-icon-svg" viewBox="0 0 24 24">
+                    <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                </svg>
+                <input type="text" id="store-search-input" class="search-field" placeholder="Try Saree, Kurti, Mens Shirt, Kids Frock...">
             </div>
 
-            <!-- HEADER NAV LINKS -->
-            <div class="header-nav">
-                <div id="header-auth-slot"></div>
-                <a href="/orders.html" class="header-nav-link">Orders</a>
-                <a href="/cart.html" class="header-nav-link cart-link">
-                    Cart <span class="cart-badge-count" id="cart-count-badge">0</span>
+            <!-- Right Actions -->
+            <div class="header-right-actions">
+                <a href="/docs" target="_blank" class="action-column-link" style="color: var(--meesho-pink);">
+                    <svg class="action-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    <span>API Docs</span>
                 </a>
-                <a href="/docs" target="_blank" class="header-nav-link" style="color: var(--primary-yellow); font-size: 13px;" title="Interactive API Docs">
-                    API Docs
+
+                <div id="header-auth-slot"></div>
+
+                <a href="/orders.html" class="action-column-link">
+                    <svg class="action-icon" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                    <span>My Orders</span>
+                </a>
+
+                <a href="/cart.html" class="action-column-link" style="position: relative;">
+                    <svg class="action-icon" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                    <span>Cart</span>
+                    <span class="header-cart-badge" id="cart-count-badge">0</span>
                 </a>
             </div>
         </div>
     </header>
 
-    <!-- 3. CIRCULAR CATEGORY BUBBLES BAR (FLIPKART / MEESHO STYLE) -->
-    <section class="category-strip">
-        <div class="category-strip-container">
-            <div class="cat-item active" data-category="">
-                <div class="cat-img-wrapper">
-                    <img src="https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=200" alt="All Collections">
-                </div>
-                <span class="cat-title">All Fashion</span>
-            </div>
+    <!-- 3. MEESHO CATEGORY MEGA NAVBAR -->
+    <nav class="meesho-category-bar">
+        <div class="cat-nav-inner">
+            <span class="cat-nav-tab active" data-category="" data-sub="">All Categories</span>
+            <span class="cat-nav-tab" data-category="women" data-sub="Ethnic">Women Ethnic</span>
+            <span class="cat-nav-tab" data-category="women" data-sub="Kurtis">Kurtis & Kurtas</span>
+            <span class="cat-nav-tab" data-category="women" data-sub="Short Tops">Women Western</span>
+            <span class="cat-nav-tab" data-category="men" data-sub="Traditional">Men Ethnic</span>
+            <span class="cat-nav-tab" data-category="men" data-sub="Modern">Men Western</span>
+            <span class="cat-nav-tab" data-category="kids" data-sub="">Kids Wear</span>
+        </div>
+    </nav>
 
-            <div class="cat-item" data-category="men" data-sub="Traditional">
-                <div class="cat-img-wrapper">
-                    <img src="https://images.unsplash.com/photo-1597983073493-88cd35cf93b0?w=200" alt="Men's Traditional">
-                </div>
-                <span class="cat-title">Men's Ethnic</span>
-            </div>
+    <!-- 4. VALUE PROPOSITION STRIP -->
+    <div class="value-strip">
+        <div class="value-strip-inner">
+            <div class="value-item"><span class="value-dot"></span> Lowest Price Guaranteed</div>
+            <div class="value-item"><span class="value-dot"></span> Free Delivery Across India</div>
+            <div class="value-item"><span class="value-dot"></span> Cash on Delivery Available</div>
+            <div class="value-item"><span class="value-dot"></span> 7 Days Easy Returns</div>
+        </div>
+    </div>
 
-            <div class="cat-item" data-category="men" data-sub="Modern">
-                <div class="cat-img-wrapper">
-                    <img src="https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=200" alt="Men's Modern">
+    <!-- 5. PROMOTIONAL HERO BANNER -->
+    <section class="meesho-hero-container">
+        <div class="meesho-banner-box">
+            <div class="meesho-banner-slide active" style="background-image: linear-gradient(to right, rgba(43, 11, 35, 0.9) 35%, rgba(43, 11, 35, 0.2)), url('https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1400');">
+                <div class="banner-glass-card">
+                    <span class="banner-pill">Lowest Prices Best Quality</span>
+                    <h1 class="banner-heading">Top Fashion Styles Starting at ₹199</h1>
+                    <p class="banner-text">Discover authentic Kurtis, Silk Sarees, Mens Formal Shirts, and Kids Festive wear at direct supplier prices.</p>
+                    <button class="banner-action-btn" onclick="filterBySub('Kurtis')">Shop Now</button>
                 </div>
-                <span class="cat-title">Men's Modern</span>
-            </div>
-
-            <div class="cat-item" data-category="women" data-sub="Ethnic">
-                <div class="cat-img-wrapper">
-                    <img src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=200" alt="Women's Sarees & Ethnic">
-                </div>
-                <span class="cat-title">Sarees & Ethnic</span>
-            </div>
-
-            <div class="cat-item" data-category="women" data-sub="Kurtis">
-                <div class="cat-img-wrapper">
-                    <img src="https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=200" alt="Kurtis & Kurtas">
-                </div>
-                <span class="cat-title">Kurtis & Kurtas</span>
-            </div>
-
-            <div class="cat-item" data-category="women" data-sub="Short Tops">
-                <div class="cat-img-wrapper">
-                    <img src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=200" alt="Women's Short Tops">
-                </div>
-                <span class="cat-title">Short Tops</span>
-            </div>
-
-            <div class="cat-item" data-category="kids" data-sub="">
-                <div class="cat-img-wrapper">
-                    <img src="https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?w=200" alt="Kids Wear">
-                </div>
-                <span class="cat-title">Kids' Wear</span>
             </div>
         </div>
     </section>
 
-    <!-- 4. HERO PROMOTIONAL BANNER SLIDER -->
-    <section class="hero-slider-section">
-        <div class="hero-banner-container" id="hero-slider">
-            <!-- Slide 1 -->
-            <div class="banner-slide active" style="background-image: linear-gradient(to right, rgba(0,0,0,0.85) 30%, rgba(0,0,0,0.2)), url('https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1400');">
-                <div class="banner-content">
-                    <div class="banner-tag">Grand Festive Showcase</div>
-                    <h2 class="banner-title">Pure Silk Sarees & Designer Kurtas</h2>
-                    <p class="banner-desc">Handpicked handloom collections from FabIndia, Manyavar, and Biba with flat 40% discount.</p>
-                    <button class="banner-btn" onclick="filterBySub('Traditional')">EXPLORE COLLECTION</button>
-                </div>
-            </div>
-
-            <!-- Slide 2 -->
-            <div class="banner-slide" style="background-image: linear-gradient(to right, rgba(0,0,0,0.85) 30%, rgba(0,0,0,0.2)), url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1400');">
-                <div class="banner-content">
-                    <div class="banner-tag">Modern Summer Drop</div>
-                    <h2 class="banner-title">Casual Shirts, Short Tops & Stretch Denim</h2>
-                    <p class="banner-desc">Comfort styles from Levi's, Peter England, and Zara. Free delivery on all orders.</p>
-                    <button class="banner-btn" onclick="filterBySub('Modern')">SHOP MODERN</button>
-                </div>
-            </div>
-
-            <button class="slider-btn prev" onclick="changeSlide(-1)">&lt;</button>
-            <button class="slider-btn next" onclick="changeSlide(1)">&gt;</button>
-        </div>
-    </section>
-
-    <!-- 5. MAIN STOREFRONT CONTENT (2-COLUMN STORE LAYOUT) -->
-    <main class="store-layout">
+    <!-- 6. MAIN 2-COLUMN STORE CATALOG -->
+    <main class="store-wrapper">
         
-        <!-- SIDEBAR FILTERS (FLIPKART STYLE) -->
-        <aside class="filter-panel">
-            <div class="filter-heading-row">
-                <span class="filter-heading-text">Filters</span>
-                <span class="filter-clear-link" onclick="resetAllFilters()">CLEAR ALL</span>
+        <!-- SIDEBAR FILTERS (MEESHO STYLE) -->
+        <aside class="meesho-sidebar">
+            <div class="sidebar-header">
+                <span class="sidebar-title">Filters</span>
+                <button class="clear-btn" onclick="resetAllFilters()">RESET</button>
             </div>
 
-            <!-- Subcategory Filter -->
-            <div class="filter-section">
-                <div class="filter-section-title">Subcategory</div>
-                <select id="filter-subcategory" class="filter-select" onchange="applyFilters()">
-                    <option value="">All Apparel Subcategories</option>
-                    <option value="Traditional">Traditional / Festive</option>
-                    <option value="Modern">Modern / Western</option>
-                    <option value="Ethnic">Ethnic Sarees & Sets</option>
+            <!-- Subcategory -->
+            <div class="filter-block">
+                <div class="block-title">Subcategory</div>
+                <select id="filter-subcategory" class="filter-dropdown" onchange="applyFilters()">
+                    <option value="">All Apparel</option>
+                    <option value="Traditional">Men's Traditional / Kurta</option>
+                    <option value="Modern">Men's Modern / Shirts & Jeans</option>
+                    <option value="Ethnic">Women's Sarees & Ethnic</option>
                     <option value="Kurtis">Kurtis & Kurtas</option>
-                    <option value="Short Tops">Short Tops & Tees</option>
-                    <option value="Boys Ethnic">Boys Ethnic</option>
-                    <option value="Girls Western">Girls Frocks & Sets</option>
+                    <option value="Short Tops">Women's Short Tops & Tees</option>
+                    <option value="Western">Women's Western Dresses</option>
+                    <option value="Boys Ethnic">Kids' Boys Ethnic</option>
+                    <option value="Girls Western">Kids' Girls Frocks</option>
                     <option value="Infants & Toddlers">Infants & Toddlers</option>
                 </select>
             </div>
 
-            <!-- Brand Filter -->
-            <div class="filter-section">
-                <div class="filter-section-title">Brand</div>
-                <div class="filter-option"><input type="checkbox" name="brand_cb" value="FabIndia" onchange="applyFilters()"> FabIndia</div>
-                <div class="filter-option"><input type="checkbox" name="brand_cb" value="Manyavar" onchange="applyFilters()"> Manyavar</div>
-                <div class="filter-option"><input type="checkbox" name="brand_cb" value="Peter England" onchange="applyFilters()"> Peter England</div>
-                <div class="filter-option"><input type="checkbox" name="brand_cb" value="Levi's" onchange="applyFilters()"> Levi's</div>
-                <div class="filter-option"><input type="checkbox" name="brand_cb" value="Biba" onchange="applyFilters()"> Biba</div>
-                <div class="filter-option"><input type="checkbox" name="brand_cb" value="Zara" onchange="applyFilters()"> Zara</div>
-                <div class="filter-option"><input type="checkbox" name="brand_cb" value="Hopscotch" onchange="applyFilters()"> Hopscotch</div>
+            <!-- Brand Selection -->
+            <div class="filter-block">
+                <div class="block-title">Brand</div>
+                <label class="filter-item"><input type="checkbox" name="brand_cb" value="FabIndia" onchange="applyFilters()"> FabIndia</label>
+                <label class="filter-item"><input type="checkbox" name="brand_cb" value="Manyavar" onchange="applyFilters()"> Manyavar</label>
+                <label class="filter-item"><input type="checkbox" name="brand_cb" value="Biba" onchange="applyFilters()"> Biba</label>
+                <label class="filter-item"><input type="checkbox" name="brand_cb" value="W for Woman" onchange="applyFilters()"> W for Woman</label>
+                <label class="filter-item"><input type="checkbox" name="brand_cb" value="Zara" onchange="applyFilters()"> Zara</label>
+                <label class="filter-item"><input type="checkbox" name="brand_cb" value="Peter England" onchange="applyFilters()"> Peter England</label>
+                <label class="filter-item"><input type="checkbox" name="brand_cb" value="Levi's" onchange="applyFilters()"> Levi's</label>
+                <label class="filter-item"><input type="checkbox" name="brand_cb" value="Hopscotch" onchange="applyFilters()"> Hopscotch</label>
             </div>
 
-            <!-- Price Filter -->
-            <div class="filter-section">
-                <div class="filter-section-title">Price Range</div>
-                <select id="filter-price" class="filter-select" onchange="applyFilters()">
-                    <option value="">Any Price</option>
-                    <option value="1000">Under ₹1,000</option>
-                    <option value="2000">Under ₹2,000</option>
-                    <option value="3500">Under ₹3,500</option>
-                    <option value="6000">Under ₹6,000</option>
+            <!-- Price Range -->
+            <div class="filter-block">
+                <div class="block-title">Price Range</div>
+                <select id="filter-price" class="filter-dropdown" onchange="applyFilters()">
+                    <option value="">All Prices</option>
+                    <option value="999">Under ₹999</option>
+                    <option value="1499">Under ₹1,499</option>
+                    <option value="2499">Under ₹2,499</option>
+                    <option value="5000">Under ₹5,000</option>
                 </select>
             </div>
 
             <!-- Rating Filter -->
-            <div class="filter-section" style="border-bottom: none;">
-                <div class="filter-section-title">Customer Ratings</div>
-                <div class="filter-option"><input type="radio" name="rating_rb" value="" checked onchange="applyFilters()"> All Ratings</div>
-                <div class="filter-option"><input type="radio" name="rating_rb" value="4.5" onchange="applyFilters()"> 4.5 ★ & above</div>
-                <div class="filter-option"><input type="radio" name="rating_rb" value="4.0" onchange="applyFilters()"> 4.0 ★ & above</div>
+            <div class="filter-block">
+                <div class="block-title">Rating</div>
+                <label class="filter-item"><input type="radio" name="rating_rb" value="" checked onchange="applyFilters()"> All Ratings</label>
+                <label class="filter-item"><input type="radio" name="rating_rb" value="4.5" onchange="applyFilters()"> 4.5 and above</label>
+                <label class="filter-item"><input type="radio" name="rating_rb" value="4.0" onchange="applyFilters()"> 4.0 and above</label>
             </div>
         </aside>
 
-        <!-- PRODUCT CATALOG GRID -->
-        <section class="product-area">
-            <div class="product-area-header">
-                <div class="results-count" id="results-count-text">
-                    Showing apparel items
-                </div>
+        <!-- CATALOG AREA -->
+        <section class="catalog-area">
+            <div class="catalog-header-bar">
+                <span class="catalog-title-main" id="catalog-title-text">Products For You</span>
+                <span class="catalog-items-count" id="results-count-text">Loading catalog...</span>
             </div>
 
-            <div class="product-cards-grid" id="product-cards-grid">
-                <!-- Dynamically populated -->
+            <div class="meesho-grid" id="meesho-products-grid">
+                <!-- Injected via JavaScript -->
             </div>
         </section>
 
     </main>
 
-    <!-- FOOTER -->
-    <footer class="site-footer">
-        <div class="footer-content">
+    <!-- 7. MEESHO FOOTER -->
+    <footer class="meesho-footer">
+        <div class="footer-inner">
             <div>
-                <div style="font-weight: 700; color: #ffffff; margin-bottom: 8px;">ABOUT THREADCRAFT</div>
-                <div>CS5101 Secure Coding Practices Laboratory</div>
-                <div>Project 7: Abuse-Resistant REST API & E-Commerce</div>
-                <div>Mahindra University, Hyderabad</div>
+                <div class="brand-title" style="margin-bottom: 8px;">meesho</div>
+                <p style="line-height: 1.6; margin-bottom: 12px;">Shop Millions of High Quality Fashion Products at Direct-From-Supplier Wholesale Prices.</p>
+                <p style="font-size: 11px; color: var(--meesho-light-gray);">CS5101 Secure Coding Practices · M.Tech Cyber Security</p>
             </div>
             <div>
-                <div style="font-weight: 700; color: #ffffff; margin-bottom: 8px;">SECURITY CAPABILITIES</div>
-                <div>CWE-89: SQL Injection Parameterization</div>
-                <div>CWE-639: Broken Object-Level Authorization (BOLA)</div>
-                <div>CWE-307: SlowAPI Rate Limiting</div>
-                <div>CWE-347: JWT Pinned Verification</div>
+                <div class="footer-col-title">Customer Care</div>
+                <p style="margin-bottom: 6px;">Help Center</p>
+                <p style="margin-bottom: 6px;">How to Order</p>
+                <p style="margin-bottom: 6px;">Returns & Refunds</p>
+            </div>
+            <div>
+                <div class="footer-col-title">Categories</div>
+                <p style="margin-bottom: 6px;">Women Fashion</p>
+                <p style="margin-bottom: 6px;">Men Fashion</p>
+                <p style="margin-bottom: 6px;">Kids Wear</p>
+            </div>
+            <div>
+                <div class="footer-col-title">Security Verifications</div>
+                <p style="margin-bottom: 6px;">CWE-89: Parameterized DB</p>
+                <p style="margin-bottom: 6px;">CWE-639: BOLA Protected</p>
+                <p style="margin-bottom: 6px;">CWE-307: SlowAPI Throttled</p>
             </div>
         </div>
-        <div class="footer-bottom">
-            ThreadCraft Apparel · Developed with FastAPI, Pydantic, SQLite, and Native Web Technologies
+        <div class="footer-bottom-copy">
+            ThreadCraft Apparel · Meesho Replica for CS5101 Project 7 Academic Submission
         </div>
     </footer>
 
     <script src="/js/core.js"></script>
     <script>
         let allProducts = [];
-        let currentSlideIdx = 0;
 
         document.addEventListener("DOMContentLoaded", () => {
             loadCatalog();
             setupSearch();
-            setupCategoryStrip();
-            startHeroSlider();
+            setupCategoryTabs();
         });
 
-        // Banner Slider
-        function changeSlide(direction) {
-            const slides = document.querySelectorAll(".banner-slide");
-            slides[currentSlideIdx].classList.remove("active");
-            currentSlideIdx = (currentSlideIdx + direction + slides.length) % slides.length;
-            slides[currentSlideIdx].classList.add("active");
-        }
+        function setupCategoryTabs() {
+            document.querySelectorAll(".cat-nav-tab").forEach(tab => {
+                tab.addEventListener("click", () => {
+                    document.querySelectorAll(".cat-nav-tab").forEach(t => t.classList.remove("active"));
+                    tab.classList.add("active");
 
-        function startHeroSlider() {
-            setInterval(() => {
-                changeSlide(1);
-            }, 6000);
-        }
-
-        // Setup Category Strip Click
-        function setupCategoryStrip() {
-            document.querySelectorAll(".cat-item").forEach(item => {
-                item.addEventListener("click", () => {
-                    document.querySelectorAll(".cat-item").forEach(i => i.classList.remove("active"));
-                    item.classList.add("active");
-                    appState.selectedCategory = item.getAttribute("data-category") || "";
-                    const sub = item.getAttribute("data-sub") || "";
+                    appState.selectedCategory = tab.getAttribute("data-category") || "";
+                    const sub = tab.getAttribute("data-sub") || "";
                     document.getElementById("filter-subcategory").value = sub;
+                    
+                    const titleMap = {
+                        "": "Products For You",
+                        "women": "Women's Collection",
+                        "men": "Men's Collection",
+                        "kids": "Kids' Wear Collection"
+                    };
+                    document.getElementById("catalog-title-text").innerText = titleMap[appState.selectedCategory] || "Products For You";
+
                     applyFilters();
                 });
             });
@@ -263,10 +235,9 @@
         function filterBySub(sub) {
             document.getElementById("filter-subcategory").value = sub;
             applyFilters();
-            window.scrollTo({ top: 600, behavior: 'smooth' });
+            window.scrollTo({ top: 500, behavior: "smooth" });
         }
 
-        // Setup Search
         function setupSearch() {
             const input = document.getElementById("store-search-input");
             let timeout;
@@ -275,33 +246,30 @@
                 timeout = setTimeout(() => {
                     appState.searchQuery = input.value.trim();
                     applyFilters();
-                }, 300);
+                }, 250);
             });
         }
 
-        // Load Products
         async function loadCatalog() {
             try {
                 const res = await fetch("/api/v1/products");
-                if (!res.ok) throw new Error("Catalog fetch failed");
+                if (!res.ok) throw new Error("Catalog fetch error");
                 allProducts = await res.json();
                 applyFilters();
             } catch (err) {
-                document.getElementById("product-cards-grid").innerHTML = `
-                    <div style="grid-column: 1/-1; text-align: center; padding: 48px; color: var(--secondary-text);">
-                        Failed to connect to the product service.
+                document.getElementById("meesho-products-grid").innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 48px; color: var(--meesho-gray);">
+                        Failed to connect to the backend API server.
                     </div>
                 `;
             }
         }
 
-        // Apply Local & Remote Filters
         function applyFilters() {
             const subcat = document.getElementById("filter-subcategory").value;
             const maxPrice = parseFloat(document.getElementById("filter-price").value) || null;
             const ratingRadio = document.querySelector("input[name='rating_rb']:checked");
             const minRating = ratingRadio && ratingRadio.value ? parseFloat(ratingRadio.value) : null;
-
             const selectedBrands = Array.from(document.querySelectorAll("input[name='brand_cb']:checked")).map(cb => cb.value);
 
             let filtered = allProducts.filter(p => {
@@ -320,12 +288,12 @@
                 return true;
             });
 
-            renderProductGrid(filtered);
+            renderGrid(filtered);
         }
 
         function resetAllFilters() {
-            document.querySelectorAll(".cat-item").forEach(i => i.classList.remove("active"));
-            document.querySelector(".cat-item").classList.add("active");
+            document.querySelectorAll(".cat-nav-tab").forEach(t => t.classList.remove("active"));
+            document.querySelector(".cat-nav-tab").classList.add("active");
             appState.selectedCategory = "";
             appState.searchQuery = "";
             document.getElementById("store-search-input").value = "";
@@ -333,21 +301,21 @@
             document.getElementById("filter-price").value = "";
             document.querySelectorAll("input[name='brand_cb']").forEach(cb => cb.checked = false);
             document.querySelector("input[name='rating_rb'][value='']").checked = true;
+            document.getElementById("catalog-title-text").innerText = "Products For You";
             applyFilters();
         }
 
-        // Render Grid
-        function renderProductGrid(products) {
-            const grid = document.getElementById("product-cards-grid");
+        function renderGrid(products) {
+            const grid = document.getElementById("meesho-products-grid");
             const countText = document.getElementById("results-count-text");
 
-            countText.innerHTML = `Showing <span>${products.length}</span> apparel items`;
+            countText.innerText = `Showing ${products.length} Products`;
 
             if (products.length === 0) {
                 grid.innerHTML = `
-                    <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px;">
-                        <h3 style="font-size: 16px; margin-bottom: 8px;">No matching clothing items found</h3>
-                        <p style="font-size: 13px; color: var(--secondary-text);">Try adjusting your filter criteria or search keyword.</p>
+                    <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px; background: #fff; border-radius: 6px;">
+                        <h3 style="font-size: 16px; margin-bottom: 6px;">No products match your filters</h3>
+                        <p style="font-size: 13px; color: var(--meesho-light-gray);">Try clearing some filter options or changing keywords.</p>
                     </div>
                 `;
                 return;
@@ -359,31 +327,32 @@
                     : 0;
 
                 return `
-                    <a href="/product.html?id=${p.id}" class="apparel-card">
-                        <div class="card-img-box">
+                    <a href="/product.html?id=${p.id}" class="meesho-card">
+                        <div class="card-img-holder">
                             <img src="${p.image_url}" alt="${escapeHtml(p.title)}" loading="lazy">
-                            <span class="assured-badge">Assured</span>
+                            <span class="trusted-tag">Supplier Assured</span>
                         </div>
 
-                        <div class="card-brand">${escapeHtml(p.brand)}</div>
-                        <div class="card-title" title="${escapeHtml(p.title)}">${escapeHtml(p.title)}</div>
+                        <div class="card-body">
+                            <div class="card-title-text" title="${escapeHtml(p.title)}">
+                                <b>${escapeHtml(p.brand)}</b> ${escapeHtml(p.title)}
+                            </div>
 
-                        <div class="card-rating-row">
-                            <span class="rating-badge">${p.rating} ★</span>
-                            <span class="rating-count-text">(${p.rating_count})</span>
-                        </div>
+                            <div class="card-price-container">
+                                <span class="card-price-val">₹${p.price.toFixed(0)}</span>
+                                ${p.original_price ? `<span class="card-mrp-val">₹${p.original_price.toFixed(0)}</span>` : ''}
+                                ${discount > 0 ? `<span class="card-discount-val">${discount}% off</span>` : ''}
+                            </div>
 
-                        <div class="card-price-row">
-                            <span class="current-price">₹${p.price.toFixed(0)}</span>
-                            ${p.original_price ? `<span class="mrp-price">₹${p.original_price.toFixed(0)}</span>` : ''}
-                            ${discount > 0 ? `<span class="discount-rate">${discount}% off</span>` : ''}
-                        </div>
+                            <span class="free-delivery-badge">Free Delivery</span>
 
-                        <div class="delivery-tag">Free Delivery</div>
-
-                        <div class="card-specs-row">
-                            <span>Sizes: ${escapeHtml(p.available_sizes)}</span>
-                            <span>${escapeHtml(p.material || 'Cotton')}</span>
+                            <div class="card-rating-strip">
+                                <span class="rating-chip">
+                                    <span>${p.rating}</span>
+                                    <svg width="10" height="10" viewBox="0 0 24 24" fill="#ffffff"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                                </span>
+                                <span class="rating-count">${p.rating_count} Reviews</span>
+                            </div>
                         </div>
                     </a>
                 `;

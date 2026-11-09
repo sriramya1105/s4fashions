@@ -3,44 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Details - ThreadCraft Apparel</title>
+    <title>Product Details - Meesho Fashion</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 
-    <!-- MAIN HEADER -->
-    <header class="main-header">
-        <div class="header-container">
-            <a href="/" class="logo-wrapper">
-                <span class="logo-text">ThreadCraft</span>
-                <span class="logo-subtext">Explore <span>Fashion</span></span>
+    <!-- TOP HEADER -->
+    <header class="meesho-top-header">
+        <div class="header-inner">
+            <a href="/" class="brand-meesho">
+                <span class="brand-title">meesho</span>
+                <span class="brand-subtitle">Fashion Mart</span>
             </a>
 
-            <div class="search-container">
-                <input type="text" id="global-search" class="search-input" placeholder="Search for products, brands and more">
+            <div class="meesho-search-wrapper">
+                <svg class="search-icon-svg" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                <input type="text" class="search-field" placeholder="Search for items, brands...">
             </div>
 
-            <div class="header-nav">
+            <div class="header-right-actions">
                 <div id="header-auth-slot"></div>
-                <a href="/orders.html" class="header-nav-link">Orders</a>
-                <a href="/cart.html" class="header-nav-link cart-link">
-                    Cart <span class="cart-badge-count" id="cart-count-badge">0</span>
+                <a href="/orders.html" class="action-column-link">
+                    <svg class="action-icon" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                    <span>Orders</span>
+                </a>
+                <a href="/cart.html" class="action-column-link" style="position: relative;">
+                    <svg class="action-icon" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                    <span>Cart</span>
+                    <span class="header-cart-badge" id="cart-count-badge">0</span>
                 </a>
             </div>
         </div>
     </header>
 
-    <!-- PRODUCT DETAILS CONTAINER -->
-    <main class="pdp-container" id="pdp-container">
+    <!-- MAIN PDP LAYOUT -->
+    <main class="meesho-pdp-layout" id="meesho-pdp-container">
         <div style="grid-column: 1/-1; text-align: center; padding: 60px;">
-            <p>Loading product details...</p>
+            <p>Loading item details...</p>
         </div>
     </main>
 
-    <!-- FOOTER -->
-    <footer class="site-footer">
-        <div class="footer-bottom">
-            ThreadCraft Apparel · CS5101 Secure Coding Practices · Built for High-Security Evaluation
+    <footer class="meesho-footer" style="margin-top: 40px;">
+        <div class="footer-bottom-copy">
+            Meesho Fashion Mart · CS5101 Secure Coding Practices Laboratory
         </div>
     </footer>
 
@@ -61,20 +66,20 @@
 
             try {
                 const res = await fetch(`/api/v1/products/${productId}`);
-                if (!res.ok) throw new Error("Product not found");
+                if (!res.ok) throw new Error("Not found");
                 currentProduct = await res.json();
-                renderPDP(currentProduct);
+                renderMeeshoPDP(currentProduct);
             } catch (err) {
-                document.getElementById("pdp-container").innerHTML = `
+                document.getElementById("meesho-pdp-container").innerHTML = `
                     <div style="grid-column: 1/-1; text-align: center; padding: 60px;">
-                        <h3>Product Not Found</h3>
-                        <p style="margin-top: 10px;"><a href="/" style="color: var(--primary-blue);">Back to Storefront</a></p>
+                        <h3>Item Not Found</h3>
+                        <p style="margin-top: 10px;"><a href="/" style="color: var(--meesho-pink);">Back to Meesho Store</a></p>
                     </div>
                 `;
             }
         });
 
-        function renderPDP(p) {
+        function renderMeeshoPDP(p) {
             const sizes = p.available_sizes.split(",").map(s => s.trim());
             const colors = p.available_colors.split(",").map(c => c.trim());
             selectedSize = sizes[0];
@@ -84,80 +89,68 @@
                 ? Math.round(((p.original_price - p.price) / p.original_price) * 100)
                 : 0;
 
-            const container = document.getElementById("pdp-container");
+            const container = document.getElementById("meesho-pdp-container");
             container.innerHTML = `
-                <!-- GALLERY & ACTIONS -->
-                <div class="pdp-gallery">
-                    <div class="pdp-main-img-box">
+                <!-- LEFT IMAGE & BUTTONS -->
+                <div class="pdp-left-box">
+                    <div class="pdp-big-image">
                         <img src="${p.image_url}" alt="${escapeHtml(p.title)}">
                     </div>
-                    <div class="pdp-action-buttons">
-                        <button class="btn-add-bag" onclick="handleAddToCart()">ADD TO BAG</button>
-                        <button class="btn-buy-now" onclick="handleBuyNow()">BUY NOW</button>
+                    <div class="pdp-cta-row">
+                        <button class="btn-meesho-cart" onclick="handleAddToCart()">Add to Cart</button>
+                        <button class="btn-meesho-buy" onclick="handleBuyNow()">Buy Now</button>
                     </div>
                 </div>
 
-                <!-- INFO PANEL -->
-                <div class="pdp-info-panel">
-                    <div>
-                        <div class="pdp-brand">${escapeHtml(p.brand)}</div>
-                        <h1 class="pdp-title">${escapeHtml(p.title)}</h1>
+                <!-- RIGHT PRODUCT DETAILS -->
+                <div class="pdp-right-box">
+                    <div class="pdp-card-section">
+                        <h1 class="pdp-main-title">${escapeHtml(p.brand)} - ${escapeHtml(p.title)}</h1>
                         
-                        <div class="card-rating-row" style="margin-top: 8px;">
-                            <span class="rating-badge">${p.rating} ★</span>
-                            <span class="rating-count-text">${p.rating_count} Ratings & Reviews</span>
-                            <span class="assured-badge" style="position: static; margin-left: 8px;">ThreadCraft Assured</span>
+                        <div class="pdp-price-row">
+                            <span class="pdp-current-price">₹${p.price.toFixed(0)}</span>
+                            ${p.original_price ? `<span class="pdp-mrp-price">₹${p.original_price.toFixed(0)}</span>` : ''}
+                            ${discount > 0 ? `<span class="pdp-discount-rate">${discount}% off</span>` : ''}
+                        </div>
+
+                        <div class="free-delivery-badge">Free Delivery</div>
+
+                        <div class="card-rating-strip" style="margin-top: 8px;">
+                            <span class="rating-chip">
+                                <span>${p.rating}</span>
+                                <svg width="10" height="10" viewBox="0 0 24 24" fill="#ffffff"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                            </span>
+                            <span class="rating-count">${p.rating_count} Customer Ratings</span>
                         </div>
                     </div>
 
-                    <div class="pdp-price-panel">
-                        <span class="pdp-current-price">₹${p.price.toFixed(0)}</span>
-                        ${p.original_price ? `<span class="pdp-mrp">₹${p.original_price.toFixed(0)}</span>` : ''}
-                        ${discount > 0 ? `<span class="pdp-discount">${discount}% off</span>` : ''}
-                    </div>
-
-                    <div>
-                        <div class="selector-group-title">Select Size:</div>
-                        <div class="selector-chips" id="size-chips">
+                    <!-- SELECT SIZE -->
+                    <div class="pdp-card-section">
+                        <div style="font-size: 15px; font-weight: 700; color: var(--meesho-dark); margin-bottom: 8px;">Select Size</div>
+                        <div class="size-pill-row" id="size-pill-container">
                             ${sizes.map((s, idx) => `
-                                <button type="button" class="chip-btn ${idx === 0 ? 'active' : ''}" onclick="selectSize('${s}', this)">${s}</button>
+                                <button type="button" class="size-pill ${idx === 0 ? 'selected' : ''}" onclick="selectSize('${s}', this)">${s}</button>
                             `).join("")}
                         </div>
                     </div>
 
-                    <div>
-                        <div class="selector-group-title">Select Color:</div>
-                        <div class="selector-chips" id="color-chips">
-                            ${colors.map((c, idx) => `
-                                <button type="button" class="chip-btn ${idx === 0 ? 'active' : ''}" onclick="selectColor('${c}', this)">${c}</button>
-                            `).join("")}
-                        </div>
-                    </div>
+                    <!-- PRODUCT SPECIFICATIONS -->
+                    <div class="pdp-card-section">
+                        <div style="font-size: 15px; font-weight: 700; color: var(--meesho-dark); margin-bottom: 12px;">Product Details</div>
+                        <p style="font-size: 13px; color: var(--meesho-gray); line-height: 1.6; margin-bottom: 14px;">${escapeHtml(p.description)}</p>
 
-                    <div style="border-top: 1px solid var(--light-border); padding-top: 16px;">
-                        <div class="selector-group-title">Product Details:</div>
-                        <p style="font-size: 14px; color: #555; line-height: 1.6; margin-bottom: 12px;">${escapeHtml(p.description)}</p>
-                        
-                        <div style="display: grid; grid-template-columns: 140px 1fr; gap: 8px; font-size: 13px;">
-                            <span style="color: var(--secondary-text);">Category:</span>
+                        <div style="display: grid; grid-template-columns: 140px 1fr; gap: 10px; font-size: 13px;">
+                            <span style="color: var(--meesho-light-gray);">Category:</span>
                             <span style="text-transform: capitalize;">${p.category} (${escapeHtml(p.subcategory)})</span>
 
-                            <span style="color: var(--secondary-text);">Fabric Material:</span>
-                            <span>${escapeHtml(p.material || 'Premium Quality')}</span>
+                            <span style="color: var(--meesho-light-gray);">Fabric:</span>
+                            <span>${escapeHtml(p.material || 'Cotton Blend')}</span>
 
-                            <span style="color: var(--secondary-text);">Inventory Status:</span>
-                            <span style="color: ${p.stock > 10 ? 'var(--primary-green)' : 'var(--danger)'}; font-weight: 600;">
-                                ${p.stock > 0 ? `In Stock (${p.stock} units left)` : 'Out of Stock'}
-                            </span>
-                        </div>
-                    </div>
+                            <span style="color: var(--meesho-light-gray);">Available Colors:</span>
+                            <span>${escapeHtml(p.available_colors)}</span>
 
-                    <div style="border-top: 1px solid var(--light-border); padding-top: 16px;">
-                        <div class="selector-group-title">Delivery & Services:</div>
-                        <div style="font-size: 13px; color: #444; display: flex; flex-direction: column; gap: 6px;">
-                            <div>Standard Delivery: <b>Within 2-4 Business Days</b></div>
-                            <div>Cash on Delivery available</div>
-                            <div>7 Days Hassle-free Exchange & Return Policy</div>
+                            <span style="color: var(--meesho-light-gray);">Stock Status:</span>
+                            <span style="color: var(--meesho-green); font-weight: 700;">In Stock (${p.stock} units available)</span>
                         </div>
                     </div>
                 </div>
@@ -166,20 +159,14 @@
 
         function selectSize(s, btn) {
             selectedSize = s;
-            document.querySelectorAll("#size-chips .chip-btn").forEach(b => b.classList.remove("active"));
-            btn.classList.add("active");
-        }
-
-        function selectColor(c, btn) {
-            selectedColor = c;
-            document.querySelectorAll("#color-chips .chip-btn").forEach(b => b.classList.remove("active"));
-            btn.classList.add("active");
+            document.querySelectorAll(".size-pill").forEach(p => p.classList.remove("selected"));
+            btn.classList.add("selected");
         }
 
         function handleAddToCart() {
             if (!currentProduct) return;
             addItemToCart(currentProduct, selectedSize, selectedColor, 1);
-            alert(`Added "${currentProduct.title}" (Size: ${selectedSize}) to your Bag!`);
+            alert(`Added "${currentProduct.title}" to Cart!`);
         }
 
         function handleBuyNow() {

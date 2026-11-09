@@ -1,41 +1,48 @@
 /* ==========================================================================
-   ThreadCraft Apparel - Core Design System (Flipkart/Myntra Commercial Quality)
+   ThreadCraft / Meesho-Style Commercial Design System
+   Color Palette:
+   - Primary Pink/Magenta: #9f2089 (Meesho Signature)
+   - Secondary Hover Pink: #841872
+   - Background Tint: #f9f9f9 / #f4f4f4
+   - Rating Green: #23bb75 (or #038d63)
+   - Accent Purple: #540c46
+   - Dark Text: #333333 / #666666
    ========================================================================== */
 
 :root {
-    --primary-blue: #2874f0;
-    --primary-blue-dark: #1e5ac0;
-    --primary-yellow: #ffe500;
-    --primary-orange: #fb641b;
-    --primary-green: #388e3c;
-    --dark-text: #212121;
-    --secondary-text: #878787;
-    --light-border: #e0e0e0;
-    --bg-gray: #f1f3f6;
-    --card-bg: #ffffff;
-    --danger: #d32f2f;
-    --shadow-soft: 0 1px 3px rgba(0, 0, 0, 0.08);
-    --shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.12);
-    --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --meesho-pink: #9f2089;
+    --meesho-pink-hover: #82156f;
+    --meesho-light-pink: #fde9f7;
+    --meesho-green: #038d63;
+    --meesho-dark: #333333;
+    --meesho-gray: #666666;
+    --meesho-light-gray: #8b8d97;
+    --meesho-border: #e7e7e7;
+    --meesho-bg: #f9f9f9;
+    --meesho-card: #ffffff;
+    --shadow-card: 0 1px 4px rgba(0, 0, 0, 0.08);
+    --shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.12);
+    --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Mier book", Helvetica, Arial, sans-serif;
 }
 
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: var(--font-family);
+    font-family: var(--font-stack);
+    -webkit-font-smoothing: antialiased;
 }
 
 body {
-    background-color: var(--bg-gray);
-    color: var(--dark-text);
+    background-color: var(--meesho-bg);
+    color: var(--meesho-dark);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
 
 /* ==========================================================================
-   SPLASH SCREEN
+   MEESHO INTRO SPLASH SCREEN
    ========================================================================== */
 #splash-screen {
     position: fixed;
@@ -43,14 +50,13 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: #2874f0;
+    background-color: #ffffff;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     z-index: 9999;
-    color: #ffffff;
-    transition: opacity 0.5s ease-out, visibility 0.5s;
+    transition: opacity 0.4s ease-out, visibility 0.4s;
 }
 
 #splash-screen.hidden {
@@ -59,895 +65,882 @@ body {
     pointer-events: none;
 }
 
-.splash-brand {
-    font-size: 38px;
+.meesho-splash-logo {
+    font-size: 42px;
     font-weight: 800;
-    letter-spacing: -0.5px;
-    margin-bottom: 8px;
+    color: var(--meesho-pink);
+    letter-spacing: -1px;
+    margin-bottom: 6px;
 }
 
-.splash-tagline {
-    font-size: 15px;
-    color: #e0e9fa;
+.meesho-splash-sub {
+    font-size: 14px;
+    color: var(--meesho-gray);
     margin-bottom: 24px;
-    font-weight: 400;
 }
 
-.splash-spinner {
-    width: 36px;
-    height: 36px;
-    border: 3px solid rgba(255, 255, 255, 0.3);
+.meesho-spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid #f3d4ef;
     border-radius: 50%;
-    border-top-color: #ffffff;
-    animation: spin 0.8s linear infinite;
+    border-top-color: var(--meesho-pink);
+    animation: meesho-spin 0.7s linear infinite;
 }
 
-@keyframes spin {
+@keyframes meesho-spin {
     to { transform: rotate(360deg); }
 }
 
 /* ==========================================================================
-   HEADER & NAVIGATION BAR
+   TOP HEADER (MEESHO STYLE)
    ========================================================================== */
-.main-header {
-    background-color: var(--primary-blue);
+.meesho-top-header {
+    background-color: #ffffff;
+    border-bottom: 1px solid var(--meesho-border);
     position: sticky;
     top: 0;
     z-index: 500;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.15);
 }
 
-.header-container {
-    max-width: 1240px;
+.header-inner {
+    max-width: 1280px;
     margin: 0 auto;
-    padding: 10px 16px;
+    padding: 14px 20px;
     display: flex;
     align-items: center;
-    gap: 20px;
+    justify-content: space-between;
+    gap: 28px;
 }
 
-.logo-wrapper {
+.brand-meesho {
+    text-decoration: none;
     display: flex;
     flex-direction: column;
-    text-decoration: none;
-    color: #ffffff;
 }
 
-.logo-text {
-    font-size: 20px;
-    font-weight: 700;
-    font-style: italic;
-    line-height: 1.1;
+.brand-title {
+    font-size: 30px;
+    font-weight: 800;
+    color: var(--meesho-pink);
+    letter-spacing: -1.2px;
+    line-height: 1;
 }
 
-.logo-subtext {
-    font-size: 11px;
-    color: #f0f0f0;
-    font-weight: 500;
-}
-
-.logo-subtext span {
-    color: var(--primary-yellow);
-    font-weight: 700;
-}
-
-.search-container {
-    flex: 1;
-    position: relative;
-    max-width: 580px;
-}
-
-.search-input {
-    width: 100%;
-    height: 36px;
-    padding: 0 16px;
-    border-radius: 2px;
-    border: none;
-    outline: none;
-    font-size: 14px;
-    box-shadow: 0 1px 2px 0 rgba(0,0,0,0.2);
-}
-
-.header-nav {
-    display: flex;
-    align-items: center;
-    gap: 24px;
-}
-
-.header-nav-link {
-    color: #ffffff;
-    text-decoration: none;
-    font-size: 15px;
+.brand-subtitle {
+    font-size: 10px;
+    color: var(--meesho-light-gray);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
     font-weight: 600;
+}
+
+/* Search bar with left icon */
+.meesho-search-wrapper {
+    flex: 1;
+    max-width: 520px;
+    position: relative;
+}
+
+.search-field {
+    width: 100%;
+    height: 42px;
+    border: 1px solid #c9c9c9;
+    border-radius: 4px;
+    padding: 0 16px 0 42px;
+    font-size: 14px;
+    color: var(--meesho-dark);
+    outline: none;
+    background-color: #ffffff;
+    transition: border-color 0.2s;
+}
+
+.search-field:focus {
+    border-color: var(--meesho-pink);
+}
+
+.search-icon-svg {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    fill: var(--meesho-light-gray);
+}
+
+/* Header utility actions */
+.header-right-actions {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 32px;
+}
+
+.action-column-link {
+    text-decoration: none;
+    color: var(--meesho-dark);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    font-size: 13px;
+    font-weight: 500;
     cursor: pointer;
     background: none;
     border: none;
-}
-
-.login-btn-header {
-    background-color: #ffffff;
-    color: var(--primary-blue);
-    padding: 6px 32px;
-    border-radius: 2px;
-    font-weight: 600;
-    font-size: 15px;
-    text-decoration: none;
-    border: 1px solid #dbdbdb;
-    cursor: pointer;
-}
-
-.login-btn-header:hover {
-    background-color: #f7f7f7;
-}
-
-.cart-link {
     position: relative;
 }
 
-.cart-badge-count {
-    background-color: var(--primary-orange);
+.action-column-link:hover {
+    color: var(--meesho-pink);
+}
+
+.action-icon {
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
+    stroke-width: 2;
+    fill: none;
+}
+
+.header-cart-badge {
+    position: absolute;
+    top: -4px;
+    right: 2px;
+    background-color: var(--meesho-pink);
     color: #ffffff;
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 700;
+    width: 18px;
+    height: 18px;
     border-radius: 50%;
-    padding: 1px 6px;
-    margin-left: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* ==========================================================================
-   CATEGORY BAR (CIRCULAR FLIPKART STYLE)
+   MEESHO CATEGORY MEGA NAVBAR (HOVER MENUS)
    ========================================================================== */
-.category-strip {
+.meesho-category-bar {
     background-color: #ffffff;
-    border-bottom: 1px solid var(--light-border);
-    box-shadow: var(--shadow-soft);
+    border-bottom: 1px solid var(--meesho-border);
 }
 
-.category-strip-container {
-    max-width: 1240px;
+.cat-nav-inner {
+    max-width: 1280px;
     margin: 0 auto;
-    padding: 12px 16px;
+    padding: 0 20px;
     display: flex;
     justify-content: space-between;
-    overflow-x: auto;
 }
 
-.cat-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.cat-nav-tab {
+    padding: 14px 12px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #444444;
     text-decoration: none;
-    color: var(--dark-text);
     cursor: pointer;
-    min-width: 110px;
-    text-align: center;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
 }
 
-.cat-img-wrapper {
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    overflow: hidden;
-    margin-bottom: 6px;
-    border: 1px solid #f0f0f0;
-}
-
-.cat-img-wrapper img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.2s ease-in-out;
-}
-
-.cat-item:hover .cat-img-wrapper img {
-    transform: scale(1.08);
-}
-
-.cat-title {
-    font-size: 13px;
+.cat-nav-tab:hover, .cat-nav-tab.active {
+    color: var(--meesho-pink);
+    border-bottom-color: var(--meesho-pink);
     font-weight: 600;
 }
 
-.cat-item.active .cat-title {
-    color: var(--primary-blue);
+/* ==========================================================================
+   MEESHO PROMOTIONAL VALUE STRIP
+   ========================================================================== */
+.value-strip {
+    background-color: #fcf4fb;
+    border-bottom: 1px solid #f6d8f1;
+    padding: 10px 0;
+}
+
+.value-strip-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-around;
+    font-size: 13px;
+    color: #551447;
+    font-weight: 600;
+}
+
+.value-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.value-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: var(--meesho-pink);
 }
 
 /* ==========================================================================
-   PROMOTIONAL HERO BANNER
+   HERO / BANNER CAROUSEL
    ========================================================================== */
-.hero-slider-section {
-    max-width: 1240px;
-    margin: 12px auto 0 auto;
-    padding: 0 16px;
+.meesho-hero-container {
+    max-width: 1280px;
+    margin: 16px auto 0 auto;
+    padding: 0 20px;
 }
 
-.hero-banner-container {
+.meesho-banner-box {
     position: relative;
-    border-radius: 4px;
+    height: 280px;
+    border-radius: 6px;
     overflow: hidden;
-    height: 240px;
-    background-color: #212121;
-    box-shadow: var(--shadow-soft);
+    background-color: #2b0b23;
 }
 
-.banner-slide {
+.meesho-banner-slide {
     position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
     height: 100%;
     display: none;
     background-size: cover;
     background-position: center;
+    padding: 0 60px;
     align-items: center;
-    padding: 0 48px;
     color: #ffffff;
 }
 
-.banner-slide.active {
+.meesho-banner-slide.active {
     display: flex;
 }
 
-.banner-content {
-    max-width: 550px;
-    background: rgba(0, 0, 0, 0.45);
-    padding: 24px;
-    border-radius: 4px;
-    backdrop-filter: blur(2px);
+.banner-glass-card {
+    background: rgba(43, 11, 35, 0.75);
+    padding: 28px 32px;
+    border-radius: 6px;
+    max-width: 520px;
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
-.banner-tag {
-    font-size: 12px;
+.banner-pill {
+    background-color: var(--meesho-light-pink);
+    color: var(--meesho-pink);
+    font-size: 11px;
     font-weight: 700;
-    letter-spacing: 1px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    display: inline-block;
+    margin-bottom: 10px;
     text-transform: uppercase;
-    color: var(--primary-yellow);
-    margin-bottom: 6px;
+    letter-spacing: 0.5px;
 }
 
-.banner-title {
-    font-size: 28px;
+.banner-heading {
+    font-size: 30px;
     font-weight: 800;
     line-height: 1.2;
     margin-bottom: 8px;
 }
 
-.banner-desc {
-    font-size: 14px;
-    margin-bottom: 16px;
-    color: #f0f0f0;
+.banner-text {
+    font-size: 13px;
+    color: #e2d1df;
+    margin-bottom: 18px;
+    line-height: 1.5;
 }
 
-.banner-btn {
-    display: inline-block;
-    background-color: var(--primary-yellow);
-    color: var(--dark-text);
+.banner-action-btn {
+    background-color: var(--meesho-pink);
+    color: #ffffff;
     font-size: 14px;
     font-weight: 700;
-    padding: 8px 24px;
-    border-radius: 2px;
-    text-decoration: none;
+    padding: 10px 24px;
+    border-radius: 4px;
     border: none;
     cursor: pointer;
+    transition: background-color 0.2s;
 }
 
-.slider-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(255, 255, 255, 0.85);
-    border: none;
-    width: 40px;
-    height: 80px;
-    cursor: pointer;
-    font-size: 20px;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--dark-text);
-    z-index: 10;
+.banner-action-btn:hover {
+    background-color: var(--meesho-pink-hover);
 }
-
-.slider-btn.prev { left: 0; border-radius: 0 4px 4px 0; }
-.slider-btn.next { right: 0; border-radius: 4px 0 0 4px; }
 
 /* ==========================================================================
-   MAIN STORE CONTENT (2-COLUMN GRID)
+   STORE LAYOUT (MEESHO 2-COLUMN)
    ========================================================================== */
-.store-layout {
-    max-width: 1240px;
-    margin: 16px auto;
-    padding: 0 16px;
+.store-wrapper {
+    max-width: 1280px;
+    margin: 20px auto;
+    padding: 0 20px;
     display: grid;
     grid-template-columns: 260px 1fr;
-    gap: 16px;
+    gap: 24px;
     flex: 1;
 }
 
-/* SIDEBAR FILTER PANEL */
-.filter-panel {
-    background-color: var(--card-bg);
-    border-radius: 2px;
-    box-shadow: var(--shadow-soft);
-    padding: 16px;
+/* LEFT SIDEBAR FILTERS */
+.meesho-sidebar {
+    background-color: #ffffff;
+    border: 1px solid var(--meesho-border);
+    border-radius: 6px;
+    padding: 18px;
     height: fit-content;
 }
 
-.filter-heading-row {
+.sidebar-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-bottom: 12px;
-    border-bottom: 1px solid var(--light-border);
-    margin-bottom: 14px;
-}
-
-.filter-heading-text {
-    font-size: 16px;
-    font-weight: 700;
-    letter-spacing: 0.3px;
-    text-transform: uppercase;
-}
-
-.filter-clear-link {
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--primary-blue);
-    text-decoration: none;
-    cursor: pointer;
-}
-
-.filter-section {
-    padding: 12px 0;
-    border-bottom: 1px solid #f0f0f0;
-}
-
-.filter-section-title {
-    font-size: 13px;
-    font-weight: 700;
-    text-transform: uppercase;
-    color: var(--dark-text);
-    margin-bottom: 10px;
-}
-
-.filter-option {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 8px;
-    font-size: 13px;
-    color: #333333;
-    cursor: pointer;
-}
-
-.filter-option input[type="checkbox"], .filter-option input[type="radio"] {
-    accent-color: var(--primary-blue);
-    cursor: pointer;
-}
-
-.filter-select {
-    width: 100%;
-    height: 34px;
-    padding: 0 8px;
-    font-size: 13px;
-    border: 1px solid var(--light-border);
-    border-radius: 2px;
-    background-color: #ffffff;
-    outline: none;
-}
-
-/* PRODUCT LIST CONTAINER */
-.product-area {
-    background-color: var(--card-bg);
-    border-radius: 2px;
-    box-shadow: var(--shadow-soft);
-    padding: 16px;
-}
-
-.product-area-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-bottom: 12px;
-    border-bottom: 1px solid var(--light-border);
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--meesho-border);
     margin-bottom: 16px;
 }
 
-.results-count {
-    font-size: 14px;
-    color: var(--secondary-text);
-}
-
-.results-count span {
+.sidebar-title {
+    font-size: 16px;
     font-weight: 700;
-    color: var(--dark-text);
+    color: var(--meesho-dark);
 }
 
-.product-cards-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+.clear-btn {
+    font-size: 12px;
+    color: var(--meesho-pink);
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    background: none;
+    border: none;
+}
+
+.filter-block {
+    padding-bottom: 16px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.filter-block:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.block-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--meesho-dark);
+    margin-bottom: 12px;
+}
+
+.filter-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--meesho-gray);
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.filter-item input {
+    accent-color: var(--meesho-pink);
+    cursor: pointer;
+    width: 15px;
+    height: 15px;
+}
+
+.filter-dropdown {
+    width: 100%;
+    height: 38px;
+    padding: 0 10px;
+    font-size: 13px;
+    border: 1px solid #d4d4d4;
+    border-radius: 4px;
+    outline: none;
+    color: var(--meesho-dark);
+    background-color: #ffffff;
+}
+
+.filter-dropdown:focus {
+    border-color: var(--meesho-pink);
+}
+
+/* PRODUCTS GRID AREA */
+.catalog-area {
+    display: flex;
+    flex-direction: column;
     gap: 16px;
 }
 
-/* COMMERCIAL FLIPKART PRODUCT CARD */
-.apparel-card {
-    background-color: #ffffff;
-    border: 1px solid #f0f0f0;
-    border-radius: 2px;
-    padding: 12px;
+.catalog-header-bar {
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff;
+    border: 1px solid var(--meesho-border);
+    padding: 14px 18px;
+    border-radius: 6px;
+}
+
+.catalog-title-main {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--meesho-dark);
+}
+
+.catalog-items-count {
+    font-size: 13px;
+    color: var(--meesho-light-gray);
+    font-weight: 500;
+}
+
+/* MEESHO PRODUCT CARDS */
+.meesho-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(225px, 1fr));
+    gap: 18px;
+}
+
+.meesho-card {
+    background-color: #ffffff;
+    border: 1px solid var(--meesho-border);
+    border-radius: 6px;
+    overflow: hidden;
     text-decoration: none;
     color: inherit;
+    display: flex;
+    flex-direction: column;
     transition: box-shadow 0.2s ease, transform 0.2s ease;
     cursor: pointer;
-    position: relative;
 }
 
-.apparel-card:hover {
+.meesho-card:hover {
     box-shadow: var(--shadow-hover);
-    transform: translateY(-2px);
+    transform: translateY(-3px);
 }
 
-.card-img-box {
+.card-img-holder {
     width: 100%;
-    height: 260px;
+    height: 270px;
+    background-color: #f7f7f7;
     overflow: hidden;
     position: relative;
-    background-color: #f8f8f8;
-    margin-bottom: 10px;
 }
 
-.card-img-box img {
+.card-img-holder img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     transition: transform 0.3s ease;
 }
 
-.apparel-card:hover .card-img-box img {
-    transform: scale(1.05);
+.meesho-card:hover .card-img-holder img {
+    transform: scale(1.04);
 }
 
-.assured-badge {
+.trusted-tag {
     position: absolute;
-    bottom: 6px;
-    left: 6px;
-    background: #ffffff;
-    padding: 2px 6px;
+    bottom: 8px;
+    left: 8px;
+    background-color: rgba(255, 255, 255, 0.95);
+    color: var(--meesho-dark);
     font-size: 10px;
     font-weight: 700;
-    border-radius: 2px;
-    color: var(--primary-blue);
+    padding: 3px 8px;
+    border-radius: 3px;
     border: 1px solid #e0e0e0;
 }
 
-.card-brand {
-    font-size: 13px;
-    color: var(--secondary-text);
-    font-weight: 700;
-    text-transform: uppercase;
-    margin-bottom: 4px;
+.card-body {
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 }
 
-.card-title {
+.card-title-text {
     font-size: 13px;
-    font-weight: 500;
-    color: var(--dark-text);
+    color: var(--meesho-gray);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     margin-bottom: 6px;
 }
 
-.card-rating-row {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin-bottom: 8px;
-}
-
-.rating-badge {
-    background-color: var(--primary-green);
-    color: #ffffff;
-    font-size: 11px;
-    font-weight: 700;
-    padding: 1px 6px;
-    border-radius: 3px;
-}
-
-.rating-count-text {
-    font-size: 12px;
-    color: var(--secondary-text);
-    font-weight: 500;
-}
-
-.card-price-row {
+.card-price-container {
     display: flex;
     align-items: baseline;
     gap: 8px;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
 }
 
-.current-price {
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--dark-text);
+.card-price-val {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--meesho-dark);
 }
 
-.mrp-price {
+.card-mrp-val {
     font-size: 12px;
-    color: var(--secondary-text);
+    color: var(--meesho-light-gray);
     text-decoration: line-through;
 }
 
-.discount-rate {
+.card-discount-val {
     font-size: 12px;
     font-weight: 700;
-    color: var(--primary-green);
+    color: var(--meesho-green);
 }
 
-.delivery-tag {
+.free-delivery-badge {
+    background-color: #f1fbf6;
+    color: var(--meesho-green);
     font-size: 11px;
-    color: var(--dark-text);
-    font-weight: 500;
-    margin-bottom: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 12px;
+    width: fit-content;
+    margin-bottom: 8px;
 }
 
-.card-specs-row {
-    font-size: 11px;
-    color: var(--secondary-text);
-    border-top: 1px dashed #e0e0e0;
-    padding-top: 6px;
+.card-rating-strip {
     display: flex;
-    justify-content: space-between;
+    align-items: center;
+    gap: 6px;
+    margin-top: auto;
+    font-size: 11px;
+}
+
+.rating-chip {
+    background-color: var(--meesho-green);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 11px;
+    padding: 2px 6px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.rating-count {
+    color: var(--meesho-light-gray);
 }
 
 /* ==========================================================================
-   DEDICATED AUTH PAGES (SPLIT-SCREEN FLIPKART STYLE)
+   PRODUCT DETAIL PAGE (MEESHO STYLE)
    ========================================================================== */
-.auth-page-container {
-    max-width: 820px;
-    margin: 40px auto;
-    background-color: #ffffff;
-    border-radius: 4px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+.meesho-pdp-layout {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 20px;
     display: grid;
-    grid-template-columns: 320px 1fr;
-    min-height: 480px;
-    overflow: hidden;
+    grid-template-columns: 440px 1fr;
+    gap: 32px;
 }
 
-.auth-sidebar-banner {
-    background-color: var(--primary-blue);
-    padding: 40px 32px;
-    color: #ffffff;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.auth-sidebar-title {
-    font-size: 26px;
-    font-weight: 700;
-    line-height: 1.3;
-    margin-bottom: 16px;
-}
-
-.auth-sidebar-sub {
-    font-size: 15px;
-    color: #dbdbdb;
-    line-height: 1.5;
-}
-
-.auth-form-container {
-    padding: 40px 36px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.form-group {
-    margin-bottom: 20px;
-    position: relative;
-}
-
-.form-label {
-    display: block;
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--secondary-text);
-    margin-bottom: 6px;
-    text-transform: uppercase;
-}
-
-.form-control {
-    width: 100%;
-    height: 42px;
-    border: 1px solid var(--light-border);
-    border-radius: 2px;
-    padding: 0 12px;
-    font-size: 14px;
-    outline: none;
-    transition: border-color 0.2s;
-}
-
-.form-control:focus {
-    border-color: var(--primary-blue);
-}
-
-.btn-auth-primary {
-    width: 100%;
-    height: 44px;
-    background-color: var(--primary-orange);
-    color: #ffffff;
-    font-size: 15px;
-    font-weight: 700;
-    border: none;
-    border-radius: 2px;
-    cursor: pointer;
-    box-shadow: 0 1px 2px 0 rgba(0,0,0,0.2);
-    margin-top: 8px;
-}
-
-.btn-auth-primary:hover {
-    background-color: #e65510;
-}
-
-.auth-toggle-link {
-    text-align: center;
-    margin-top: 24px;
-    font-size: 14px;
-    color: var(--primary-blue);
-    text-decoration: none;
-    font-weight: 600;
-    cursor: pointer;
-}
-
-.demo-account-box {
-    margin-top: 20px;
-    background-color: #f9f9f9;
-    border: 1px dashed var(--light-border);
-    padding: 12px;
-    border-radius: 4px;
-    font-size: 12px;
-    color: #555555;
-}
-
-.demo-account-box span {
-    font-weight: 700;
-    color: var(--dark-text);
-}
-
-.btn-demo-fill {
-    margin-top: 8px;
-    background: #e8f0fe;
-    color: var(--primary-blue);
-    border: 1px solid #c2d7fc;
-    padding: 4px 10px;
-    font-size: 12px;
-    font-weight: 600;
-    border-radius: 2px;
-    cursor: pointer;
-}
-
-/* ==========================================================================
-   PRODUCT DETAIL PAGE
-   ========================================================================== */
-.pdp-container {
-    max-width: 1240px;
-    margin: 16px auto;
-    padding: 0 16px;
-    display: grid;
-    grid-template-columns: 460px 1fr;
-    gap: 24px;
+.pdp-left-box {
     background-color: #ffffff;
-    box-shadow: var(--shadow-soft);
-    padding: 24px;
-    border-radius: 2px;
-}
-
-.pdp-gallery {
+    border: 1px solid var(--meesho-border);
+    border-radius: 6px;
+    padding: 16px;
     display: flex;
     flex-direction: column;
     gap: 16px;
+    height: fit-content;
 }
 
-.pdp-main-img-box {
+.pdp-big-image {
     width: 100%;
     height: 480px;
-    border: 1px solid var(--light-border);
     overflow: hidden;
+    border-radius: 4px;
+    background-color: #f7f7f7;
 }
 
-.pdp-main-img-box img {
+.pdp-big-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
-.pdp-action-buttons {
+.pdp-cta-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 12px;
 }
 
-.btn-add-bag {
-    height: 48px;
-    background-color: #ff9f00;
-    color: #ffffff;
+.btn-meesho-cart {
+    height: 46px;
+    background-color: #ffffff;
+    border: 1px solid var(--meesho-pink);
+    color: var(--meesho-pink);
     font-weight: 700;
-    font-size: 15px;
-    border: none;
-    border-radius: 2px;
+    font-size: 14px;
+    border-radius: 4px;
     cursor: pointer;
+    transition: background-color 0.2s;
 }
 
-.btn-buy-now {
-    height: 48px;
-    background-color: var(--primary-orange);
-    color: #ffffff;
-    font-weight: 700;
-    font-size: 15px;
-    border: none;
-    border-radius: 2px;
-    cursor: pointer;
+.btn-meesho-cart:hover {
+    background-color: var(--meesho-light-pink);
 }
 
-.pdp-info-panel {
+.btn-meesho-buy {
+    height: 46px;
+    background-color: var(--meesho-pink);
+    border: none;
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-meesho-buy:hover {
+    background-color: var(--meesho-pink-hover);
+}
+
+.pdp-right-box {
     display: flex;
     flex-direction: column;
     gap: 16px;
 }
 
-.pdp-brand {
-    font-size: 16px;
-    color: var(--secondary-text);
-    font-weight: 700;
-    text-transform: uppercase;
+.pdp-card-section {
+    background-color: #ffffff;
+    border: 1px solid var(--meesho-border);
+    border-radius: 6px;
+    padding: 20px;
 }
 
-.pdp-title {
-    font-size: 20px;
-    font-weight: 500;
-    color: var(--dark-text);
-    line-height: 1.3;
+.pdp-main-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--meesho-gray);
+    line-height: 1.4;
+    margin-bottom: 12px;
 }
 
-.pdp-price-panel {
+.pdp-price-row {
     display: flex;
     align-items: baseline;
-    gap: 12px;
+    gap: 10px;
+    margin-bottom: 8px;
 }
 
 .pdp-current-price {
     font-size: 26px;
-    font-weight: 700;
+    font-weight: 800;
+    color: var(--meesho-dark);
 }
 
-.pdp-mrp {
-    font-size: 16px;
-    color: var(--secondary-text);
+.pdp-mrp-price {
+    font-size: 14px;
+    color: var(--meesho-light-gray);
     text-decoration: line-through;
 }
 
-.pdp-discount {
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--primary-green);
-}
-
-.selector-group-title {
+.pdp-discount-rate {
     font-size: 14px;
     font-weight: 700;
-    margin-bottom: 8px;
+    color: var(--meesho-green);
 }
 
-.selector-chips {
+.size-pill-row {
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
+    margin-top: 10px;
 }
 
-.chip-btn {
-    border: 1px solid var(--light-border);
+.size-pill {
+    padding: 8px 18px;
+    border: 1px solid #d4d4d4;
+    border-radius: 20px;
     background: #ffffff;
-    padding: 8px 16px;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
+    color: var(--meesho-dark);
     cursor: pointer;
-    border-radius: 2px;
+    transition: all 0.2s;
 }
 
-.chip-btn.active {
-    border-color: var(--primary-blue);
-    color: var(--primary-blue);
-    background-color: #f1f6ff;
+.size-pill.selected {
+    border-color: var(--meesho-pink);
+    color: var(--meesho-pink);
+    background-color: var(--meesho-light-pink);
 }
 
 /* ==========================================================================
-   CART & ORDER HISTORY PAGES
+   CART & ORDER SUMMARY (MEESHO 2-COLUMN)
    ========================================================================== */
-.cart-layout {
-    max-width: 1240px;
-    margin: 16px auto;
-    padding: 0 16px;
+.meesho-cart-layout {
+    max-width: 1100px;
+    margin: 24px auto;
+    padding: 0 20px;
     display: grid;
-    grid-template-columns: 1fr 360px;
-    gap: 16px;
+    grid-template-columns: 1fr 380px;
+    gap: 24px;
 }
 
-.cart-items-card {
+.cart-items-panel {
     background-color: #ffffff;
-    border-radius: 2px;
-    box-shadow: var(--shadow-soft);
+    border: 1px solid var(--meesho-border);
+    border-radius: 6px;
     padding: 20px;
 }
 
-.price-summary-card {
+.cart-summary-panel {
     background-color: #ffffff;
-    border-radius: 2px;
-    box-shadow: var(--shadow-soft);
+    border: 1px solid var(--meesho-border);
+    border-radius: 6px;
     padding: 20px;
     height: fit-content;
 }
 
-.summary-title {
+.cart-item-row {
+    display: flex;
+    gap: 16px;
+    padding-bottom: 18px;
+    margin-bottom: 18px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.cart-item-thumb {
+    width: 90px;
+    height: 110px;
+    border-radius: 4px;
+    overflow: hidden;
+    background: #f7f7f7;
+    flex-shrink: 0;
+}
+
+.cart-item-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.cart-item-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* ==========================================================================
+   AUTH CARD (MEESHO AUTHENTICATION STYLE)
+   ========================================================================== */
+.meesho-auth-container {
+    max-width: 420px;
+    margin: 40px auto;
+    background-color: #ffffff;
+    border: 1px solid var(--meesho-border);
+    border-radius: 8px;
+    box-shadow: var(--shadow-card);
+    padding: 32px 28px;
+}
+
+.meesho-auth-logo {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--meesho-pink);
+    text-align: center;
+    margin-bottom: 4px;
+}
+
+.meesho-auth-sub {
+    font-size: 13px;
+    color: var(--meesho-gray);
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.meesho-input-group {
+    margin-bottom: 18px;
+}
+
+.meesho-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--meesho-dark);
+    margin-bottom: 6px;
+}
+
+.meesho-input {
+    width: 100%;
+    height: 42px;
+    border: 1px solid #d4d4d4;
+    border-radius: 4px;
+    padding: 0 12px;
+    font-size: 14px;
+    outline: none;
+}
+
+.meesho-input:focus {
+    border-color: var(--meesho-pink);
+}
+
+.btn-meesho-primary {
+    width: 100%;
+    height: 44px;
+    background-color: var(--meesho-pink);
+    color: #ffffff;
     font-size: 15px;
     font-weight: 700;
-    color: var(--secondary-text);
-    text-transform: uppercase;
-    padding-bottom: 12px;
-    border-bottom: 1px solid var(--light-border);
-    margin-bottom: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 8px;
 }
 
-.summary-row {
-    display: flex;
-    justify-content: space-between;
-    font-size: 14px;
-    margin-bottom: 12px;
+.btn-meesho-primary:hover {
+    background-color: var(--meesho-pink-hover);
 }
 
-.summary-total-row {
-    display: flex;
-    justify-content: space-between;
-    font-size: 16px;
-    font-weight: 700;
-    border-top: 1px dashed var(--light-border);
-    border-bottom: 1px dashed var(--light-border);
-    padding: 14px 0;
-    margin: 16px 0;
-}
-
-/* FOOTER */
-.site-footer {
-    background-color: #172337;
-    color: #ffffff;
-    padding: 32px 16px 20px 16px;
+/* ==========================================================================
+   FOOTER (MEESHO STYLE)
+   ========================================================================== */
+.meesho-footer {
+    background-color: #ffffff;
+    border-top: 1px solid var(--meesho-border);
+    padding: 40px 20px 24px 20px;
     margin-top: auto;
 }
 
-.footer-content {
-    max-width: 1240px;
+.footer-inner {
+    max-width: 1280px;
     margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 32px;
     font-size: 13px;
-    color: #878787;
-    border-bottom: 1px solid #454d5e;
-    padding-bottom: 20px;
-    margin-bottom: 16px;
+    color: var(--meesho-gray);
+    border-bottom: 1px solid var(--meesho-border);
+    padding-bottom: 28px;
+    margin-bottom: 20px;
 }
 
-.footer-bottom {
-    max-width: 1240px;
+.footer-col-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--meesho-dark);
+    margin-bottom: 12px;
+}
+
+.footer-bottom-copy {
+    max-width: 1280px;
     margin: 0 auto;
     text-align: center;
     font-size: 12px;
-    color: #878787;
+    color: var(--meesho-light-gray);
 }

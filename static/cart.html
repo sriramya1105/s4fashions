@@ -3,134 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shopping Cart - ThreadCraft Apparel</title>
+    <title>Shopping Cart - Meesho Fashion</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 
-    <!-- MAIN HEADER -->
-    <header class="main-header">
-        <div class="header-container">
-            <a href="/" class="logo-wrapper">
-                <span class="logo-text">ThreadCraft</span>
-                <span class="logo-subtext">Explore <span>Fashion</span></span>
+    <!-- TOP HEADER -->
+    <header class="meesho-top-header">
+        <div class="header-inner">
+            <a href="/" class="brand-meesho">
+                <span class="brand-title">meesho</span>
+                <span class="brand-subtitle">Fashion Mart</span>
             </a>
 
-            <div class="search-container">
-                <input type="text" class="search-input" placeholder="Search for products, brands and more">
-            </div>
-
-            <div class="header-nav">
+            <div class="header-right-actions">
                 <div id="header-auth-slot"></div>
-                <a href="/orders.html" class="header-nav-link">Orders</a>
-                <a href="/cart.html" class="header-nav-link cart-link" style="color: var(--primary-yellow);">
-                    Cart <span class="cart-badge-count" id="cart-count-badge">0</span>
+                <a href="/orders.html" class="action-column-link">
+                    <svg class="action-icon" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                    <span>Orders</span>
+                </a>
+                <a href="/cart.html" class="action-column-link" style="color: var(--meesho-pink);">
+                    <svg class="action-icon" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                    <span>Cart</span>
+                    <span class="header-cart-badge" id="cart-count-badge">0</span>
                 </a>
             </div>
         </div>
     </header>
 
-    <!-- CART & PRICE DETAILS (FLIPKART 2-COLUMN LAYOUT) -->
-    <main class="cart-layout" id="cart-main">
+    <!-- MEESHO 2-COLUMN CART -->
+    <main class="meesho-cart-layout">
         
-        <!-- LEFT: ITEMS CONTAINER -->
-        <section class="cart-items-card">
-            <h2 style="font-size: 18px; font-weight: 700; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--light-border);">
-                My Cart (<span id="cart-header-count">0</span>)
+        <!-- LEFT CART ITEMS & ADDRESS -->
+        <section class="cart-items-panel">
+            <h2 style="font-size: 16px; font-weight: 700; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--meesho-border);">
+                Cart | <span id="cart-header-count">0</span> Item(s)
             </h2>
 
-            <div id="cart-items-list" style="display: flex; flex-direction: column; gap: 16px;">
-                <!-- Populated by JS -->
+            <div id="meesho-cart-list">
+                <!-- Cart items rendered here -->
             </div>
 
-            <!-- CHECKOUT ADDRESS ACCORDION -->
-            <div id="checkout-section" style="margin-top: 24px; border-top: 1px solid var(--light-border); padding-top: 16px;">
-                <h3 style="font-size: 15px; font-weight: 700; text-transform: uppercase; margin-bottom: 12px;">Delivery Address</h3>
+            <!-- DELIVERY ADDRESS -->
+            <div id="checkout-block" style="margin-top: 24px; border-top: 1px solid var(--meesho-border); padding-top: 18px;">
+                <h3 style="font-size: 15px; font-weight: 700; margin-bottom: 12px; color: var(--meesho-dark);">Delivery Address</h3>
                 
-                <div class="form-group">
-                    <label class="form-label">Full Street Address (with Landmark)</label>
-                    <textarea id="ship-address" class="form-control" style="height: 60px; padding: 8px;" placeholder="Flat/House No., Street, City, State, Pincode"></textarea>
+                <div class="meesho-input-group">
+                    <label class="meesho-label">Complete Delivery Address</label>
+                    <textarea id="ship-address" class="meesho-input" style="height: 60px; padding: 8px;" placeholder="House/Flat No, Street, Colony, City, Pin code"></textarea>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label">Contact Phone Number</label>
-                    <input type="text" id="ship-phone" class="form-control" placeholder="+91 9876543210">
+                <div class="meesho-input-group">
+                    <label class="meesho-label">Contact Phone Number</label>
+                    <input type="text" id="ship-phone" class="meesho-input" placeholder="+91 9876543210">
                 </div>
 
-                <button type="button" class="btn-buy-now" id="btn-place-order" style="width: 100%; height: 48px;" onclick="placeOrder()">
-                    PLACE ORDER
-                </button>
+                <button type="button" class="btn-meesho-primary" id="btn-order" onclick="placeOrder()">Continue / Place Order</button>
             </div>
         </section>
 
-        <!-- RIGHT: PRICE DETAILS (STICKY FLOATING SUMMARY) -->
-        <aside class="price-summary-card">
-            <div class="summary-title">Price Details</div>
+        <!-- RIGHT PRICE DETAILS -->
+        <aside class="cart-summary-panel">
+            <h3 style="font-size: 15px; font-weight: 700; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--meesho-border);">
+                Price Details
+            </h3>
 
-            <div class="summary-row">
-                <span>Price (<span id="summary-items-count">0</span> items)</span>
-                <span id="summary-mrp-total">₹0</span>
+            <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 10px; color: var(--meesho-gray);">
+                <span>Total Product Price</span>
+                <span id="mrp-total">₹0</span>
             </div>
 
-            <div class="summary-row">
-                <span>Discount</span>
-                <span id="summary-discount-total" style="color: var(--primary-green);">- ₹0</span>
+            <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 10px; color: var(--meesho-green);">
+                <span>Total Discounts</span>
+                <span id="discount-total">- ₹0</span>
             </div>
 
-            <div class="summary-row">
+            <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 14px; color: var(--meesho-green);">
                 <span>Delivery Charges</span>
-                <span style="color: var(--primary-green);">FREE</span>
+                <span>FREE</span>
             </div>
 
-            <div class="summary-total-row">
-                <span>Total Amount</span>
-                <span id="summary-final-total">₹0</span>
+            <div style="display: flex; justify-content: space-between; font-size: 16px; font-weight: 800; border-top: 1px dashed var(--meesho-border); padding-top: 12px; margin-top: 10px; color: var(--meesho-dark);">
+                <span>Order Total</span>
+                <span id="final-total">₹0</span>
             </div>
 
-            <div style="font-size: 12px; color: var(--primary-green); font-weight: 700;">
-                You will save <span id="summary-savings-text">₹0</span> on this order
-            </div>
-
-            <div style="margin-top: 20px; font-size: 11px; color: var(--secondary-text); line-height: 1.5; border-top: 1px solid #f0f0f0; padding-top: 12px;">
-                Safe and Secure Payments. 100% Authentic products from verified fashion merchandisers.
+            <div style="margin-top: 20px; font-size: 11px; color: var(--meesho-light-gray); line-height: 1.5; background: #fafafa; padding: 10px; border-radius: 4px;">
+                Clicking on "Continue" will place your Cash on Delivery order safely using Server-Side Price Verification (CWE-20).
             </div>
         </aside>
 
     </main>
 
-    <footer class="site-footer">
-        <div class="footer-bottom">
-            ThreadCraft Apparel · CS5101 Secure Coding Practices · Built for High-Security Evaluation
+    <footer class="meesho-footer">
+        <div class="footer-bottom-copy">
+            Meesho Fashion Mart · CS5101 Secure Coding Practices Laboratory
         </div>
     </footer>
 
     <script src="/js/core.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            renderCartPage();
+            renderCart();
         });
 
-        function renderCartPage() {
-            const list = document.getElementById("cart-items-list");
+        function renderCart() {
+            const list = document.getElementById("meesho-cart-list");
             const count = appState.cart.reduce((a, b) => a + b.quantity, 0);
 
             document.getElementById("cart-header-count").innerText = count;
-            document.getElementById("summary-items-count").innerText = count;
 
             if (appState.cart.length === 0) {
                 list.innerHTML = `
                     <div style="text-align: center; padding: 48px 16px;">
-                        <h3 style="font-size: 18px; margin-bottom: 8px;">Your cart is empty!</h3>
-                        <p style="font-size: 13px; color: var(--secondary-text); margin-bottom: 16px;">Explore our categories and add items to your cart.</p>
-                        <a href="/" class="login-btn-header" style="background-color: var(--primary-blue); color: #ffffff; padding: 10px 24px; display: inline-block;">Shop Now</a>
+                        <h3 style="font-size: 16px; margin-bottom: 6px;">Your cart is empty</h3>
+                        <p style="font-size: 13px; color: var(--meesho-light-gray); margin-bottom: 16px;">Add items to your cart to checkout.</p>
+                        <a href="/" class="btn-meesho-primary" style="display: inline-block; width: 140px; text-decoration: none; text-align: center; line-height: 44px;">Shop Now</a>
                     </div>
                 `;
-                document.getElementById("checkout-section").style.display = "none";
+                document.getElementById("checkout-block").style.display = "none";
                 updateSummary(0, 0);
                 return;
             }
 
-            document.getElementById("checkout-section").style.display = "block";
+            document.getElementById("checkout-block").style.display = "block";
 
             let totalSelling = 0;
             let totalMRP = 0;
@@ -141,32 +137,29 @@
                 totalSelling += item.price * item.quantity;
 
                 return `
-                    <div style="display: flex; gap: 16px; border-bottom: 1px solid #f0f0f0; padding-bottom: 16px;">
-                        <div style="width: 110px; height: 130px; flex-shrink: 0; background: #f8f8f8;">
-                            <img src="${item.image_url}" style="width: 100%; height: 100%; object-fit: cover;">
+                    <div class="cart-item-row">
+                        <div class="cart-item-thumb">
+                            <img src="${item.image_url}">
                         </div>
 
-                        <div style="flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div class="cart-item-details">
                             <div>
-                                <div style="font-size: 14px; font-weight: 700; color: var(--secondary-text);">${escapeHtml(item.brand)}</div>
-                                <div style="font-size: 14px; font-weight: 500; color: var(--dark-text); margin-top: 2px;">${escapeHtml(item.title)}</div>
-                                <div style="font-size: 12px; color: var(--secondary-text); margin-top: 4px;">
-                                    Size: <b>${item.size}</b> | Color: <b>${item.color}</b>
-                                </div>
+                                <div style="font-size: 14px; font-weight: 700; color: var(--meesho-dark);">${escapeHtml(item.brand)} - ${escapeHtml(item.title)}</div>
+                                <div style="font-size: 12px; color: var(--meesho-gray); margin-top: 4px;">Size: <b>${item.size}</b> | Color: <b>${item.color}</b></div>
                             </div>
 
-                            <div style="display: flex; align-items: baseline; gap: 10px; margin-top: 8px;">
-                                <span style="font-size: 18px; font-weight: 700;">₹${(item.price * item.quantity).toFixed(0)}</span>
-                                ${mrp > item.price ? `<span style="font-size: 13px; color: var(--secondary-text); text-decoration: line-through;">₹${(mrp * item.quantity).toFixed(0)}</span>` : ''}
+                            <div style="display: flex; align-items: baseline; gap: 8px; margin-top: 8px;">
+                                <span style="font-size: 16px; font-weight: 800;">₹${(item.price * item.quantity).toFixed(0)}</span>
+                                ${mrp > item.price ? `<span style="font-size: 12px; color: var(--meesho-light-gray); text-decoration: line-through;">₹${(mrp * item.quantity).toFixed(0)}</span>` : ''}
                             </div>
 
-                            <div style="display: flex; align-items: center; gap: 16px; margin-top: 10px;">
-                                <div style="display: flex; align-items: center; border: 1px solid var(--light-border);">
-                                    <button onclick="changeQty(${idx}, -1)" style="width: 28px; height: 28px; background: #fafafa; border: none; cursor: pointer; font-weight: bold;">-</button>
-                                    <span style="padding: 0 12px; font-size: 13px; font-weight: 600;">${item.quantity}</span>
-                                    <button onclick="changeQty(${idx}, 1)" style="width: 28px; height: 28px; background: #fafafa; border: none; cursor: pointer; font-weight: bold;">+</button>
+                            <div style="display: flex; align-items: center; gap: 16px; margin-top: 8px;">
+                                <div style="display: flex; align-items: center; border: 1px solid var(--meesho-border); border-radius: 4px;">
+                                    <button onclick="changeQty(${idx}, -1)" style="width: 28px; height: 26px; border: none; background: #f9f9f9; cursor: pointer; font-weight: bold;">-</button>
+                                    <span style="padding: 0 10px; font-size: 12px; font-weight: 700;">${item.quantity}</span>
+                                    <button onclick="changeQty(${idx}, 1)" style="width: 28px; height: 26px; border: none; background: #f9f9f9; cursor: pointer; font-weight: bold;">+</button>
                                 </div>
-                                <button onclick="removeItem(${idx})" style="background: none; border: none; color: var(--dark-text); font-size: 13px; font-weight: 600; cursor: pointer;">REMOVE</button>
+                                <button onclick="removeItem(${idx})" style="background: none; border: none; color: var(--meesho-pink); font-size: 12px; font-weight: 700; cursor: pointer;">REMOVE</button>
                             </div>
                         </div>
                     </div>
@@ -178,10 +171,9 @@
 
         function updateSummary(mrp, selling) {
             const discount = mrp - selling;
-            document.getElementById("summary-mrp-total").innerText = `₹${mrp.toFixed(0)}`;
-            document.getElementById("summary-discount-total").innerText = `- ₹${discount > 0 ? discount.toFixed(0) : '0'}`;
-            document.getElementById("summary-final-total").innerText = `₹${selling.toFixed(0)}`;
-            document.getElementById("summary-savings-text").innerText = `₹${discount > 0 ? discount.toFixed(0) : '0'}`;
+            document.getElementById("mrp-total").innerText = `₹${mrp.toFixed(0)}`;
+            document.getElementById("discount-total").innerText = `- ₹${discount > 0 ? discount.toFixed(0) : '0'}`;
+            document.getElementById("final-total").innerText = `₹${selling.toFixed(0)}`;
         }
 
         function changeQty(idx, delta) {
@@ -191,19 +183,19 @@
             }
             localStorage.setItem("tc_cart", JSON.stringify(appState.cart));
             updateCartCounter();
-            renderCartPage();
+            renderCart();
         }
 
         function removeItem(idx) {
             appState.cart.splice(idx, 1);
             localStorage.setItem("tc_cart", JSON.stringify(appState.cart));
             updateCartCounter();
-            renderCartPage();
+            renderCart();
         }
 
         async function placeOrder() {
             if (!appState.token || !appState.user) {
-                alert("Please login first to place your order.");
+                alert("Please log in to complete your purchase.");
                 window.location.href = "/login.html";
                 return;
             }
@@ -212,12 +204,12 @@
             const phone = document.getElementById("ship-phone").value.trim();
 
             if (!address || address.length < 10) {
-                alert("Please enter a valid complete delivery address (minimum 10 characters).");
+                alert("Please enter a complete delivery address.");
                 return;
             }
 
             if (!phone || phone.length < 10) {
-                alert("Please enter a valid 10-digit phone number.");
+                alert("Please enter a valid phone number.");
                 return;
             }
 
@@ -232,9 +224,9 @@
                 phone_number: phone
             };
 
-            const btn = document.getElementById("btn-place-order");
+            const btn = document.getElementById("btn-order");
             btn.disabled = true;
-            btn.innerText = "Processing Order...";
+            btn.innerText = "Placing Order...";
 
             try {
                 const res = await fetch("/api/v1/orders/checkout", {
@@ -247,25 +239,23 @@
                 });
 
                 const data = await res.json();
-
                 if (!res.ok) {
-                    alert(`Order failed: ${data.message || data.error || "Validation error"}`);
+                    alert(`Order failed: ${data.message || data.error}`);
                     btn.disabled = false;
-                    btn.innerText = "PLACE ORDER";
+                    btn.innerText = "Continue / Place Order";
                     return;
                 }
 
-                // Reset cart
                 appState.cart = [];
                 localStorage.removeItem("tc_cart");
                 updateCartCounter();
 
-                alert(`Order Placed Successfully! Order ID: #${data.id}\nTotal Payable: ₹${data.total_amount}`);
+                alert(`Order Placed Successfully! Order #${data.id}`);
                 window.location.href = "/orders.html";
             } catch (err) {
                 alert("Network communication error.");
                 btn.disabled = false;
-                btn.innerText = "PLACE ORDER";
+                btn.innerText = "Continue / Place Order";
             }
         }
     </script>
