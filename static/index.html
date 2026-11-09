@@ -8,9 +8,9 @@
 </head>
 <body>
 
-    <!-- 1. S4 FASHIONS DYNAMIC SPLASH SCREEN (BUILT FROM ISOLATED TRANSPARENT ASSETS) -->
+    <!-- 1. S4 FASHIONS DYNAMIC SPLASH SCREEN (PROPERLY PROPORTIONED 16:9 STAGE) -->
     <div id="splash-screen">
-        <div class="s4-stage">
+        <div class="s4-stage-wrapper">
             <!-- Top Purple Fabric Wave Decor -->
             <img src="/assets/top-purple-fabric-wave.png" alt="Top Wave" class="s4-asset-wave-top">
 
@@ -23,13 +23,13 @@
             <!-- Right Background: Shelf with Plant & Folded Clothes -->
             <img src="/assets/clothing-shelf-plant.png" alt="Plant Shelf" class="s4-asset-shelf-plant">
 
-            <!-- Top Center: Transparent S4 Fashions Logo -->
+            <!-- Top Center: Clean S4 Fashions Logo -->
             <div class="s4-asset-logo-box">
-                <img src="/assets/s4-logo.png" alt="S4 Fashions Logo" class="s4-asset-logo">
+                <img src="/assets/s4-logo-perfect.png" alt="S4 Fashions Logo" class="s4-asset-logo">
             </div>
 
-            <!-- Center Stage: The 4 Models (Women, Men, Boy, Girl) -->
-            <div class="s4-models-stage-group">
+            <!-- Center Stage: The Models with Arch Backgrounds -->
+            <div class="s4-models-center-group">
                 <div class="model-slot slot-women">
                     <img src="/assets/women-model.png" alt="Women Model">
                 </div>
@@ -44,12 +44,10 @@
                 </div>
             </div>
 
-            <!-- Single 'Shop Now' Action Button -->
-            <div class="s4-shop-now-wrapper">
-                <button type="button" class="s4-shop-btn-action" onclick="dismissSplashNow()">
-                    Shop Now &rarr;
-                </button>
-            </div>
+            <!-- Single 'Shop Now' Action Button (Only ONE in the entire screen) -->
+            <button type="button" class="s4-single-shop-btn" onclick="dismissSplashNow()">
+                Shop Now &rarr;
+            </button>
 
             <!-- Bottom Benefits Bar -->
             <div class="s4-benefits-box">
