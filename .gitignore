@@ -1,0 +1,18 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Environment and secrets
+.env
+*.db
+*.sqlite3
+
+# IDE / Editor
+.vscode/
+.idea/

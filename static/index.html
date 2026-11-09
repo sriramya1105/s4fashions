@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ThreadCraft Apparel - Men, Women & Kids Wear</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+    <!-- TOP NAVIGATION BAR -->
+    <header class="navbar">
+        <div class="nav-container">
+            <a href="/" class="brand-logo">
+                <span>ThreadCraft</span>
+                <span class="brand-badge">SECURE STORE</span>
+            </a>
+
+            <!-- SEARCH BAR (Meesho / Flipkart style) -->
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="search-input" placeholder="Search for Kurtas, Kurtis, Shirts, Tops, Jeans, Frocks...">
+            </div>
+
+            <!-- USER ACTIONS -->
+            <div class="nav-actions">
+                <a href="/docs" target="_blank" class="nav-btn" style="color: #9c27b0;" title="Swagger Interactive API Sandbox">
+                    ⚡ API Docs
+                </a>
+                <button class="nav-btn" onclick="openOrdersModal()">
+                    📦 Orders
+                </button>
+                <button class="nav-btn" id="auth-btn" onclick="openAuthModal()">
+                    👤 Login
+                </button>
+                <button class="nav-btn cart-btn" onclick="openCartModal()">
+                    🛍️ Bag
+                    <span class="cart-count" id="cart-count">0</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- CATEGORY NAVIGATION TABS -->
+        <nav class="sub-navbar">
+            <div class="subnav-container">
+                <div class="subnav-item active" data-category="">All Categories</div>
+                <div class="subnav-item" data-category="men">Men's Wear</div>
+                <div class="subnav-item" data-category="women">Women's Wear</div>
+                <div class="subnav-item" data-category="kids">Kids' Wear</div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- MAIN PRODUCT BROWSER -->
+    <main class="main-container">
+        
+        <!-- SIDEBAR FILTERS (Meesho / Flipkart style) -->
+        <aside class="filter-panel">
+            <div class="filter-title">Filters & Specifications</div>
+
+            <div class="filter-group">
+                <label for="subcategory-filter">Subcategory</label>
+                <select id="subcategory-filter">
+                    <option value="">All Subcategories</option>
+                    <option value="Traditional">Traditional / Ethnic</option>
+                    <option value="Modern">Modern / Western</option>
+                    <option value="Kurtis">Kurtis & Kurtas</option>
+                    <option value="Short Tops">Short Tops & Tees</option>
+                    <option value="Boys Ethnic">Boys Wear</option>
+                    <option value="Girls Western">Girls Frocks & Sets</option>
+                    <option value="Infants">Infants & Toddlers</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="brand-filter">Brand</label>
+                <select id="brand-filter">
+                    <option value="">All Brands</option>
+                    <option value="FabIndia">FabIndia</option>
+                    <option value="Manyavar">Manyavar</option>
+                    <option value="Peter England">Peter England</option>
+                    <option value="Levi's">Levi's</option>
+                    <option value="Allen Solly">Allen Solly</option>
+                    <option value="Biba">Biba</option>
+                    <option value="W for Woman">W for Woman</option>
+                    <option value="Zara">Zara</option>
+                    <option value="Hopscotch">Hopscotch</option>
+                    <option value="Mothercare">Mothercare</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="price-filter">Max Price (₹)</label>
+                <select id="price-filter">
+                    <option value="">Any Price</option>
+                    <option value="1000">Under ₹1,000</option>
+                    <option value="2000">Under ₹2,000</option>
+                    <option value="3000">Under ₹3,000</option>
+                    <option value="5000">Under ₹5,000</option>
+                </select>
+            </div>
+
+            <button class="btn-filter-clear" id="btn-clear-filter">Reset Filters</button>
+        </aside>
+
+        <!-- PRODUCT CATALOG GRID -->
+        <section class="products-container">
+            <div class="products-header">
+                <div class="products-count" id="products-count">Loading apparel...</div>
+            </div>
+
+            <div class="product-grid" id="product-grid">
+                <!-- Dynamically populated by app.js -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- GENERIC MODAL (Bag, Auth, Order History, Size Selection) -->
+    <div class="modal" id="generic-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 style="margin: 0; color: #282c3f;">ThreadCraft Apparel</h4>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div id="modal-body">
+                <!-- Injected via JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>ThreadCraft Apparel - CS5101 Secure Coding Practices · Project 7 (Abuse-Resistant REST API)</p>
+        <p style="margin-top: 4px; font-size: 11px;">Built with FastAPI · SQLite · Pydantic · SlowAPI · HTML/CSS/JS</p>
+    </footer>
+
+    <script src="/js/app.js"></script>
+</body>
+</html>
