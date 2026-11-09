@@ -23,25 +23,18 @@ document.addEventListener("DOMContentLoaded", () => {
     updateCartCounter();
 });
 
-// Splash Screen Logic (Dismiss after 900ms or on user return)
+// Splash Screen Logic (Displays the S4 Fashions poster for 2.5 - 3 seconds, then smoothly reveals store)
 function handleSplashScreen() {
     const splash = document.getElementById("splash-screen");
     if (!splash) return;
-    
-    // Check if user visited in this session
-    const hasSeenSplash = sessionStorage.getItem("tc_splash_seen");
-    if (hasSeenSplash) {
-        splash.style.display = "none";
-        return;
-    }
 
+    // Display splash poster for exactly 2.5 seconds, then fade out smoothly
     setTimeout(() => {
         splash.classList.add("hidden");
-        sessionStorage.setItem("tc_splash_seen", "true");
         setTimeout(() => {
             splash.style.display = "none";
-        }, 500);
-    }, 900);
+        }, 800);
+    }, 2500);
 }
 
 // Authentication UI Sync
