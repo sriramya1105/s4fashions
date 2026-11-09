@@ -42,7 +42,7 @@ body {
 }
 
 /* ==========================================================================
-   S4 FASHIONS COMPLETE ENVIRONMENT (LEAVES, CLOTHES STAND, SHELF, MODELS, CTA)
+   S4 FASHIONS LUXURY SPLASH SCREEN (ELEGANT WINE / CREAM PALETTE)
    ========================================================================== */
 #splash-screen {
     position: fixed;
@@ -50,7 +50,7 @@ body {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: #fbf7f4;
+    background: linear-gradient(135deg, #fdf8f5 0%, #faedf3 100%);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -59,7 +59,7 @@ body {
     visibility: visible;
     transition: opacity 0.8s ease-in-out, visibility 0.8s ease-in-out;
     overflow: hidden;
-    padding: 0;
+    padding: 24px;
 }
 
 #splash-screen.hidden {
@@ -68,189 +68,179 @@ body {
     pointer-events: none;
 }
 
-.s4-full-stage {
-    position: relative;
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: radial-gradient(circle at center, #ffffff 40%, #fbf5f2 100%);
-    overflow: hidden;
-}
-
-/* Left Clothes Stand & Hanging Shirts */
-.scene-decor.decor-left-rack {
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    z-index: 1;
-    pointer-events: none;
-    display: flex;
-    align-items: center;
-}
-
-.scene-decor.decor-left-rack img {
-    height: 95%;
-    max-width: 25vw;
-    object-fit: contain;
-    object-position: left center;
-}
-
-/* Right Plant Shelf & Folded Clothes */
-.scene-decor.decor-right-shelf {
-    position: absolute;
-    right: 0;
-    top: 0;
-    height: 100%;
-    z-index: 1;
-    pointer-events: none;
-    display: flex;
-    align-items: center;
-}
-
-.scene-decor.decor-right-shelf img {
-    height: 95%;
-    max-width: 25vw;
-    object-fit: contain;
-    object-position: right center;
-}
-
-/* Center Composition (Header, Models, CTA, Trust Badges) */
-.s4-center-composition {
-    max-width: 720px;
+.s4-luxury-container {
+    max-width: 960px;
     width: 100%;
-    height: 94%;
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 16px 48px rgba(85, 20, 71, 0.08);
+    border: 1px solid #f2e3ed;
+    padding: 36px 36px 28px 36px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    z-index: 5;
-    padding: 10px 0;
-}
-
-/* Brand Header */
-.s4-splash-header {
     text-align: center;
-    display: flex;
-    flex-direction: column;
+    animation: luxuryFadeIn 0.5s ease-out;
+}
+
+@keyframes luxuryFadeIn {
+    from { opacity: 0; transform: scale(0.98) translateY(10px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.luxury-brand-badge {
+    display: inline-flex;
     align-items: center;
+    gap: 8px;
+    background: #fbf0f6;
+    color: #6e1a4f;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 12px;
 }
 
-.s4-hanger-logo {
-    width: 46px;
-    height: 22px;
-    margin-bottom: 2px;
+.badge-dot {
+    width: 5px;
+    height: 5px;
+    background: #6e1a4f;
+    border-radius: 50%;
 }
 
-.hanger-svg {
-    width: 100%;
-    height: 100%;
-}
-
-.s4-title-text {
-    font-size: 34px;
+.luxury-main-title {
+    font-size: 40px;
     font-weight: 800;
     font-style: italic;
-    color: #551447;
+    color: #4a1038;
     letter-spacing: -0.5px;
     line-height: 1.1;
     font-family: 'Georgia', serif;
+    margin-bottom: 6px;
 }
 
-.s4-tagline-bar {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    margin-top: 4px;
+.luxury-sub-title {
+    font-size: 14px;
+    color: #7a6071;
+    margin-bottom: 28px;
+    max-width: 560px;
 }
 
-.s4-dash {
-    width: 32px;
-    height: 1px;
-    background: #bfa1b5;
-}
-
-.s4-tagline {
-    font-size: 13px;
-    font-weight: 600;
-    color: #66435c;
-    letter-spacing: 0.8px;
-    text-transform: uppercase;
-}
-
-/* Center Models */
-.s4-models-stage {
+/* 3 Clean Fashion Cards */
+.luxury-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
     width: 100%;
+    margin-bottom: 28px;
+}
+
+.luxury-fashion-card {
+    background: #ffffff;
+    border: 1px solid #f0e1ec;
+    border-radius: 12px;
+    overflow: hidden;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.03);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.luxury-fashion-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(85, 20, 71, 0.1);
+}
+
+.luxury-fashion-card.featured {
+    border-color: #e0bdd5;
+}
+
+.card-photo-box {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    background: #f7eef5;
+}
+
+.card-photo-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    transition: transform 0.4s ease;
+}
+
+.luxury-fashion-card:hover .card-photo-box img {
+    transform: scale(1.05);
+}
+
+.card-meta {
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    flex: 1;
-    margin: 6px 0;
+    gap: 4px;
+    background: #faf6f9;
 }
 
-.s4-models-figure {
-    max-width: 650px;
-    width: 95%;
-    max-height: 52vh;
-    object-fit: contain;
-    display: block;
-    filter: drop-shadow(0 6px 16px rgba(110, 26, 79, 0.08));
+.card-category {
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: #6e1a4f;
 }
 
-/* Single 'Shop Now' CTA Button */
-.s4-cta-wrapper {
-    margin: 6px 0 12px 0;
+.card-highlight {
+    font-size: 12px;
+    color: #666666;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
 }
 
-.s4-shop-cta-btn {
+/* Shop Now Button */
+.luxury-shop-cta {
     background: #6e1a4f;
     color: #ffffff;
     font-size: 15px;
     font-weight: 700;
-    padding: 11px 40px;
-    border-radius: 28px;
+    padding: 12px 48px;
+    border-radius: 30px;
     border: none;
     cursor: pointer;
     box-shadow: 0 4px 16px rgba(110, 26, 79, 0.35);
-    transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease;
     letter-spacing: 0.5px;
+    margin-bottom: 20px;
 }
 
-.s4-shop-cta-btn:hover {
+.luxury-shop-cta:hover {
     background: #8e2366;
-    transform: scale(1.05);
+    transform: scale(1.04);
     box-shadow: 0 6px 22px rgba(110, 26, 79, 0.55);
 }
 
-/* Trust Highlights Footer */
-.s4-trust-row {
+/* Trust Badges Bar */
+.luxury-trust-bar {
     display: flex;
     justify-content: center;
-    gap: 22px;
+    gap: 16px;
     flex-wrap: wrap;
-    font-size: 12px;
-    font-weight: 600;
-    color: #555555;
-    padding-top: 10px;
-    border-top: 1px solid #f0e1ec;
     width: 100%;
+    border-top: 1px solid #f2e3ed;
+    padding-top: 16px;
 }
 
-.s4-trust-col {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.trust-icon {
-    width: 15px;
-    height: 15px;
-    stroke: #6e1a4f;
-    fill: none;
-    stroke-width: 2;
+.trust-pill {
+    font-size: 12px;
+    color: #6d5264;
+    font-weight: 600;
+    background: #faf5f8;
+    padding: 6px 14px;
+    border-radius: 16px;
+    border: 1px solid #f0e1ec;
 }
 
 /* Bottom Progress Bar */
@@ -259,7 +249,7 @@ body {
     bottom: 0;
     left: 0;
     height: 4px;
-    background: #9f2089;
+    background: #6e1a4f;
     width: 0%;
     animation: splashBar 5.5s linear forwards;
 }

@@ -8,68 +8,67 @@
 </head>
 <body>
 
-    <!-- 1. S4 FASHIONS COMPLETE SCENE SPLASH SCREEN (LEAVES, CLOTHES RACK, SHELF, MODELS, LOGO, BUTTON) -->
+    <!-- 1. S4 FASHIONS LUXURY HERO SPLASH SCREEN -->
     <div id="splash-screen">
-        <div class="s4-full-stage">
-            <!-- Left Clothes Stand & Hanging Rack -->
-            <div class="scene-decor decor-left-rack">
-                <img src="/assets/scene_left_rack.png" alt="Clothes Stand Rack">
+        <div class="s4-luxury-container">
+            <!-- Brand Badge -->
+            <div class="luxury-brand-badge">
+                <span class="badge-dot"></span>
+                <span>NEW ARRIVALS 2026</span>
+                <span class="badge-dot"></span>
             </div>
 
-            <!-- Right Plant Shelf & Folded Clothes -->
-            <div class="scene-decor decor-right-shelf">
-                <img src="/assets/scene_right_shelf.png" alt="Plant Shelf and Folded Apparel">
+            <!-- Main Luxury Heading -->
+            <h1 class="luxury-main-title">S4 Fashions</h1>
+            <p class="luxury-sub-title">Elevate Your Everyday Style · Curated Apparel for Women, Men & Kids</p>
+
+            <!-- Three Clean Fashion Cards (Matching Color Palette: Cream, Plum, Rose) -->
+            <div class="luxury-cards-grid">
+                <!-- Women Card -->
+                <div class="luxury-fashion-card">
+                    <div class="card-photo-box">
+                        <img src="https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?w=600" alt="Women Ethnic & Modern">
+                    </div>
+                    <div class="card-meta">
+                        <span class="card-category">WOMEN</span>
+                        <span class="card-highlight">Ethnic Sarees, Kurtis & Tops</span>
+                    </div>
+                </div>
+
+                <!-- Men Card -->
+                <div class="luxury-fashion-card featured">
+                    <div class="card-photo-box">
+                        <img src="https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=600" alt="Men Traditional & Modern">
+                    </div>
+                    <div class="card-meta">
+                        <span class="card-category">MEN</span>
+                        <span class="card-highlight">Kurtas, Formal Shirts & Denim</span>
+                    </div>
+                </div>
+
+                <!-- Kids Card -->
+                <div class="luxury-fashion-card">
+                    <div class="card-photo-box">
+                        <img src="https://images.unsplash.com/photo-1622290291468-a28f7a7dc6a8?w=600" alt="Kids Wear">
+                    </div>
+                    <div class="card-meta">
+                        <span class="card-category">KIDS</span>
+                        <span class="card-highlight">Festive Sets, Frocks & Toddlers</span>
+                    </div>
+                </div>
             </div>
 
-            <!-- Main Center Content Area -->
-            <div class="s4-center-composition">
-                <!-- Top Header & Logo -->
-                <div class="s4-splash-header">
-                    <div class="s4-hanger-logo">
-                        <svg viewBox="0 0 100 45" class="hanger-svg">
-                            <path d="M 50 15 C 46 8, 38 8, 38 14 C 38 19, 48 24, 50 26 C 52 24, 62 19, 62 14 C 62 8, 54 8, 50 15 Z" fill="none" stroke="#6e1a4f" stroke-width="2.5"/>
-                            <path d="M 50 26 L 10 40 L 90 40 Z" fill="none" stroke="#6e1a4f" stroke-width="2.5" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
-                    <h1 class="s4-title-text">S4 Fashions</h1>
-                    <div class="s4-tagline-bar">
-                        <span class="s4-dash"></span>
-                        <span class="s4-tagline">Fashion for Women | Men | Kids</span>
-                        <span class="s4-dash"></span>
-                    </div>
-                </div>
+            <!-- Single 'Shop Now' CTA Button -->
+            <button type="button" class="luxury-shop-cta" onclick="dismissSplashNow()">
+                Shop Now &rarr;
+            </button>
 
-                <!-- Center Models (Women, Men, Kids) -->
-                <div class="s4-models-stage">
-                    <img src="/assets/all_models.png" alt="S4 Fashions Models - Women, Men, Kids" class="s4-models-figure">
-                </div>
-
-                <!-- Single 'Shop Now' CTA Button -->
-                <div class="s4-cta-wrapper">
-                    <button type="button" class="s4-shop-cta-btn" onclick="dismissSplashNow()">
-                        Shop Now &rarr;
-                    </button>
-                </div>
-
-                <!-- Trust Highlights Footer -->
-                <div class="s4-trust-row">
-                    <div class="s4-trust-col">
-                        <svg class="trust-icon" viewBox="0 0 24 24"><path d="M5 17h-2v-11h11v11h-2m-9 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0m9 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0m0 -6h4l3 3v3h-2"/></svg>
-                        <span>Free Shipping Above ₹1,999</span>
-                    </div>
-                    <div class="s4-trust-col">
-                        <svg class="trust-icon" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                        <span>Secure Payments</span>
-                    </div>
-                    <div class="s4-trust-col">
-                        <svg class="trust-icon" viewBox="0 0 24 24"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
-                        <span>Easy Returns</span>
-                    </div>
-                    <div class="s4-trust-col">
-                        <svg class="trust-icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
-                        <span>100% Authentic Fashion</span>
-                    </div>
-                </div>
+            <!-- Value Highlights -->
+            <div class="luxury-trust-bar">
+                <div class="trust-pill">Free Shipping Above ₹999</div>
+                <div class="trust-pill">Cash on Delivery Available</div>
+                <div class="trust-pill">7-Day Easy Returns</div>
+                <div class="trust-pill">100% Certified Authentic</div>
             </div>
         </div>
 
