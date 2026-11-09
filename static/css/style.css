@@ -42,7 +42,7 @@ body {
 }
 
 /* ==========================================================================
-   S4 FASHIONS SPLASH SCREEN (FULL SCREEN EDGE-TO-EDGE NO GAPS)
+   S4 FASHIONS SPLASH SCREEN (COMPONENT-EXTRACTED, RESPONSIVE, ZERO CUTOFFS)
    ========================================================================== */
 #splash-screen {
     position: fixed;
@@ -59,8 +59,7 @@ body {
     visibility: visible;
     transition: opacity 0.8s ease-in-out, visibility 0.8s ease-in-out;
     overflow: hidden;
-    margin: 0;
-    padding: 0;
+    padding: 16px;
 }
 
 #splash-screen.hidden {
@@ -69,50 +68,171 @@ body {
     pointer-events: none;
 }
 
-/* Fullscreen Edge-to-Edge Container */
-.s4-poster-stage {
-    position: relative;
-    width: 100vw;
-    height: 100vh;
+.s4-composed-container {
+    max-width: 980px;
+    width: 100%;
+    max-height: 94vh;
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 12px 36px rgba(110, 26, 79, 0.08);
+    border: 1px solid #f2e3ee;
+    padding: 24px 32px 20px 32px;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
+    justify-content: space-between;
+    position: relative;
     overflow: hidden;
 }
 
-/* Fill full screen seamlessly eliminating any left or right gaps */
-.s4-exact-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    display: block;
+/* Corner Purple Decorative Drapes */
+.s4-corner-wave {
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    pointer-events: none;
+    background: radial-gradient(circle at 100% 0%, #aa3688 0%, #7d1c5d 40%, transparent 70%);
+    opacity: 0.25;
 }
 
-/* 'Shop Now' Button positioned naturally below the models */
-.s4-overlay-shop-btn {
-    position: absolute;
-    bottom: 19%;
-    left: 50%;
-    transform: translateX(-50%);
+.s4-corner-wave.top-right {
+    top: 0;
+    right: 0;
+    border-radius: 0 20px 0 100%;
+}
+
+.s4-corner-wave.bottom-left {
+    bottom: 0;
+    left: 0;
+    border-radius: 0 100% 0 20px;
+    background: radial-gradient(circle at 0% 100%, #aa3688 0%, #7d1c5d 40%, transparent 70%);
+}
+
+/* Brand Header */
+.s4-splash-header {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 2;
+}
+
+.s4-hanger-logo {
+    width: 48px;
+    height: 24px;
+    margin-bottom: 2px;
+}
+
+.hanger-svg {
+    width: 100%;
+    height: 100%;
+}
+
+.s4-title-text {
+    font-size: 34px;
+    font-weight: 800;
+    font-style: italic;
+    color: #551447;
+    letter-spacing: -0.5px;
+    line-height: 1.1;
+    font-family: 'Georgia', serif;
+}
+
+.s4-tagline-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 4px;
+}
+
+.s4-dash {
+    width: 30px;
+    height: 1px;
+    background: #bfa1b5;
+}
+
+.s4-tagline {
+    font-size: 13px;
+    font-weight: 600;
+    color: #66435c;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+}
+
+/* Center Models Artwork */
+.s4-models-stage {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 0;
+    z-index: 2;
+}
+
+.s4-models-figure {
+    max-width: 680px;
+    width: 90%;
+    max-height: 320px;
+    object-fit: contain;
+    border-radius: 12px;
+    display: block;
+    filter: drop-shadow(0 6px 14px rgba(110, 26, 79, 0.08));
+}
+
+/* Central Shop Now CTA */
+.s4-cta-wrapper {
+    z-index: 2;
+    margin: 6px 0 14px 0;
+}
+
+.s4-shop-cta-btn {
     background: #6e1a4f;
     color: #ffffff;
     font-size: 15px;
     font-weight: 700;
-    padding: 11px 40px;
-    border-radius: 28px;
+    padding: 10px 38px;
+    border-radius: 26px;
     border: none;
     cursor: pointer;
-    box-shadow: 0 4px 18px rgba(110, 26, 79, 0.45);
+    box-shadow: 0 4px 16px rgba(110, 26, 79, 0.35);
     transition: all 0.2s ease-in-out;
     letter-spacing: 0.5px;
-    z-index: 10;
 }
 
-.s4-overlay-shop-btn:hover {
+.s4-shop-cta-btn:hover {
     background: #8e2366;
-    transform: translateX(-50%) scale(1.06);
-    box-shadow: 0 6px 24px rgba(110, 26, 79, 0.65);
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(110, 26, 79, 0.55);
+}
+
+/* Trust Highlights Footer */
+.s4-trust-row {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    font-size: 12px;
+    font-weight: 600;
+    color: #555555;
+    padding-top: 10px;
+    border-top: 1px solid #f2e3ee;
+    width: 100%;
+    z-index: 2;
+}
+
+.s4-trust-col {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.trust-icon {
+    width: 15px;
+    height: 15px;
+    stroke: #6e1a4f;
+    fill: none;
+    stroke-width: 2;
 }
 
 /* Bottom Progress Bar */
