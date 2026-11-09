@@ -23,18 +23,30 @@ document.addEventListener("DOMContentLoaded", () => {
     updateCartCounter();
 });
 
-// Splash Screen Logic (Displays the S4 Fashions poster for 2.5 - 3 seconds, then smoothly reveals store)
+// Splash Screen Controller (5.5 - 6s timer or instant on 'Shop Now' click)
+let splashTimer = null;
+
+function dismissSplashNow() {
+    const splash = document.getElementById("splash-screen");
+    if (!splash) return;
+    if (splashTimer) {
+        clearTimeout(splashTimer);
+        splashTimer = null;
+    }
+    splash.classList.add("hidden");
+    setTimeout(() => {
+        splash.style.display = "none";
+    }, 700);
+}
+
 function handleSplashScreen() {
     const splash = document.getElementById("splash-screen");
     if (!splash) return;
 
-    // Display splash poster for exactly 2.5 seconds, then fade out smoothly
-    setTimeout(() => {
-        splash.classList.add("hidden");
-        setTimeout(() => {
-            splash.style.display = "none";
-        }, 800);
-    }, 2500);
+    // Automatically transition to home after 5.5 seconds if user does not click 'Shop Now'
+    splashTimer = setTimeout(() => {
+        dismissSplashNow();
+    }, 5500);
 }
 
 // Authentication UI Sync

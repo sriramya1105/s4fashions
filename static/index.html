@@ -8,9 +8,16 @@
 </head>
 <body>
 
-    <!-- 1. S4 FASHIONS SPLASH SCREEN (2.5 - 3 SECONDS DURATION) -->
+    <!-- 1. S4 FASHIONS SPLASH SCREEN (Interactive 5-6 Seconds with Single 'Shop Now' CTA) -->
     <div id="splash-screen">
-        <img src="/assets/s4_fashions_splash.jpg" alt="S4 Fashions - Women, Men, Kids" class="splash-poster">
+        <div class="splash-banner-wrapper">
+            <img src="/assets/s4_fashions_splash.jpg" alt="S4 Fashions - Women, Men, Kids" class="splash-poster">
+            
+            <!-- Dedicated Clickable 'Shop Now' CTA Button directly over the image position -->
+            <button type="button" class="splash-shop-now-btn" onclick="dismissSplashNow()">
+                Shop Now &rarr;
+            </button>
+        </div>
         <div class="splash-loader-progress"></div>
     </div>
 
