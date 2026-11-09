@@ -8,62 +8,16 @@
 </head>
 <body>
 
-    <!-- 1. S4 FASHIONS RESPONSIVE HTML/CSS SPLASH SCREEN -->
+    <!-- 1. S4 FASHIONS SPLASH SCREEN (PERFECT 16:9 CONTAINED POSTER + SHOP NOW BUTTON) -->
     <div id="splash-screen">
-        <div class="s4-splash-card">
-            <!-- Top Logo & Subtitle -->
-            <div class="s4-brand-header">
-                <div class="s4-brand-title">S4 Fashions</div>
-                <div class="s4-brand-tagline">
-                    <span class="tagline-line"></span>
-                    <span class="tagline-text">Fashion for Women | Men | Kids</span>
-                    <span class="tagline-line"></span>
-                </div>
-            </div>
-
-            <!-- Three Arched Fashion Photo Showcases -->
-            <div class="s4-models-showcase">
-                <!-- Women Arch -->
-                <div class="s4-model-arch">
-                    <img src="https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?w=500" alt="Women Fashion" class="arch-img">
-                    <div class="arch-label">Women Fashion</div>
-                </div>
-
-                <!-- Men Arch (Center prominent) -->
-                <div class="s4-model-arch arch-center">
-                    <img src="https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=500" alt="Men Fashion" class="arch-img">
-                    <div class="arch-label">Men Fashion</div>
-                </div>
-
-                <!-- Kids Arch -->
-                <div class="s4-model-arch">
-                    <img src="https://images.unsplash.com/photo-1622290291468-a28f7a7dc6a8?w=500" alt="Kids Fashion" class="arch-img">
-                    <div class="arch-label">Kids Wear</div>
-                </div>
-            </div>
-
-            <!-- Trust Badges Strip -->
-            <div class="s4-trust-strip">
-                <div class="trust-badge-item">
-                    <span class="badge-point"></span> Free Shipping Above ₹999
-                </div>
-                <div class="trust-badge-item">
-                    <span class="badge-point"></span> Secure Payments
-                </div>
-                <div class="trust-badge-item">
-                    <span class="badge-point"></span> Easy 7-Day Returns
-                </div>
-                <div class="trust-badge-item">
-                    <span class="badge-point"></span> 100% Authentic Fashion
-                </div>
-            </div>
-
-            <!-- Single 'Shop Now' CTA Button -->
-            <button type="button" class="s4-shop-now-cta" onclick="dismissSplashNow()">
+        <div class="s4-poster-stage">
+            <img src="/assets/s4_fashions_clean.jpg" alt="S4 Fashions - Women, Men, Kids" class="s4-exact-image">
+            
+            <!-- Clickable 'Shop Now' Button directly below the models -->
+            <button type="button" class="s4-overlay-shop-btn" onclick="dismissSplashNow()">
                 Shop Now &rarr;
             </button>
         </div>
-
         <div class="splash-loader-progress"></div>
     </div>
 
