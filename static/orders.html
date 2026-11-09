@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders - ThreadCraft Apparel</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+    <!-- MAIN HEADER -->
+    <header class="main-header">
+        <div class="header-container">
+            <a href="/" class="logo-wrapper">
+                <span class="logo-text">ThreadCraft</span>
+                <span class="logo-subtext">Explore <span>Fashion</span></span>
+            </a>
+
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="Search for products, brands and more">
+            </div>
+
+            <div class="header-nav">
+                <div id="header-auth-slot"></div>
+                <a href="/orders.html" class="header-nav-link" style="color: var(--primary-yellow);">Orders</a>
+                <a href="/cart.html" class="header-nav-link cart-link">
+                    Cart <span class="cart-badge-count" id="cart-count-badge">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ORDERS CONTAINER -->
+    <main style="max-width: 960px; margin: 20px auto; padding: 0 16px; flex: 1;">
+        <h2 style="font-size: 18px; font-weight: 700; margin-bottom: 16px;">My Orders History</h2>
+        
+        <div id="orders-list-container" style="display: flex; flex-direction: column; gap: 14px;">
+            <p>Loading your orders...</p>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-bottom">
+            ThreadCraft Apparel · CS5101 Secure Coding Practices · BOLA / IDOR Verification (CWE-639)
+        </div>
+    </footer>
+
+    <script src="/js/core.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            if (!appState.token || !appState.user) {
+                alert("Please login to view your orders.");
+                window.location.href = "/login.html";
+                return;
+            }
+
+            try {
+                const res = await fetch("/api/v1/orders", {
+                    headers: { "Authorization": `Bearer ${appState.token}` }
+                });
+
+                if (!res.ok) throw new Error("Could not fetch orders");
+                const orders = await res.json();
+                renderOrders(orders);
+            } catch (err) {
+                document.getElementById("orders-list-container").innerHTML = `
+                    <div style="background: #ffffff; padding: 32px; text-align: center; border-radius: 2px;">
+                        <p>Failed to retrieve orders. Please verify server connection.</p>
+                    </div>
+                `;
+            }
+        });
+
+        function renderOrders(orders) {
+            const container = document.getElementById("orders-list-container");
+
+            if (orders.length === 0) {
+                container.innerHTML = `
+                    <div style="background: #ffffff; padding: 48px; text-align: center; border-radius: 2px; box-shadow: var(--shadow-soft);">
+                        <h3 style="font-size: 18px; margin-bottom: 8px;">No Orders Placed Yet</h3>
+                        <p style="color: var(--secondary-text); font-size: 13px; margin-bottom: 16px;">Browse our traditional and modern apparel and place your first order.</p>
+                        <a href="/" class="login-btn-header" style="background-color: var(--primary-blue); color: #ffffff; padding: 8px 24px; display: inline-block;">Shop Now</a>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = orders.map(o => `
+                <div style="background: #ffffff; border: 1px solid var(--light-border); border-radius: 2px; padding: 16px; box-shadow: var(--shadow-soft);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f0f0f0; padding-bottom: 12px; margin-bottom: 12px;">
+                        <div>
+                            <span style="font-size: 12px; color: var(--secondary-text); text-transform: uppercase;">Order Placed</span>
+                            <div style="font-size: 13px; font-weight: 600;">${new Date(o.created_at).toLocaleDateString()}</div>
+                        </div>
+                        <div>
+                            <span style="font-size: 12px; color: var(--secondary-text); text-transform: uppercase;">Total</span>
+                            <div style="font-size: 14px; font-weight: 700;">₹${o.total_amount.toFixed(0)}</div>
+                        </div>
+                        <div>
+                            <span style="font-size: 12px; color: var(--secondary-text); text-transform: uppercase;">Ship To</span>
+                            <div style="font-size: 13px; font-weight: 600;">${escapeHtml(o.phone_number)}</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <span style="font-size: 12px; color: var(--secondary-text); text-transform: uppercase;">Order ID</span>
+                            <div style="font-size: 13px; font-weight: 700; color: var(--primary-blue);">#${o.id}</div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <div style="width: 10px; height: 10px; border-radius: 50%; background-color: var(--primary-green);"></div>
+                            <span style="font-size: 14px; font-weight: 700; text-transform: uppercase;">${o.status}</span>
+                        </div>
+                        <span style="font-size: 12px; color: var(--secondary-text);">BOLA Protected (CWE-639)</span>
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                        ${o.items.map(item => `
+                            <div style="font-size: 13px; color: #333; display: flex; justify-content: space-between; background: #fafafa; padding: 8px 12px; border-radius: 2px;">
+                                <span><b>${escapeHtml(item.product_title)}</b> (Size: ${item.size}, Color: ${item.color})</span>
+                                <span>Qty: ${item.quantity} × ₹${item.unit_price.toFixed(0)}</span>
+                            </div>
+                        `).join("")}
+                    </div>
+
+                    <div style="font-size: 12px; color: var(--secondary-text); margin-top: 10px; border-top: 1px dashed #eee; padding-top: 8px;">
+                        Delivery Address: ${escapeHtml(o.shipping_address)}
+                    </div>
+                </div>
+            `).join("");
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Portal - ThreadCraft Apparel</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body style="background-color: var(--bg-gray);">
+
+    <!-- HEADER -->
+    <header class="main-header" style="background-color: #172337;">
+        <div class="header-container" style="justify-content: space-between;">
+            <a href="/" class="logo-wrapper">
+                <span class="logo-text">ThreadCraft</span>
+                <span class="logo-subtext">ADMIN <span>PORTAL</span></span>
+            </a>
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <span id="admin-user-display" style="color: #ffffff; font-size: 13px;"></span>
+                <a href="/" style="color: #ffe500; font-size: 13px; text-decoration: none;">View Storefront</a>
+                <button onclick="logoutUser()" style="background: none; border: 1px solid #777; color: #fff; padding: 4px 10px; font-size: 12px; cursor: pointer;">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <main style="max-width: 1200px; margin: 24px auto; padding: 0 16px; flex: 1;">
+        <div style="margin-bottom: 24px;">
+            <h1 style="font-size: 22px; font-weight: 700;">Merchant Administration & Inventory Control</h1>
+            <p style="font-size: 13px; color: var(--secondary-text); margin-top: 4px;">Protected by Role-Based Access Control (RBAC CWE-284). Customer accounts are strictly denied.</p>
+        </div>
+
+        <!-- ANALYTICS TILES -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 28px;">
+            <div style="background: #ffffff; padding: 20px; border-radius: 2px; box-shadow: var(--shadow-soft); border-left: 4px solid var(--primary-blue);">
+                <div style="font-size: 12px; color: var(--secondary-text); text-transform: uppercase; font-weight: 700;">Total Revenue</div>
+                <div id="stat-revenue" style="font-size: 24px; font-weight: 800; margin-top: 6px;">₹0</div>
+            </div>
+
+            <div style="background: #ffffff; padding: 20px; border-radius: 2px; box-shadow: var(--shadow-soft); border-left: 4px solid var(--primary-green);">
+                <div style="font-size: 12px; color: var(--secondary-text); text-transform: uppercase; font-weight: 700;">Orders Processed</div>
+                <div id="stat-orders" style="font-size: 24px; font-weight: 800; margin-top: 6px;">0</div>
+            </div>
+
+            <div style="background: #ffffff; padding: 20px; border-radius: 2px; box-shadow: var(--shadow-soft); border-left: 4px solid var(--primary-orange);">
+                <div style="font-size: 12px; color: var(--secondary-text); text-transform: uppercase; font-weight: 700;">Catalog Items</div>
+                <div id="stat-items" style="font-size: 24px; font-weight: 800; margin-top: 6px;">0</div>
+            </div>
+
+            <div style="background: #ffffff; padding: 20px; border-radius: 2px; box-shadow: var(--shadow-soft); border-left: 4px solid #9c27b0;">
+                <div style="font-size: 12px; color: var(--secondary-text); text-transform: uppercase; font-weight: 700;">Registered Customers</div>
+                <div id="stat-customers" style="font-size: 24px; font-weight: 800; margin-top: 6px;">0</div>
+            </div>
+        </div>
+
+        <!-- ADD NEW PRODUCT FORM -->
+        <div style="background: #ffffff; padding: 24px; border-radius: 2px; box-shadow: var(--shadow-soft);">
+            <h2 style="font-size: 16px; font-weight: 700; text-transform: uppercase; margin-bottom: 16px; border-bottom: 1px solid var(--light-border); padding-bottom: 10px;">
+                Add New Apparel Item to Catalog
+            </h2>
+
+            <form id="admin-add-product-form" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                <div class="form-group" style="grid-column: 1 / -1;">
+                    <label class="form-label">Product Title</label>
+                    <input type="text" id="p-title" class="form-control" required placeholder="e.g. Raymond Dark Charcoal Slim Fit Blazer">
+                </div>
+
+                <div class="form-group" style="grid-column: 1 / -1;">
+                    <label class="form-label">Detailed Description</label>
+                    <textarea id="p-desc" class="form-control" style="height: 60px; padding: 8px;" required placeholder="Fabric blend, occasion suitability, fit style"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Brand Name</label>
+                    <input type="text" id="p-brand" class="form-control" required placeholder="e.g. Raymond, FabIndia, Biba">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Category</label>
+                    <select id="p-cat" class="form-control" required>
+                        <option value="men">Men's Wear</option>
+                        <option value="women">Women's Wear</option>
+                        <option value="kids">Kids' Wear</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Subcategory</label>
+                    <input type="text" id="p-subcat" class="form-control" required placeholder="e.g. Traditional, Modern, Kurtis, Short Tops">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Available Sizes (comma-separated)</label>
+                    <input type="text" id="p-sizes" class="form-control" required value="S,M,L,XL,XXL">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Available Colors (comma-separated)</label>
+                    <input type="text" id="p-colors" class="form-control" required value="Navy Blue,Black,White">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Material / Fabric</label>
+                    <input type="text" id="p-mat" class="form-control" placeholder="e.g. 100% Combed Cotton">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Selling Price (₹)</label>
+                    <input type="number" id="p-price" class="form-control" required min="1" step="0.5" placeholder="1499">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Original MRP Price (₹)</label>
+                    <input type="number" id="p-orig-price" class="form-control" min="1" step="0.5" placeholder="2499">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Initial Inventory Stock Units</label>
+                    <input type="number" id="p-stock" class="form-control" required min="0" value="50">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Image URL</label>
+                    <input type="url" id="p-img" class="form-control" placeholder="https://images.unsplash.com/...">
+                </div>
+
+                <div style="grid-column: 1 / -1; margin-top: 10px;">
+                    <button type="submit" id="btn-add-p" class="btn-buy-now" style="width: 240px;">Publish Product</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script src="/js/core.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            if (!appState.token || !appState.user || appState.user.role !== "admin") {
+                alert("Access Denied: Administrator role required.");
+                window.location.href = "/login.html";
+                return;
+            }
+
+            document.getElementById("admin-user-display").innerText = `Logged in: ${appState.user.username} (Admin)`;
+
+            // Load Analytics
+            try {
+                const res = await fetch("/api/v1/admin/stats", {
+                    headers: { "Authorization": `Bearer ${appState.token}` }
+                });
+
+                if (res.ok) {
+                    const stats = await res.json();
+                    document.getElementById("stat-revenue").innerText = `₹${stats.total_revenue.toFixed(0)}`;
+                    document.getElementById("stat-orders").innerText = stats.total_orders_placed;
+                    document.getElementById("stat-items").innerText = stats.active_catalog_items;
+                    document.getElementById("stat-customers").innerText = stats.registered_customers;
+                }
+            } catch (err) {
+                console.error("Failed to load admin metrics", err);
+            }
+        });
+
+        document.getElementById("admin-add-product-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById("btn-add-p");
+            btn.disabled = true;
+            btn.innerText = "Publishing...";
+
+            const payload = {
+                title: document.getElementById("p-title").value.trim(),
+                description: document.getElementById("p-desc").value.trim(),
+                brand: document.getElementById("p-brand").value.trim(),
+                category: document.getElementById("p-cat").value,
+                subcategory: document.getElementById("p-subcat").value.trim(),
+                available_sizes: document.getElementById("p-sizes").value.trim(),
+                available_colors: document.getElementById("p-colors").value.trim(),
+                material: document.getElementById("p-mat").value.trim(),
+                price: parseFloat(document.getElementById("p-price").value),
+                original_price: parseFloat(document.getElementById("p-orig-price").value) || null,
+                stock: parseInt(document.getElementById("p-stock").value, 10),
+                image_url: document.getElementById("p-img").value.trim() || null
+            };
+
+            try {
+                const res = await fetch("/api/v1/admin/products", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${appState.token}`
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await res.json();
+                if (!res.ok) {
+                    alert(`Failed to add product: ${data.message || data.error}`);
+                    btn.disabled = false;
+                    btn.innerText = "Publish Product";
+                    return;
+                }
+
+                alert(`Product "${data.title}" successfully added to inventory!`);
+                window.location.reload();
+            } catch (err) {
+                alert("Network communication error.");
+                btn.disabled = false;
+                btn.innerText = "Publish Product";
+            }
+        });
+    </script>
+</body>
+</html>

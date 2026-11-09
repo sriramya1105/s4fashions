@@ -8,133 +8,387 @@
 </head>
 <body>
 
-    <!-- TOP NAVIGATION BAR -->
-    <header class="navbar">
-        <div class="nav-container">
-            <a href="/" class="brand-logo">
-                <span>ThreadCraft</span>
-                <span class="brand-badge">SECURE STORE</span>
+    <!-- 1. LUXURY SPLASH SCREEN (Fades automatically on launch) -->
+    <div id="splash-screen">
+        <div class="splash-brand">ThreadCraft</div>
+        <div class="splash-tagline">Ethnic & Modern Apparel Curated for You</div>
+        <div class="splash-spinner"></div>
+    </div>
+
+    <!-- 2. MAIN HEADER (FLIPKART STYLE) -->
+    <header class="main-header">
+        <div class="header-container">
+            <a href="/" class="logo-wrapper">
+                <span class="logo-text">ThreadCraft</span>
+                <span class="logo-subtext">Explore <span>Fashion</span></span>
             </a>
 
-            <!-- SEARCH BAR (Meesho / Flipkart style) -->
-            <div class="search-box">
-                <span class="search-icon">🔍</span>
-                <input type="text" id="search-input" placeholder="Search for Kurtas, Kurtis, Shirts, Tops, Jeans, Frocks...">
+            <!-- SMART SEARCH BAR -->
+            <div class="search-container">
+                <input type="text" id="store-search-input" class="search-input" placeholder="Search for Kurtas, Kurtis, Shirts, Tops, Jeans, Frocks, Sarees...">
             </div>
 
-            <!-- USER ACTIONS -->
-            <div class="nav-actions">
-                <a href="/docs" target="_blank" class="nav-btn" style="color: #9c27b0;" title="Swagger Interactive API Sandbox">
-                    ⚡ API Docs
+            <!-- HEADER NAV LINKS -->
+            <div class="header-nav">
+                <div id="header-auth-slot"></div>
+                <a href="/orders.html" class="header-nav-link">Orders</a>
+                <a href="/cart.html" class="header-nav-link cart-link">
+                    Cart <span class="cart-badge-count" id="cart-count-badge">0</span>
                 </a>
-                <button class="nav-btn" onclick="openOrdersModal()">
-                    📦 Orders
-                </button>
-                <button class="nav-btn" id="auth-btn" onclick="openAuthModal()">
-                    👤 Login
-                </button>
-                <button class="nav-btn cart-btn" onclick="openCartModal()">
-                    🛍️ Bag
-                    <span class="cart-count" id="cart-count">0</span>
-                </button>
+                <a href="/docs" target="_blank" class="header-nav-link" style="color: var(--primary-yellow); font-size: 13px;" title="Interactive API Docs">
+                    API Docs
+                </a>
             </div>
         </div>
-
-        <!-- CATEGORY NAVIGATION TABS -->
-        <nav class="sub-navbar">
-            <div class="subnav-container">
-                <div class="subnav-item active" data-category="">All Categories</div>
-                <div class="subnav-item" data-category="men">Men's Wear</div>
-                <div class="subnav-item" data-category="women">Women's Wear</div>
-                <div class="subnav-item" data-category="kids">Kids' Wear</div>
-            </div>
-        </nav>
     </header>
 
-    <!-- MAIN PRODUCT BROWSER -->
-    <main class="main-container">
-        
-        <!-- SIDEBAR FILTERS (Meesho / Flipkart style) -->
-        <aside class="filter-panel">
-            <div class="filter-title">Filters & Specifications</div>
+    <!-- 3. CIRCULAR CATEGORY BUBBLES BAR (FLIPKART / MEESHO STYLE) -->
+    <section class="category-strip">
+        <div class="category-strip-container">
+            <div class="cat-item active" data-category="">
+                <div class="cat-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=200" alt="All Collections">
+                </div>
+                <span class="cat-title">All Fashion</span>
+            </div>
 
-            <div class="filter-group">
-                <label for="subcategory-filter">Subcategory</label>
-                <select id="subcategory-filter">
-                    <option value="">All Subcategories</option>
-                    <option value="Traditional">Traditional / Ethnic</option>
+            <div class="cat-item" data-category="men" data-sub="Traditional">
+                <div class="cat-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1597983073493-88cd35cf93b0?w=200" alt="Men's Traditional">
+                </div>
+                <span class="cat-title">Men's Ethnic</span>
+            </div>
+
+            <div class="cat-item" data-category="men" data-sub="Modern">
+                <div class="cat-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=200" alt="Men's Modern">
+                </div>
+                <span class="cat-title">Men's Modern</span>
+            </div>
+
+            <div class="cat-item" data-category="women" data-sub="Ethnic">
+                <div class="cat-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=200" alt="Women's Sarees & Ethnic">
+                </div>
+                <span class="cat-title">Sarees & Ethnic</span>
+            </div>
+
+            <div class="cat-item" data-category="women" data-sub="Kurtis">
+                <div class="cat-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=200" alt="Kurtis & Kurtas">
+                </div>
+                <span class="cat-title">Kurtis & Kurtas</span>
+            </div>
+
+            <div class="cat-item" data-category="women" data-sub="Short Tops">
+                <div class="cat-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=200" alt="Women's Short Tops">
+                </div>
+                <span class="cat-title">Short Tops</span>
+            </div>
+
+            <div class="cat-item" data-category="kids" data-sub="">
+                <div class="cat-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?w=200" alt="Kids Wear">
+                </div>
+                <span class="cat-title">Kids' Wear</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. HERO PROMOTIONAL BANNER SLIDER -->
+    <section class="hero-slider-section">
+        <div class="hero-banner-container" id="hero-slider">
+            <!-- Slide 1 -->
+            <div class="banner-slide active" style="background-image: linear-gradient(to right, rgba(0,0,0,0.85) 30%, rgba(0,0,0,0.2)), url('https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1400');">
+                <div class="banner-content">
+                    <div class="banner-tag">Grand Festive Showcase</div>
+                    <h2 class="banner-title">Pure Silk Sarees & Designer Kurtas</h2>
+                    <p class="banner-desc">Handpicked handloom collections from FabIndia, Manyavar, and Biba with flat 40% discount.</p>
+                    <button class="banner-btn" onclick="filterBySub('Traditional')">EXPLORE COLLECTION</button>
+                </div>
+            </div>
+
+            <!-- Slide 2 -->
+            <div class="banner-slide" style="background-image: linear-gradient(to right, rgba(0,0,0,0.85) 30%, rgba(0,0,0,0.2)), url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1400');">
+                <div class="banner-content">
+                    <div class="banner-tag">Modern Summer Drop</div>
+                    <h2 class="banner-title">Casual Shirts, Short Tops & Stretch Denim</h2>
+                    <p class="banner-desc">Comfort styles from Levi's, Peter England, and Zara. Free delivery on all orders.</p>
+                    <button class="banner-btn" onclick="filterBySub('Modern')">SHOP MODERN</button>
+                </div>
+            </div>
+
+            <button class="slider-btn prev" onclick="changeSlide(-1)">&lt;</button>
+            <button class="slider-btn next" onclick="changeSlide(1)">&gt;</button>
+        </div>
+    </section>
+
+    <!-- 5. MAIN STOREFRONT CONTENT (2-COLUMN STORE LAYOUT) -->
+    <main class="store-layout">
+        
+        <!-- SIDEBAR FILTERS (FLIPKART STYLE) -->
+        <aside class="filter-panel">
+            <div class="filter-heading-row">
+                <span class="filter-heading-text">Filters</span>
+                <span class="filter-clear-link" onclick="resetAllFilters()">CLEAR ALL</span>
+            </div>
+
+            <!-- Subcategory Filter -->
+            <div class="filter-section">
+                <div class="filter-section-title">Subcategory</div>
+                <select id="filter-subcategory" class="filter-select" onchange="applyFilters()">
+                    <option value="">All Apparel Subcategories</option>
+                    <option value="Traditional">Traditional / Festive</option>
                     <option value="Modern">Modern / Western</option>
+                    <option value="Ethnic">Ethnic Sarees & Sets</option>
                     <option value="Kurtis">Kurtis & Kurtas</option>
                     <option value="Short Tops">Short Tops & Tees</option>
-                    <option value="Boys Ethnic">Boys Wear</option>
+                    <option value="Boys Ethnic">Boys Ethnic</option>
                     <option value="Girls Western">Girls Frocks & Sets</option>
-                    <option value="Infants">Infants & Toddlers</option>
+                    <option value="Infants & Toddlers">Infants & Toddlers</option>
                 </select>
             </div>
 
-            <div class="filter-group">
-                <label for="brand-filter">Brand</label>
-                <select id="brand-filter">
-                    <option value="">All Brands</option>
-                    <option value="FabIndia">FabIndia</option>
-                    <option value="Manyavar">Manyavar</option>
-                    <option value="Peter England">Peter England</option>
-                    <option value="Levi's">Levi's</option>
-                    <option value="Allen Solly">Allen Solly</option>
-                    <option value="Biba">Biba</option>
-                    <option value="W for Woman">W for Woman</option>
-                    <option value="Zara">Zara</option>
-                    <option value="Hopscotch">Hopscotch</option>
-                    <option value="Mothercare">Mothercare</option>
-                </select>
+            <!-- Brand Filter -->
+            <div class="filter-section">
+                <div class="filter-section-title">Brand</div>
+                <div class="filter-option"><input type="checkbox" name="brand_cb" value="FabIndia" onchange="applyFilters()"> FabIndia</div>
+                <div class="filter-option"><input type="checkbox" name="brand_cb" value="Manyavar" onchange="applyFilters()"> Manyavar</div>
+                <div class="filter-option"><input type="checkbox" name="brand_cb" value="Peter England" onchange="applyFilters()"> Peter England</div>
+                <div class="filter-option"><input type="checkbox" name="brand_cb" value="Levi's" onchange="applyFilters()"> Levi's</div>
+                <div class="filter-option"><input type="checkbox" name="brand_cb" value="Biba" onchange="applyFilters()"> Biba</div>
+                <div class="filter-option"><input type="checkbox" name="brand_cb" value="Zara" onchange="applyFilters()"> Zara</div>
+                <div class="filter-option"><input type="checkbox" name="brand_cb" value="Hopscotch" onchange="applyFilters()"> Hopscotch</div>
             </div>
 
-            <div class="filter-group">
-                <label for="price-filter">Max Price (₹)</label>
-                <select id="price-filter">
+            <!-- Price Filter -->
+            <div class="filter-section">
+                <div class="filter-section-title">Price Range</div>
+                <select id="filter-price" class="filter-select" onchange="applyFilters()">
                     <option value="">Any Price</option>
                     <option value="1000">Under ₹1,000</option>
                     <option value="2000">Under ₹2,000</option>
-                    <option value="3000">Under ₹3,000</option>
-                    <option value="5000">Under ₹5,000</option>
+                    <option value="3500">Under ₹3,500</option>
+                    <option value="6000">Under ₹6,000</option>
                 </select>
             </div>
 
-            <button class="btn-filter-clear" id="btn-clear-filter">Reset Filters</button>
+            <!-- Rating Filter -->
+            <div class="filter-section" style="border-bottom: none;">
+                <div class="filter-section-title">Customer Ratings</div>
+                <div class="filter-option"><input type="radio" name="rating_rb" value="" checked onchange="applyFilters()"> All Ratings</div>
+                <div class="filter-option"><input type="radio" name="rating_rb" value="4.5" onchange="applyFilters()"> 4.5 ★ & above</div>
+                <div class="filter-option"><input type="radio" name="rating_rb" value="4.0" onchange="applyFilters()"> 4.0 ★ & above</div>
+            </div>
         </aside>
 
         <!-- PRODUCT CATALOG GRID -->
-        <section class="products-container">
-            <div class="products-header">
-                <div class="products-count" id="products-count">Loading apparel...</div>
+        <section class="product-area">
+            <div class="product-area-header">
+                <div class="results-count" id="results-count-text">
+                    Showing apparel items
+                </div>
             </div>
 
-            <div class="product-grid" id="product-grid">
-                <!-- Dynamically populated by app.js -->
+            <div class="product-cards-grid" id="product-cards-grid">
+                <!-- Dynamically populated -->
             </div>
         </section>
 
     </main>
 
-    <!-- GENERIC MODAL (Bag, Auth, Order History, Size Selection) -->
-    <div class="modal" id="generic-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 style="margin: 0; color: #282c3f;">ThreadCraft Apparel</h4>
-                <button class="close-btn" onclick="closeModal()">&times;</button>
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div>
+                <div style="font-weight: 700; color: #ffffff; margin-bottom: 8px;">ABOUT THREADCRAFT</div>
+                <div>CS5101 Secure Coding Practices Laboratory</div>
+                <div>Project 7: Abuse-Resistant REST API & E-Commerce</div>
+                <div>Mahindra University, Hyderabad</div>
             </div>
-            <div id="modal-body">
-                <!-- Injected via JavaScript -->
+            <div>
+                <div style="font-weight: 700; color: #ffffff; margin-bottom: 8px;">SECURITY CAPABILITIES</div>
+                <div>CWE-89: SQL Injection Parameterization</div>
+                <div>CWE-639: Broken Object-Level Authorization (BOLA)</div>
+                <div>CWE-307: SlowAPI Rate Limiting</div>
+                <div>CWE-347: JWT Pinned Verification</div>
             </div>
         </div>
-    </div>
-
-    <!-- FOOTER -->
-    <footer>
-        <p>ThreadCraft Apparel - CS5101 Secure Coding Practices · Project 7 (Abuse-Resistant REST API)</p>
-        <p style="margin-top: 4px; font-size: 11px;">Built with FastAPI · SQLite · Pydantic · SlowAPI · HTML/CSS/JS</p>
+        <div class="footer-bottom">
+            ThreadCraft Apparel · Developed with FastAPI, Pydantic, SQLite, and Native Web Technologies
+        </div>
     </footer>
 
-    <script src="/js/app.js"></script>
+    <script src="/js/core.js"></script>
+    <script>
+        let allProducts = [];
+        let currentSlideIdx = 0;
+
+        document.addEventListener("DOMContentLoaded", () => {
+            loadCatalog();
+            setupSearch();
+            setupCategoryStrip();
+            startHeroSlider();
+        });
+
+        // Banner Slider
+        function changeSlide(direction) {
+            const slides = document.querySelectorAll(".banner-slide");
+            slides[currentSlideIdx].classList.remove("active");
+            currentSlideIdx = (currentSlideIdx + direction + slides.length) % slides.length;
+            slides[currentSlideIdx].classList.add("active");
+        }
+
+        function startHeroSlider() {
+            setInterval(() => {
+                changeSlide(1);
+            }, 6000);
+        }
+
+        // Setup Category Strip Click
+        function setupCategoryStrip() {
+            document.querySelectorAll(".cat-item").forEach(item => {
+                item.addEventListener("click", () => {
+                    document.querySelectorAll(".cat-item").forEach(i => i.classList.remove("active"));
+                    item.classList.add("active");
+                    appState.selectedCategory = item.getAttribute("data-category") || "";
+                    const sub = item.getAttribute("data-sub") || "";
+                    document.getElementById("filter-subcategory").value = sub;
+                    applyFilters();
+                });
+            });
+        }
+
+        function filterBySub(sub) {
+            document.getElementById("filter-subcategory").value = sub;
+            applyFilters();
+            window.scrollTo({ top: 600, behavior: 'smooth' });
+        }
+
+        // Setup Search
+        function setupSearch() {
+            const input = document.getElementById("store-search-input");
+            let timeout;
+            input.addEventListener("input", () => {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => {
+                    appState.searchQuery = input.value.trim();
+                    applyFilters();
+                }, 300);
+            });
+        }
+
+        // Load Products
+        async function loadCatalog() {
+            try {
+                const res = await fetch("/api/v1/products");
+                if (!res.ok) throw new Error("Catalog fetch failed");
+                allProducts = await res.json();
+                applyFilters();
+            } catch (err) {
+                document.getElementById("product-cards-grid").innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 48px; color: var(--secondary-text);">
+                        Failed to connect to the product service.
+                    </div>
+                `;
+            }
+        }
+
+        // Apply Local & Remote Filters
+        function applyFilters() {
+            const subcat = document.getElementById("filter-subcategory").value;
+            const maxPrice = parseFloat(document.getElementById("filter-price").value) || null;
+            const ratingRadio = document.querySelector("input[name='rating_rb']:checked");
+            const minRating = ratingRadio && ratingRadio.value ? parseFloat(ratingRadio.value) : null;
+
+            const selectedBrands = Array.from(document.querySelectorAll("input[name='brand_cb']:checked")).map(cb => cb.value);
+
+            let filtered = allProducts.filter(p => {
+                if (appState.selectedCategory && p.category !== appState.selectedCategory) return false;
+                if (subcat && !p.subcategory.toLowerCase().includes(subcat.toLowerCase())) return false;
+                if (maxPrice && p.price > maxPrice) return false;
+                if (minRating && p.rating < minRating) return false;
+                if (selectedBrands.length > 0 && !selectedBrands.includes(p.brand)) return false;
+                if (appState.searchQuery) {
+                    const q = appState.searchQuery.toLowerCase();
+                    const inTitle = p.title.toLowerCase().includes(q);
+                    const inBrand = p.brand.toLowerCase().includes(q);
+                    const inDesc = p.description.toLowerCase().includes(q);
+                    if (!inTitle && !inBrand && !inDesc) return false;
+                }
+                return true;
+            });
+
+            renderProductGrid(filtered);
+        }
+
+        function resetAllFilters() {
+            document.querySelectorAll(".cat-item").forEach(i => i.classList.remove("active"));
+            document.querySelector(".cat-item").classList.add("active");
+            appState.selectedCategory = "";
+            appState.searchQuery = "";
+            document.getElementById("store-search-input").value = "";
+            document.getElementById("filter-subcategory").value = "";
+            document.getElementById("filter-price").value = "";
+            document.querySelectorAll("input[name='brand_cb']").forEach(cb => cb.checked = false);
+            document.querySelector("input[name='rating_rb'][value='']").checked = true;
+            applyFilters();
+        }
+
+        // Render Grid
+        function renderProductGrid(products) {
+            const grid = document.getElementById("product-cards-grid");
+            const countText = document.getElementById("results-count-text");
+
+            countText.innerHTML = `Showing <span>${products.length}</span> apparel items`;
+
+            if (products.length === 0) {
+                grid.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px;">
+                        <h3 style="font-size: 16px; margin-bottom: 8px;">No matching clothing items found</h3>
+                        <p style="font-size: 13px; color: var(--secondary-text);">Try adjusting your filter criteria or search keyword.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = products.map(p => {
+                const discount = p.original_price && p.original_price > p.price
+                    ? Math.round(((p.original_price - p.price) / p.original_price) * 100)
+                    : 0;
+
+                return `
+                    <a href="/product.html?id=${p.id}" class="apparel-card">
+                        <div class="card-img-box">
+                            <img src="${p.image_url}" alt="${escapeHtml(p.title)}" loading="lazy">
+                            <span class="assured-badge">Assured</span>
+                        </div>
+
+                        <div class="card-brand">${escapeHtml(p.brand)}</div>
+                        <div class="card-title" title="${escapeHtml(p.title)}">${escapeHtml(p.title)}</div>
+
+                        <div class="card-rating-row">
+                            <span class="rating-badge">${p.rating} ★</span>
+                            <span class="rating-count-text">(${p.rating_count})</span>
+                        </div>
+
+                        <div class="card-price-row">
+                            <span class="current-price">₹${p.price.toFixed(0)}</span>
+                            ${p.original_price ? `<span class="mrp-price">₹${p.original_price.toFixed(0)}</span>` : ''}
+                            ${discount > 0 ? `<span class="discount-rate">${discount}% off</span>` : ''}
+                        </div>
+
+                        <div class="delivery-tag">Free Delivery</div>
+
+                        <div class="card-specs-row">
+                            <span>Sizes: ${escapeHtml(p.available_sizes)}</span>
+                            <span>${escapeHtml(p.material || 'Cotton')}</span>
+                        </div>
+                    </a>
+                `;
+            }).join("");
+        }
+    </script>
 </body>
 </html>

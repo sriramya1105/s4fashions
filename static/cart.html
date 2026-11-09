@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - ThreadCraft Apparel</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+    <!-- MAIN HEADER -->
+    <header class="main-header">
+        <div class="header-container">
+            <a href="/" class="logo-wrapper">
+                <span class="logo-text">ThreadCraft</span>
+                <span class="logo-subtext">Explore <span>Fashion</span></span>
+            </a>
+
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="Search for products, brands and more">
+            </div>
+
+            <div class="header-nav">
+                <div id="header-auth-slot"></div>
+                <a href="/orders.html" class="header-nav-link">Orders</a>
+                <a href="/cart.html" class="header-nav-link cart-link" style="color: var(--primary-yellow);">
+                    Cart <span class="cart-badge-count" id="cart-count-badge">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- CART & PRICE DETAILS (FLIPKART 2-COLUMN LAYOUT) -->
+    <main class="cart-layout" id="cart-main">
+        
+        <!-- LEFT: ITEMS CONTAINER -->
+        <section class="cart-items-card">
+            <h2 style="font-size: 18px; font-weight: 700; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--light-border);">
+                My Cart (<span id="cart-header-count">0</span>)
+            </h2>
+
+            <div id="cart-items-list" style="display: flex; flex-direction: column; gap: 16px;">
+                <!-- Populated by JS -->
+            </div>
+
+            <!-- CHECKOUT ADDRESS ACCORDION -->
+            <div id="checkout-section" style="margin-top: 24px; border-top: 1px solid var(--light-border); padding-top: 16px;">
+                <h3 style="font-size: 15px; font-weight: 700; text-transform: uppercase; margin-bottom: 12px;">Delivery Address</h3>
+                
+                <div class="form-group">
+                    <label class="form-label">Full Street Address (with Landmark)</label>
+                    <textarea id="ship-address" class="form-control" style="height: 60px; padding: 8px;" placeholder="Flat/House No., Street, City, State, Pincode"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Contact Phone Number</label>
+                    <input type="text" id="ship-phone" class="form-control" placeholder="+91 9876543210">
+                </div>
+
+                <button type="button" class="btn-buy-now" id="btn-place-order" style="width: 100%; height: 48px;" onclick="placeOrder()">
+                    PLACE ORDER
+                </button>
+            </div>
+        </section>
+
+        <!-- RIGHT: PRICE DETAILS (STICKY FLOATING SUMMARY) -->
+        <aside class="price-summary-card">
+            <div class="summary-title">Price Details</div>
+
+            <div class="summary-row">
+                <span>Price (<span id="summary-items-count">0</span> items)</span>
+                <span id="summary-mrp-total">₹0</span>
+            </div>
+
+            <div class="summary-row">
+                <span>Discount</span>
+                <span id="summary-discount-total" style="color: var(--primary-green);">- ₹0</span>
+            </div>
+
+            <div class="summary-row">
+                <span>Delivery Charges</span>
+                <span style="color: var(--primary-green);">FREE</span>
+            </div>
+
+            <div class="summary-total-row">
+                <span>Total Amount</span>
+                <span id="summary-final-total">₹0</span>
+            </div>
+
+            <div style="font-size: 12px; color: var(--primary-green); font-weight: 700;">
+                You will save <span id="summary-savings-text">₹0</span> on this order
+            </div>
+
+            <div style="margin-top: 20px; font-size: 11px; color: var(--secondary-text); line-height: 1.5; border-top: 1px solid #f0f0f0; padding-top: 12px;">
+                Safe and Secure Payments. 100% Authentic products from verified fashion merchandisers.
+            </div>
+        </aside>
+
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-bottom">
+            ThreadCraft Apparel · CS5101 Secure Coding Practices · Built for High-Security Evaluation
+        </div>
+    </footer>
+
+    <script src="/js/core.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            renderCartPage();
+        });
+
+        function renderCartPage() {
+            const list = document.getElementById("cart-items-list");
+            const count = appState.cart.reduce((a, b) => a + b.quantity, 0);
+
+            document.getElementById("cart-header-count").innerText = count;
+            document.getElementById("summary-items-count").innerText = count;
+
+            if (appState.cart.length === 0) {
+                list.innerHTML = `
+                    <div style="text-align: center; padding: 48px 16px;">
+                        <h3 style="font-size: 18px; margin-bottom: 8px;">Your cart is empty!</h3>
+                        <p style="font-size: 13px; color: var(--secondary-text); margin-bottom: 16px;">Explore our categories and add items to your cart.</p>
+                        <a href="/" class="login-btn-header" style="background-color: var(--primary-blue); color: #ffffff; padding: 10px 24px; display: inline-block;">Shop Now</a>
+                    </div>
+                `;
+                document.getElementById("checkout-section").style.display = "none";
+                updateSummary(0, 0);
+                return;
+            }
+
+            document.getElementById("checkout-section").style.display = "block";
+
+            let totalSelling = 0;
+            let totalMRP = 0;
+
+            list.innerHTML = appState.cart.map((item, idx) => {
+                const mrp = item.original_price || item.price;
+                totalMRP += mrp * item.quantity;
+                totalSelling += item.price * item.quantity;
+
+                return `
+                    <div style="display: flex; gap: 16px; border-bottom: 1px solid #f0f0f0; padding-bottom: 16px;">
+                        <div style="width: 110px; height: 130px; flex-shrink: 0; background: #f8f8f8;">
+                            <img src="${item.image_url}" style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+
+                        <div style="flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+                            <div>
+                                <div style="font-size: 14px; font-weight: 700; color: var(--secondary-text);">${escapeHtml(item.brand)}</div>
+                                <div style="font-size: 14px; font-weight: 500; color: var(--dark-text); margin-top: 2px;">${escapeHtml(item.title)}</div>
+                                <div style="font-size: 12px; color: var(--secondary-text); margin-top: 4px;">
+                                    Size: <b>${item.size}</b> | Color: <b>${item.color}</b>
+                                </div>
+                            </div>
+
+                            <div style="display: flex; align-items: baseline; gap: 10px; margin-top: 8px;">
+                                <span style="font-size: 18px; font-weight: 700;">₹${(item.price * item.quantity).toFixed(0)}</span>
+                                ${mrp > item.price ? `<span style="font-size: 13px; color: var(--secondary-text); text-decoration: line-through;">₹${(mrp * item.quantity).toFixed(0)}</span>` : ''}
+                            </div>
+
+                            <div style="display: flex; align-items: center; gap: 16px; margin-top: 10px;">
+                                <div style="display: flex; align-items: center; border: 1px solid var(--light-border);">
+                                    <button onclick="changeQty(${idx}, -1)" style="width: 28px; height: 28px; background: #fafafa; border: none; cursor: pointer; font-weight: bold;">-</button>
+                                    <span style="padding: 0 12px; font-size: 13px; font-weight: 600;">${item.quantity}</span>
+                                    <button onclick="changeQty(${idx}, 1)" style="width: 28px; height: 28px; background: #fafafa; border: none; cursor: pointer; font-weight: bold;">+</button>
+                                </div>
+                                <button onclick="removeItem(${idx})" style="background: none; border: none; color: var(--dark-text); font-size: 13px; font-weight: 600; cursor: pointer;">REMOVE</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join("");
+
+            updateSummary(totalMRP, totalSelling);
+        }
+
+        function updateSummary(mrp, selling) {
+            const discount = mrp - selling;
+            document.getElementById("summary-mrp-total").innerText = `₹${mrp.toFixed(0)}`;
+            document.getElementById("summary-discount-total").innerText = `- ₹${discount > 0 ? discount.toFixed(0) : '0'}`;
+            document.getElementById("summary-final-total").innerText = `₹${selling.toFixed(0)}`;
+            document.getElementById("summary-savings-text").innerText = `₹${discount > 0 ? discount.toFixed(0) : '0'}`;
+        }
+
+        function changeQty(idx, delta) {
+            appState.cart[idx].quantity += delta;
+            if (appState.cart[idx].quantity <= 0) {
+                appState.cart.splice(idx, 1);
+            }
+            localStorage.setItem("tc_cart", JSON.stringify(appState.cart));
+            updateCartCounter();
+            renderCartPage();
+        }
+
+        function removeItem(idx) {
+            appState.cart.splice(idx, 1);
+            localStorage.setItem("tc_cart", JSON.stringify(appState.cart));
+            updateCartCounter();
+            renderCartPage();
+        }
+
+        async function placeOrder() {
+            if (!appState.token || !appState.user) {
+                alert("Please login first to place your order.");
+                window.location.href = "/login.html";
+                return;
+            }
+
+            const address = document.getElementById("ship-address").value.trim();
+            const phone = document.getElementById("ship-phone").value.trim();
+
+            if (!address || address.length < 10) {
+                alert("Please enter a valid complete delivery address (minimum 10 characters).");
+                return;
+            }
+
+            if (!phone || phone.length < 10) {
+                alert("Please enter a valid 10-digit phone number.");
+                return;
+            }
+
+            const payload = {
+                items: appState.cart.map(i => ({
+                    product_id: i.product_id,
+                    size: i.size,
+                    color: i.color,
+                    quantity: i.quantity
+                })),
+                shipping_address: address,
+                phone_number: phone
+            };
+
+            const btn = document.getElementById("btn-place-order");
+            btn.disabled = true;
+            btn.innerText = "Processing Order...";
+
+            try {
+                const res = await fetch("/api/v1/orders/checkout", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${appState.token}`
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await res.json();
+
+                if (!res.ok) {
+                    alert(`Order failed: ${data.message || data.error || "Validation error"}`);
+                    btn.disabled = false;
+                    btn.innerText = "PLACE ORDER";
+                    return;
+                }
+
+                // Reset cart
+                appState.cart = [];
+                localStorage.removeItem("tc_cart");
+                updateCartCounter();
+
+                alert(`Order Placed Successfully! Order ID: #${data.id}\nTotal Payable: ₹${data.total_amount}`);
+                window.location.href = "/orders.html";
+            } catch (err) {
+                alert("Network communication error.");
+                btn.disabled = false;
+                btn.innerText = "PLACE ORDER";
+            }
+        }
+    </script>
+</body>
+</html>

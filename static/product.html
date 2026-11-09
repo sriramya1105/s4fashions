@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details - ThreadCraft Apparel</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+    <!-- MAIN HEADER -->
+    <header class="main-header">
+        <div class="header-container">
+            <a href="/" class="logo-wrapper">
+                <span class="logo-text">ThreadCraft</span>
+                <span class="logo-subtext">Explore <span>Fashion</span></span>
+            </a>
+
+            <div class="search-container">
+                <input type="text" id="global-search" class="search-input" placeholder="Search for products, brands and more">
+            </div>
+
+            <div class="header-nav">
+                <div id="header-auth-slot"></div>
+                <a href="/orders.html" class="header-nav-link">Orders</a>
+                <a href="/cart.html" class="header-nav-link cart-link">
+                    Cart <span class="cart-badge-count" id="cart-count-badge">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- PRODUCT DETAILS CONTAINER -->
+    <main class="pdp-container" id="pdp-container">
+        <div style="grid-column: 1/-1; text-align: center; padding: 60px;">
+            <p>Loading product details...</p>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <div class="footer-bottom">
+            ThreadCraft Apparel · CS5101 Secure Coding Practices · Built for High-Security Evaluation
+        </div>
+    </footer>
+
+    <script src="/js/core.js"></script>
+    <script>
+        let currentProduct = null;
+        let selectedSize = null;
+        let selectedColor = null;
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get("id");
+
+            if (!productId) {
+                window.location.href = "/";
+                return;
+            }
+
+            try {
+                const res = await fetch(`/api/v1/products/${productId}`);
+                if (!res.ok) throw new Error("Product not found");
+                currentProduct = await res.json();
+                renderPDP(currentProduct);
+            } catch (err) {
+                document.getElementById("pdp-container").innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 60px;">
+                        <h3>Product Not Found</h3>
+                        <p style="margin-top: 10px;"><a href="/" style="color: var(--primary-blue);">Back to Storefront</a></p>
+                    </div>
+                `;
+            }
+        });
+
+        function renderPDP(p) {
+            const sizes = p.available_sizes.split(",").map(s => s.trim());
+            const colors = p.available_colors.split(",").map(c => c.trim());
+            selectedSize = sizes[0];
+            selectedColor = colors[0];
+
+            const discount = p.original_price && p.original_price > p.price
+                ? Math.round(((p.original_price - p.price) / p.original_price) * 100)
+                : 0;
+
+            const container = document.getElementById("pdp-container");
+            container.innerHTML = `
+                <!-- GALLERY & ACTIONS -->
+                <div class="pdp-gallery">
+                    <div class="pdp-main-img-box">
+                        <img src="${p.image_url}" alt="${escapeHtml(p.title)}">
+                    </div>
+                    <div class="pdp-action-buttons">
+                        <button class="btn-add-bag" onclick="handleAddToCart()">ADD TO BAG</button>
+                        <button class="btn-buy-now" onclick="handleBuyNow()">BUY NOW</button>
+                    </div>
+                </div>
+
+                <!-- INFO PANEL -->
+                <div class="pdp-info-panel">
+                    <div>
+                        <div class="pdp-brand">${escapeHtml(p.brand)}</div>
+                        <h1 class="pdp-title">${escapeHtml(p.title)}</h1>
+                        
+                        <div class="card-rating-row" style="margin-top: 8px;">
+                            <span class="rating-badge">${p.rating} ★</span>
+                            <span class="rating-count-text">${p.rating_count} Ratings & Reviews</span>
+                            <span class="assured-badge" style="position: static; margin-left: 8px;">ThreadCraft Assured</span>
+                        </div>
+                    </div>
+
+                    <div class="pdp-price-panel">
+                        <span class="pdp-current-price">₹${p.price.toFixed(0)}</span>
+                        ${p.original_price ? `<span class="pdp-mrp">₹${p.original_price.toFixed(0)}</span>` : ''}
+                        ${discount > 0 ? `<span class="pdp-discount">${discount}% off</span>` : ''}
+                    </div>
+
+                    <div>
+                        <div class="selector-group-title">Select Size:</div>
+                        <div class="selector-chips" id="size-chips">
+                            ${sizes.map((s, idx) => `
+                                <button type="button" class="chip-btn ${idx === 0 ? 'active' : ''}" onclick="selectSize('${s}', this)">${s}</button>
+                            `).join("")}
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="selector-group-title">Select Color:</div>
+                        <div class="selector-chips" id="color-chips">
+                            ${colors.map((c, idx) => `
+                                <button type="button" class="chip-btn ${idx === 0 ? 'active' : ''}" onclick="selectColor('${c}', this)">${c}</button>
+                            `).join("")}
+                        </div>
+                    </div>
+
+                    <div style="border-top: 1px solid var(--light-border); padding-top: 16px;">
+                        <div class="selector-group-title">Product Details:</div>
+                        <p style="font-size: 14px; color: #555; line-height: 1.6; margin-bottom: 12px;">${escapeHtml(p.description)}</p>
+                        
+                        <div style="display: grid; grid-template-columns: 140px 1fr; gap: 8px; font-size: 13px;">
+                            <span style="color: var(--secondary-text);">Category:</span>
+                            <span style="text-transform: capitalize;">${p.category} (${escapeHtml(p.subcategory)})</span>
+
+                            <span style="color: var(--secondary-text);">Fabric Material:</span>
+                            <span>${escapeHtml(p.material || 'Premium Quality')}</span>
+
+                            <span style="color: var(--secondary-text);">Inventory Status:</span>
+                            <span style="color: ${p.stock > 10 ? 'var(--primary-green)' : 'var(--danger)'}; font-weight: 600;">
+                                ${p.stock > 0 ? `In Stock (${p.stock} units left)` : 'Out of Stock'}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div style="border-top: 1px solid var(--light-border); padding-top: 16px;">
+                        <div class="selector-group-title">Delivery & Services:</div>
+                        <div style="font-size: 13px; color: #444; display: flex; flex-direction: column; gap: 6px;">
+                            <div>Standard Delivery: <b>Within 2-4 Business Days</b></div>
+                            <div>Cash on Delivery available</div>
+                            <div>7 Days Hassle-free Exchange & Return Policy</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function selectSize(s, btn) {
+            selectedSize = s;
+            document.querySelectorAll("#size-chips .chip-btn").forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+        }
+
+        function selectColor(c, btn) {
+            selectedColor = c;
+            document.querySelectorAll("#color-chips .chip-btn").forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+        }
+
+        function handleAddToCart() {
+            if (!currentProduct) return;
+            addItemToCart(currentProduct, selectedSize, selectedColor, 1);
+            alert(`Added "${currentProduct.title}" (Size: ${selectedSize}) to your Bag!`);
+        }
+
+        function handleBuyNow() {
+            handleAddToCart();
+            window.location.href = "/cart.html";
+        }
+    </script>
+</body>
+</html>
