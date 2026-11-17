@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product Details - S4 Fashions</title>
-    <link rel="stylesheet" href="/css/modern.css">
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/modern.css?v=20261117_3">
+    <link rel="stylesheet" href="/css/style.css?v=20261117_3">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -31,6 +31,7 @@
                 <a href="/cart.html" class="nav-btn primary-btn">
                     Bag <span class="nav-cart-badge" id="nav-cart-count">0</span>
                 </a>
+                <script>(function(){try{var c=JSON.parse(localStorage.getItem("tc_cart")||"[]");var n=c.reduce(function(a,b){return a+(parseInt(b.quantity,10)||1);},0);var el=document.getElementById("nav-cart-count");if(el)el.innerText=n;}catch(e){}})();</script>
             </div>
         </div>
     </header>
@@ -84,7 +85,7 @@
         </div>
     </aside>
 
-    <script src="/js/core.js"></script>
+    <script src="/js/core.js?v=20261117_3"></script>
     <script>
         let currentProduct = null;
         let selectedSize = null;
@@ -206,6 +207,20 @@
         function handleAddToCart() {
             if (!currentProduct) return;
             addItemToCart(currentProduct, selectedSize, selectedColor, 1);
+            
+            // Calculate total count immediately
+            let cartItems = [];
+            try {
+                cartItems = JSON.parse(localStorage.getItem("tc_cart") || "[]");
+            } catch(e) {
+                cartItems = appState.cart || [];
+            }
+            const totalCount = cartItems.reduce((acc, item) => acc + (parseInt(item.quantity, 10) || 1), 0);
+            
+            // Update all badge elements immediately in the DOM
+            document.querySelectorAll("#nav-cart-count, .nav-cart-badge, #cart-count-badge").forEach(el => {
+                el.innerText = totalCount;
+            });
             updateCartCounter();
 
             // Update button state visually
@@ -216,14 +231,14 @@
                 btn.style.color = "#ffffff";
                 btn.style.borderColor = "#768452";
                 
-                // Revert back after 2.5 seconds or keep subtle indicator
+                // Keep '✓ Added to Cart' visible, then refresh count badge
                 setTimeout(() => {
                     const thisItemCount = (appState.cart || []).filter(i => i.product_id === currentProduct.id).reduce((a, b) => a + (b.quantity || 1), 0);
-                    btn.innerHTML = `Add to Cart (${thisItemCount} in Bag)`;
+                    btn.innerHTML = `✓ Added to Cart (${thisItemCount} in Bag)`;
                     btn.style.background = "#ffffff";
-                    btn.style.color = "var(--primary)";
-                    btn.style.borderColor = "var(--primary)";
-                }, 2500);
+                    btn.style.color = "#8e0d5d";
+                    btn.style.borderColor = "#8e0d5d";
+                }, 1800);
             }
 
             showToastPopup(

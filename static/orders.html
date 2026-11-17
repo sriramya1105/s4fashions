@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Orders - S4 Fashions</title>
-    <link rel="stylesheet" href="/css/modern.css">
+    <link rel="stylesheet" href="/css/modern.css?v=20261117_3">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -32,6 +32,7 @@
                 <a href="/cart.html" class="nav-btn primary-btn">
                     Bag <span class="nav-cart-badge" id="nav-cart-count">0</span>
                 </a>
+                <script>(function(){try{var c=JSON.parse(localStorage.getItem("tc_cart")||"[]");var n=c.reduce(function(a,b){return a+(parseInt(b.quantity,10)||1);},0);var el=document.getElementById("nav-cart-count");if(el)el.innerText=n;}catch(e){}})();</script>
             </div>
         </div>
     </header>
@@ -96,60 +97,10 @@
         </div>
     </aside>
 
-    <script src="/js/core.js"></script>
+    <script src="/js/core.js?v=20261117_3"></script>
     <script>
-        function toggleProfileMenu() {
-            const m = document.getElementById("profile-dropdown-card");
-            if (m) m.style.display = (m.style.display === "none" || !m.style.display) ? "block" : "none";
-        }
-
-        document.addEventListener("click", (e) => {
-            const slot = document.getElementById("user-profile-slot");
-            if (slot && !slot.contains(e.target)) {
-                const m = document.getElementById("profile-dropdown-card");
-                if (m) m.style.display = "none";
-            }
-        });
-
-        function syncUserAuth() {
-            const slot = document.getElementById("user-profile-slot");
-            if (!slot) return;
-
-            if (appState.user && appState.token) {
-                slot.innerHTML = `
-                    <button type="button" class="nav-btn" onclick="toggleProfileMenu()" style="display: flex; align-items: center; gap: 8px; border: 1px solid var(--border-color); border-radius: 24px; padding: 6px 14px; background: #ffffff;">
-                        <span style="width: 28px; height: 28px; border-radius: 50%; background: #fbebf4; color: #8e0d5d; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700;">
-                            ${escapeHtml(appState.user.username.charAt(0).toUpperCase())}
-                        </span>
-                        <span style="font-weight: 600; font-size: 13px; color: var(--secondary);">${escapeHtml(appState.user.username)}</span>
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                    </button>
-
-                    <div id="profile-dropdown-card" style="display: none; position: absolute; right: 0; top: 120%; width: 280px; background: #ffffff; border: 1px solid var(--border-color); border-radius: var(--radius-md); box-shadow: 0 10px 30px rgba(115,30,72,0.12); z-index: 2000; overflow: hidden;">
-                        <div style="background: #faf6f8; padding: 16px; border-bottom: 1px solid var(--border-color);">
-                            <div style="font-weight: 800; font-size: 14px; color: var(--secondary);">${escapeHtml(appState.user.full_name || appState.user.username)}</div>
-                            <div style="font-size: 11px; color: var(--text-muted);">${escapeHtml(appState.user.email || 'customer@s4fashions.com')}</div>
-                        </div>
-                        <div style="padding: 10px 0;">
-                            <a href="/orders.html" style="display: flex; align-items: center; gap: 10px; padding: 10px 18px; color: var(--text-main); text-decoration: none; font-size: 13px; font-weight: 600;">
-                                <span>📦</span>
-                                <span>My Orders</span>
-                            </a>
-                            <div style="height: 1px; background: #f3f4f6; margin: 6px 0;"></div>
-                            <button onclick="logoutUser()" style="width: 100%; display: flex; align-items: center; gap: 10px; padding: 10px 18px; color: #dc2626; background: none; border: none; font-size: 13px; font-weight: 600; cursor: pointer; text-align: left;">
-                                <span>🚪</span>
-                                <span>Sign Out</span>
-                            </button>
-                        </div>
-                    </div>
-                `;
-            } else {
-                slot.innerHTML = `<a href="/login.html" class="nav-btn" style="border: 1px solid var(--border-color); border-radius: 20px; padding: 6px 16px;">👤 Sign In</a>`;
-            }
-        }
-
         document.addEventListener("DOMContentLoaded", async () => {
-            syncUserAuth();
+            syncAuthHeader();
             updateCartCounter();
 
             if (!appState.token) {

@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shopping Cart - S4 Fashions</title>
-    <link rel="stylesheet" href="/css/modern.css">
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/modern.css?v=20261117_3">
+    <link rel="stylesheet" href="/css/style.css?v=20261117_3">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -31,6 +31,7 @@
                 <a href="/cart.html" class="nav-btn primary-btn">
                     Bag <span class="nav-cart-badge" id="nav-cart-count">0</span>
                 </a>
+                <script>(function(){try{var c=JSON.parse(localStorage.getItem("tc_cart")||"[]");var n=c.reduce(function(a,b){return a+(parseInt(b.quantity,10)||1);},0);var el=document.getElementById("nav-cart-count");if(el)el.innerText=n;}catch(e){}})();</script>
             </div>
         </div>
     </header>
@@ -141,7 +142,7 @@
         </div>
     </aside>
 
-    <script src="/js/core.js"></script>
+    <script src="/js/core.js?v=20261117_3"></script>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             updateCartCounter();
@@ -149,11 +150,23 @@
         });
 
         function renderCart() {
-            updateCartCounter();
-            const list = document.getElementById("meesho-cart-list");
-            const count = appState.cart.reduce((a, b) => a + b.quantity, 0);
+            let cartItems = [];
+            try {
+                cartItems = JSON.parse(localStorage.getItem("tc_cart") || "[]");
+                if (!Array.isArray(cartItems)) cartItems = [];
+                appState.cart = cartItems;
+            } catch(e) {
+                cartItems = appState.cart || [];
+            }
 
-            document.getElementById("cart-header-count").innerText = count;
+            const count = cartItems.reduce((a, b) => a + (parseInt(b.quantity, 10) || 1), 0);
+            const navEl = document.getElementById("nav-cart-count");
+            if (navEl) navEl.innerText = count;
+            document.querySelectorAll(".nav-cart-badge, #nav-cart-count, #cart-count-badge").forEach(el => {
+                el.innerText = count;
+            });
+            const headerCount = document.getElementById("cart-header-count");
+            if (headerCount) headerCount.innerText = count;
 
             if (appState.cart.length === 0) {
                 list.innerHTML = `

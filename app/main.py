@@ -46,6 +46,17 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# No-Cache Middleware for Static Assets (Prevents stale cached scripts during development)
+@app.middleware("http")
+async def add_no_cache_headers(request, call_next):
+    response = await call_next(request)
+    path = request.url.path.lower()
+    if path.endswith((".js", ".css", ".html")) or path == "/" or "static" in path:
+        response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+        response.headers["Pragma"] = "no-cache"
+        response.headers["Expires"] = "0"
+    return response
+
 # Global Security Exception Handlers (CWE-209 & Rate Limiting)
 app.add_exception_handler(RateLimitExceeded, rate_limit_exceeded_handler)
 app.add_exception_handler(StarletteHTTPException, http_exception_handler)

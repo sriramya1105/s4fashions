@@ -88,11 +88,32 @@ if (document.readyState === "loading") {
     initApp();
 }
 
+// Window load listener to ensure late-mounted elements get updated
+window.addEventListener("load", () => {
+    updateCartCounter();
+});
+
+// Storage event listener to sync cart counter across multi-tabs in real-time
+window.addEventListener("storage", (e) => {
+    if (e.key === "tc_cart") {
+        updateCartCounter();
+    }
+    if (e.key === "tc_user" || e.key === "tc_token") {
+        try {
+            appState.user = JSON.parse(localStorage.getItem("tc_user") || "null");
+            appState.token = localStorage.getItem("tc_token") || null;
+            syncAuthHeader();
+        } catch (err) {}
+    }
+});
+
 // Cart Count Update across all pages and headers
 function updateCartCounter() {
     let items = [];
     try {
-        items = JSON.parse(localStorage.getItem("tc_cart") || "[]");
+        const stored = localStorage.getItem("tc_cart");
+        items = stored ? JSON.parse(stored) : [];
+        if (!Array.isArray(items)) items = [];
         appState.cart = items;
     } catch (e) {
         items = [];
@@ -101,12 +122,13 @@ function updateCartCounter() {
     const totalCount = items.reduce((acc, item) => acc + (parseInt(item.quantity, 10) || 1), 0);
     
     // Select all potential cart badge containers across all templates
-    const selectors = ["#nav-cart-count", "#cart-count-badge", ".nav-cart-badge", ".cart-badge-count"];
+    const selectors = ["#nav-cart-count", "#cart-count-badge", ".nav-cart-badge", ".cart-badge-count", "#header-cart-badge"];
     selectors.forEach(sel => {
         document.querySelectorAll(sel).forEach(el => {
             el.innerText = totalCount;
         });
     });
+    return totalCount;
 }
 
 // Custom Popup Toast Notification System (Replaces Browser window.alert)
