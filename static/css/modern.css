@@ -257,11 +257,11 @@ body {
 }
 
 /* ==========================================================================
-   TOP HERO CAROUSEL (COVERS EXACTLY 1/4th OF PAGE HEIGHT ~ 25vh)
+   TOP HERO CAROUSEL (EXPANDED PROPORTIONS)
    ========================================================================== */
 .s4-hero-carousel {
     max-width: 1440px;
-    margin: 16px auto 0 auto;
+    margin: 20px auto 0 auto;
     padding: 0 24px;
     display: block;
     width: 100%;
@@ -269,11 +269,11 @@ body {
 
 .carousel-box {
     position: relative;
-    height: 250px;
+    height: 380px;
     width: 100%;
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-lg);
     overflow: hidden;
-    box-shadow: 0 4px 16px rgba(115, 30, 72, 0.1);
+    box-shadow: 0 6px 20px rgba(115, 30, 72, 0.12);
     background: #2b0b23;
 }
 
@@ -288,7 +288,7 @@ body {
     background-repeat: no-repeat;
     display: none;
     align-items: center;
-    padding: 0 54px;
+    padding: 0 64px;
     color: #ffffff;
     box-sizing: border-box;
 }
@@ -299,12 +299,38 @@ body {
 
 .carousel-content {
     background: rgba(30, 8, 22, 0.82);
-    backdrop-filter: blur(6px);
-    padding: 22px 32px;
+    backdrop-filter: blur(8px);
+    padding: 28px 40px;
     border-radius: var(--radius-md);
-    max-width: 520px;
+    max-width: 580px;
     border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.carousel-pill {
+    background: var(--primary-light);
+    color: #8e0d5d;
+    font-size: 12px;
+    font-weight: 800;
+    padding: 4px 12px;
+    border-radius: 14px;
+    text-transform: uppercase;
+    display: inline-block;
+    margin-bottom: 10px;
+    letter-spacing: 0.5px;
+}
+
+.carousel-title {
+    font-size: 32px;
+    font-weight: 800;
+    line-height: 1.25;
+    margin-bottom: 10px;
+}
+
+.carousel-desc {
+    font-size: 15px;
+    line-height: 1.5;
+    color: #f3f4f6;
 }
 
 .carousel-pill {
