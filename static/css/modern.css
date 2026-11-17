@@ -844,6 +844,163 @@ body {
 }
 
 /* ==========================================================================
+   ADMIN PORTAL DATA TABLES - PREMIUM CLEAN UI
+   ========================================================================== */
+.admin-table-container {
+    background: #ffffff;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 8px rgba(115, 30, 72, 0.04);
+    overflow: hidden;
+    margin-bottom: 32px;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    text-align: left;
+    font-size: 13px;
+    background: #ffffff;
+}
+
+.admin-table thead th {
+    background: #faf6f8;
+    color: var(--secondary);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    padding: 14px 18px;
+    border-bottom: 2px solid var(--border-color);
+    white-space: nowrap;
+}
+
+.admin-table tbody td {
+    padding: 14px 18px;
+    border-bottom: 1px solid #f3ecef;
+    color: var(--text-main);
+    vertical-align: middle;
+}
+
+.admin-table tbody tr {
+    transition: background-color 0.15s ease-in-out;
+}
+
+.admin-table tbody tr:hover {
+    background-color: #fdf5f9;
+}
+
+.admin-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Table Specific Badges & Chips */
+.tag-badge-id {
+    display: inline-block;
+    font-weight: 800;
+    font-size: 12px;
+    color: #731e48;
+    background: #fbebf4;
+    padding: 3px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.3px;
+}
+
+.tag-badge-dept {
+    display: inline-flex;
+    align-items: center;
+    font-weight: 700;
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 12px;
+    background: #fdebf4;
+    color: #8e0d5d;
+    border: 1px solid rgba(142, 13, 93, 0.2);
+}
+
+.tag-badge-subcat {
+    display: inline-block;
+    font-weight: 600;
+    font-size: 12px;
+    color: #4b5563;
+    background: #f3f4f6;
+    padding: 3px 8px;
+    border-radius: 4px;
+}
+
+.tag-badge-slug {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 11px;
+    color: #6b7280;
+    background: #f9fafb;
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid #e5e7eb;
+}
+
+.btn-delete {
+    background: #fee2e2;
+    color: #dc2626;
+    border: 1px solid #fca5a5;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.btn-delete:hover {
+    background: #dc2626;
+    color: #ffffff;
+    border-color: #dc2626;
+    box-shadow: 0 2px 6px rgba(220, 38, 38, 0.25);
+    transform: translateY(-1px);
+}
+
+/* Product Row Specifics */
+.product-cell-title {
+    font-weight: 700;
+    color: var(--text-main);
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.product-cell-sub {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 3px;
+}
+
+.product-cell-price {
+    font-weight: 800;
+    color: var(--primary);
+    font-size: 14px;
+}
+
+.product-cell-stock {
+    font-weight: 700;
+    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 12px;
+    display: inline-block;
+}
+
+.stock-good {
+    background: #eaf5eb;
+    color: #1e7e34;
+}
+
+.stock-low {
+    background: #fff4e5;
+    color: #b76e00;
+}
+
+/* ==========================================================================
    FOOTER
    ========================================================================== */
 .s4-site-footer {
