@@ -298,13 +298,13 @@ body {
 }
 
 .carousel-content {
-    background: rgba(30, 8, 22, 0.82);
-    backdrop-filter: blur(8px);
-    padding: 28px 40px;
+    background: rgba(30, 8, 22, 0.42);
+    backdrop-filter: blur(4px);
+    padding: 26px 36px;
     border-radius: var(--radius-md);
-    max-width: 580px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    max-width: 560px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
 
 .carousel-pill {
