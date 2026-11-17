@@ -16,49 +16,6 @@ let appState = {
     searchQuery: ""
 };
 
-// Initialize
-document.addEventListener("DOMContentLoaded", () => {
-    syncAuthHeader();
-    updateCartCounter();
-});
-
-// Splash Screen Controller (Show once only when the website is first opened)
-let splashTimer = null;
-
-function dismissSplashNow() {
-    const splash = document.getElementById("splash-screen");
-    if (!splash) return;
-    if (splashTimer) {
-        clearTimeout(splashTimer);
-        splashTimer = null;
-    }
-    sessionStorage.setItem("s4_splash_shown", "true");
-    splash.classList.add("hidden");
-    setTimeout(() => {
-        splash.style.display = "none";
-    }, 700);
-}
-
-function handleSplashScreen() {
-    const splash = document.getElementById("splash-screen");
-    if (!splash) return;
-
-    // If splash has already been shown in this browser session, hide it immediately
-    const hasBeenShown = sessionStorage.getItem("s4_splash_shown");
-    if (hasBeenShown) {
-        splash.style.display = "none";
-        return;
-    }
-
-    // Mark as shown so it never displays again on page refresh or navigation
-    sessionStorage.setItem("s4_splash_shown", "true");
-
-    // Automatically transition to home after 5.5 seconds if user does not click 'Shop Now'
-    splashTimer = setTimeout(() => {
-        dismissSplashNow();
-    }, 5500);
-}
-
 // Customer Profile Slide-Over Drawer Controller
 function openProfileSidebar() {
     const backdrop = document.getElementById("profile-drawer-backdrop");
@@ -119,16 +76,29 @@ function logoutUser() {
     window.location.href = "/";
 }
 
+// Initialize
+function initApp() {
+    syncAuthHeader();
+    updateCartCounter();
+}
+
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initApp);
+} else {
+    initApp();
+}
+
 // Cart Count Update across all pages and headers
 function updateCartCounter() {
-    // Always refresh cart state from localStorage first
+    let items = [];
     try {
-        appState.cart = JSON.parse(localStorage.getItem("tc_cart") || "[]");
+        items = JSON.parse(localStorage.getItem("tc_cart") || "[]");
+        appState.cart = items;
     } catch (e) {
-        appState.cart = [];
+        items = [];
     }
 
-    const totalCount = appState.cart.reduce((acc, item) => acc + (parseInt(item.quantity, 10) || 1), 0);
+    const totalCount = items.reduce((acc, item) => acc + (parseInt(item.quantity, 10) || 1), 0);
     
     // Select all potential cart badge containers across all templates
     const selectors = ["#nav-cart-count", "#cart-count-badge", ".nav-cart-badge", ".cart-badge-count"];

@@ -144,10 +144,12 @@
     <script src="/js/core.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
+            updateCartCounter();
             renderCart();
         });
 
         function renderCart() {
+            updateCartCounter();
             const list = document.getElementById("meesho-cart-list");
             const count = appState.cart.reduce((a, b) => a + b.quantity, 0);
 
