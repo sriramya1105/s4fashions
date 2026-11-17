@@ -121,13 +121,21 @@ function logoutUser() {
 
 // Cart Count Update across all pages and headers
 function updateCartCounter() {
-    const totalCount = (appState.cart || []).reduce((acc, item) => acc + (item.quantity || 1), 0);
-    const badges = [
-        document.getElementById("cart-count-badge"),
-        document.getElementById("nav-cart-count")
-    ];
-    badges.forEach(b => {
-        if (b) b.innerText = totalCount;
+    // Always refresh cart state from localStorage first
+    try {
+        appState.cart = JSON.parse(localStorage.getItem("tc_cart") || "[]");
+    } catch (e) {
+        appState.cart = [];
+    }
+
+    const totalCount = appState.cart.reduce((acc, item) => acc + (parseInt(item.quantity, 10) || 1), 0);
+    
+    // Select all potential cart badge containers across all templates
+    const selectors = ["#nav-cart-count", "#cart-count-badge", ".nav-cart-badge", ".cart-badge-count"];
+    selectors.forEach(sel => {
+        document.querySelectorAll(sel).forEach(el => {
+            el.innerText = totalCount;
+        });
     });
 }
 
