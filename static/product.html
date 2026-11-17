@@ -43,8 +43,8 @@
         </div>
     </main>
 
-    <footer class="s4-site-footer" style="background: #ffffff; border-top: 1px solid var(--meesho-border); padding: 24px; text-align: center; margin-top: 40px;">
-        <p style="font-size: 14px; font-weight: 600; color: #731e48;">S4 Fashions made with love💖</p>
+    <footer class="s4-site-footer" style="background: #8e0d5d; border-top: 1px solid #731e48; padding: 24px; text-align: center; margin-top: 40px; color: #ffffff;">
+        <p style="font-size: 15px; font-weight: 600; color: #ffffff;">S4 Fashions made with love💖</p>
     </footer>
 
     <script src="/js/core.js"></script>
@@ -168,7 +168,13 @@
         }
 
         function handleBuyNow() {
+            if (!currentProduct) return;
             handleAddToCart();
+            if (!appState.token || !appState.user) {
+                alert("Please log in to proceed to checkout.");
+                window.location.href = "/login.html";
+                return;
+            }
             window.location.href = "/cart.html";
         }
     </script>

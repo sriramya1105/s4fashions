@@ -1037,14 +1037,16 @@ body {
 }
 
 /* ==========================================================================
-   FOOTER
+   FOOTER (MAGENTA THEME)
    ========================================================================== */
 .s4-site-footer {
-    background: #ffffff;
-    border-top: 1px solid var(--border-color);
+    background: #8e0d5d;
+    border-top: 1px solid #731e48;
     padding: 24px;
     text-align: center;
-    font-size: 13px;
-    color: var(--text-muted);
+    font-size: 14px;
+    font-weight: 600;
+    color: #ffffff;
     margin-top: auto;
+    letter-spacing: 0.3px;
 }

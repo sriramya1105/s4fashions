@@ -18,7 +18,6 @@ let appState = {
 
 // Initialize
 document.addEventListener("DOMContentLoaded", () => {
-    handleSplashScreen();
     syncAuthHeader();
     updateCartCounter();
 });
