@@ -239,11 +239,45 @@ def admin_get_stats(
     total_categories = db.query(Category).count()
     total_customers = db.query(User).filter(User.role == UserRole.CUSTOMER).count()
 
+    # Category product distribution for Donut/Pie Chart
+    categories = db.query(Category).all()
+    cat_distribution = []
+    for cat in categories:
+        count = db.query(Product).filter(Product.category_id == cat.id).count()
+        cat_distribution.append({
+            "name": cat.name,
+            "count": count
+        })
+
+    # Subcategory product breakdown for Bar Chart
+    subcategories = db.query(SubCategory).all()
+    subcat_distribution = []
+    for sub in subcategories:
+        count = db.query(Product).filter(Product.subcategory_id == sub.id).count()
+        if count > 0:
+            subcat_distribution.append({
+                "name": sub.name,
+                "count": count,
+                "category": sub.category.name if sub.category else ""
+            })
+
+    # Order status breakdown
+    order_statuses = {
+        "pending": db.query(Order).filter(Order.status == OrderStatus.PENDING).count(),
+        "confirmed": db.query(Order).filter(Order.status == OrderStatus.CONFIRMED).count(),
+        "shipped": db.query(Order).filter(Order.status == OrderStatus.SHIPPED).count(),
+        "delivered": db.query(Order).filter(Order.status == OrderStatus.DELIVERED).count(),
+        "cancelled": db.query(Order).filter(Order.status == OrderStatus.CANCELLED).count(),
+    }
+
     return {
         "status": "success",
         "total_revenue": round(total_sales, 2),
         "total_orders_placed": total_orders,
         "active_catalog_items": total_products,
         "total_categories": total_categories,
-        "registered_customers": total_customers
+        "registered_customers": total_customers,
+        "category_distribution": cat_distribution,
+        "subcategory_distribution": subcat_distribution,
+        "order_statuses": order_statuses
     }
