@@ -354,12 +354,32 @@
                 window.location.href = "/login.html";
                 return;
             }
+
+            // Check 10-Minute Session Expiry
+            const loginTimestamp = localStorage.getItem("tc_login_time");
+            const now = Date.now();
+            const TEN_MINUTES_MS = 10 * 60 * 1000;
+
+            if (loginTimestamp && (now - parseInt(loginTimestamp, 10)) > TEN_MINUTES_MS) {
+                alert("Your 10-minute admin session has expired. Please sign in again.");
+                logoutAdmin();
+                return;
+            }
+
             document.getElementById("admin-user-tag").innerText = `${appState.user.username} (Admin)`;
+
+            // Start a live countdown timer to automatically prompt login when 10 minutes pass
+            const remainingTime = loginTimestamp ? (TEN_MINUTES_MS - (now - parseInt(loginTimestamp, 10))) : TEN_MINUTES_MS;
+            setTimeout(() => {
+                alert("Your 10-minute admin session has expired. Please sign in again.");
+                logoutAdmin();
+            }, Math.max(remainingTime, 1000));
         }
 
         function logoutAdmin() {
             localStorage.removeItem("tc_token");
             localStorage.removeItem("tc_user");
+            localStorage.removeItem("tc_login_time");
             window.location.href = "/login.html";
         }
 

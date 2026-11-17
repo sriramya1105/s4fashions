@@ -15,16 +15,13 @@
                 <span class="brand-title">S4 Fashions</span>
                 <span class="brand-subtitle">Women · Men · Kids</span>
             </a>
-            <div style="font-size: 13px; color: var(--meesho-pink); font-weight: 600;">
-                CS5101 Secure Authentication
-            </div>
         </div>
     </header>
 
     <!-- MEESHO AUTH CARD -->
     <div class="meesho-auth-container">
-        <div class="meesho-auth-logo">Sign In to Meesho</div>
-        <div class="meesho-auth-sub">To view your wishlist, orders, and personalized apparel feed</div>
+        <div class="meesho-auth-logo">Sign In to S4 Fashions</div>
+        <div class="meesho-auth-sub">To access merchant controls, view orders, and manage catalog</div>
 
         <div id="login-alert" style="display: none; padding: 10px 14px; background-color: #fde8e8; color: #9b1c1c; font-size: 13px; border-radius: 4px; margin-bottom: 16px;"></div>
 
@@ -44,7 +41,7 @@
 
         <div style="text-align: center; margin-top: 18px; font-size: 13px;">
             <a href="/register.html" style="color: var(--meesho-pink); text-decoration: none; font-weight: 700;">
-                New to Meesho? Create an Account
+                New Customer? Create an Account
             </a>
         </div>
 
@@ -98,6 +95,7 @@
 
                 localStorage.setItem("tc_token", data.access_token);
                 localStorage.setItem("tc_user", JSON.stringify(data.user));
+                localStorage.setItem("tc_login_time", Date.now().toString());
 
                 if (data.user.role === "admin") {
                     window.location.href = "/admin_portal/index.html";
