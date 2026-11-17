@@ -239,21 +239,24 @@ body {
 }
 
 .nav-btn.primary-btn {
-    background: var(--primary);
+    background: #8e0d5d;
     color: #ffffff;
 }
 
 .nav-btn.primary-btn:hover {
-    background: var(--primary-dark);
+    background: #731e48;
 }
 
 .nav-cart-badge {
-    background: var(--accent);
-    color: #ffffff;
+    background: #ffffff;
+    color: #8e0d5d;
     font-size: 11px;
-    font-weight: 700;
+    font-weight: 800;
     padding: 2px 7px;
     border-radius: 12px;
+    margin-left: 4px;
+    display: inline-block;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 }
 
 /* ==========================================================================

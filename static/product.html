@@ -206,6 +206,7 @@
         function handleAddToCart() {
             if (!currentProduct) return;
             addItemToCart(currentProduct, selectedSize, selectedColor, 1);
+            updateCartCounter();
 
             // Update button state visually
             const btn = document.getElementById("btn-add-to-cart");
@@ -215,9 +216,10 @@
                 btn.style.color = "#ffffff";
                 btn.style.borderColor = "#768452";
                 
-                // Revert back after 3 seconds or keep subtle indicator
+                // Revert back after 2.5 seconds or keep subtle indicator
                 setTimeout(() => {
-                    btn.innerHTML = `Add to Cart (${appState.cart.filter(i => i.product_id === currentProduct.id).reduce((a, b) => a + b.quantity, 0)} in Bag)`;
+                    const thisItemCount = (appState.cart || []).filter(i => i.product_id === currentProduct.id).reduce((a, b) => a + (b.quantity || 1), 0);
+                    btn.innerHTML = `Add to Cart (${thisItemCount} in Bag)`;
                     btn.style.background = "#ffffff";
                     btn.style.color = "var(--primary)";
                     btn.style.borderColor = "var(--primary)";
