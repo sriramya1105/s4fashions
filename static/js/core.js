@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
     updateCartCounter();
 });
 
-// Splash Screen Controller (First visit or full page refresh / session)
+// Splash Screen Controller (Show once only when the website is first opened)
 let splashTimer = null;
 
 function dismissSplashNow() {
@@ -44,20 +44,14 @@ function handleSplashScreen() {
     const splash = document.getElementById("splash-screen");
     if (!splash) return;
 
-    // Check if splash has already been shown in this active browsing session
+    // If splash has already been shown in this browser session, hide it immediately
     const hasBeenShown = sessionStorage.getItem("s4_splash_shown");
-
-    // Check navigation type: if user refreshed the page (reload), show splash screen
-    const navEntries = performance.getEntriesByType && performance.getEntriesByType("navigation");
-    const isReload = navEntries && navEntries.length > 0 && navEntries[0].type === "reload";
-
-    if (hasBeenShown && !isReload) {
-        // Internal navigation (e.g. returning from product details or login): hide immediately
+    if (hasBeenShown) {
         splash.style.display = "none";
         return;
     }
 
-    // Mark as shown for the current session
+    // Mark as shown so it never displays again on page refresh or navigation
     sessionStorage.setItem("s4_splash_shown", "true");
 
     // Automatically transition to home after 5.5 seconds if user does not click 'Shop Now'
