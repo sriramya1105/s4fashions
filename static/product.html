@@ -132,8 +132,12 @@
                         <img src="${p.image_url}" alt="${escapeHtml(p.title)}">
                     </div>
                     <div class="pdp-cta-row">
-                        <button class="btn-meesho-cart" onclick="handleAddToCart()">Add to Cart</button>
-                        <button class="btn-meesho-buy" onclick="handleBuyNow()">Buy Now</button>
+                        <button id="btn-add-to-cart" class="btn-meesho-cart" onclick="handleAddToCart()">
+                            Add to Cart
+                        </button>
+                        <button class="btn-meesho-buy" onclick="handleBuyNow()">
+                            Buy Now
+                        </button>
                     </div>
                 </div>
 
@@ -201,6 +205,24 @@
         function handleAddToCart() {
             if (!currentProduct) return;
             addItemToCart(currentProduct, selectedSize, selectedColor, 1);
+
+            // Update button state visually
+            const btn = document.getElementById("btn-add-to-cart");
+            if (btn) {
+                btn.innerHTML = `✓ Added to Cart`;
+                btn.style.background = "#768452";
+                btn.style.color = "#ffffff";
+                btn.style.borderColor = "#768452";
+                
+                // Revert back after 3 seconds or keep subtle indicator
+                setTimeout(() => {
+                    btn.innerHTML = `Add to Cart (${appState.cart.filter(i => i.product_id === currentProduct.id).reduce((a, b) => a + b.quantity, 0)} in Bag)`;
+                    btn.style.background = "#ffffff";
+                    btn.style.color = "var(--primary)";
+                    btn.style.borderColor = "var(--primary)";
+                }, 2500);
+            }
+
             showToastPopup(
                 "Added to Bag!",
                 `"${currentProduct.title}" (${selectedSize}, ${selectedColor}) has been added.`,

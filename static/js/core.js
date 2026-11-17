@@ -119,12 +119,16 @@ function logoutUser() {
     window.location.href = "/";
 }
 
-// Cart Count Update
+// Cart Count Update across all pages and headers
 function updateCartCounter() {
-    const countEl = document.getElementById("cart-count-badge");
-    if (!countEl) return;
-    const totalCount = appState.cart.reduce((acc, item) => acc + item.quantity, 0);
-    countEl.innerText = totalCount;
+    const totalCount = (appState.cart || []).reduce((acc, item) => acc + (item.quantity || 1), 0);
+    const badges = [
+        document.getElementById("cart-count-badge"),
+        document.getElementById("nav-cart-count")
+    ];
+    badges.forEach(b => {
+        if (b) b.innerText = totalCount;
+    });
 }
 
 // Custom Popup Toast Notification System (Replaces Browser window.alert)
