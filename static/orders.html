@@ -3,51 +3,182 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Orders - ThreadCraft Apparel</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <title>My Orders - S4 Fashions</title>
+    <link rel="stylesheet" href="/css/modern.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <!-- MAIN HEADER -->
-    <header class="main-header">
-        <div class="header-container">
-            <a href="/" class="logo-wrapper">
-                <span class="logo-text">ThreadCraft</span>
-                <span class="logo-subtext">Explore <span>Fashion</span></span>
+    <!-- 1. HEADER NAVIGATION -->
+    <header class="s4-nav">
+        <div class="nav-wrap">
+            <a href="/" class="nav-brand">
+                S4 Fashions <span class="sub-brand">Fashion Hub</span>
             </a>
 
-            <div class="search-container">
-                <input type="text" class="search-input" placeholder="Search for products, brands and more">
+            <!-- Search Bar -->
+            <div class="nav-search-bar">
+                <svg class="nav-search-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <input type="text" id="global-product-search" placeholder="Search for Sarees, Kurtas, Trousers, Shirts, Frocks...">
             </div>
 
-            <div class="header-nav">
-                <div id="header-auth-slot"></div>
-                <a href="/orders.html" class="header-nav-link" style="color: var(--primary-yellow);">Orders</a>
-                <a href="/cart.html" class="header-nav-link cart-link">
-                    Cart <span class="cart-badge-count" id="cart-count-badge">0</span>
+            <!-- Actions -->
+            <div class="nav-actions">
+                <div id="user-profile-slot" style="position: relative;"></div>
+                <a href="/cart.html" class="nav-btn primary-btn">
+                    Bag <span class="nav-cart-badge" id="nav-cart-count">0</span>
                 </a>
             </div>
         </div>
     </header>
 
     <!-- ORDERS CONTAINER -->
-    <main style="max-width: 960px; margin: 20px auto; padding: 0 16px; flex: 1;">
-        <h2 style="font-size: 18px; font-weight: 700; margin-bottom: 16px;">My Orders History</h2>
+    <main style="max-width: 960px; margin: 32px auto; padding: 0 24px; flex: 1; width: 100%;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+            <div>
+                <h1 style="font-size: 24px; font-weight: 800; color: var(--secondary);">My Orders History</h1>
+                <p style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">Track and view previous purchases and dispatch statuses.</p>
+            </div>
+            <a href="/" class="nav-btn" style="border: 1px solid var(--border-color); border-radius: 6px; font-size: 13px;">
+                &larr; Continue Shopping
+            </a>
+        </div>
         
-        <div id="orders-list-container" style="display: flex; flex-direction: column; gap: 14px;">
-            <p>Loading your orders...</p>
+        <div id="orders-list-container" style="display: flex; flex-direction: column; gap: 16px;">
+            <p style="color: var(--text-muted);">Loading your orders...</p>
         </div>
     </main>
 
-    <footer class="site-footer">
-        <div class="footer-bottom">
-            ThreadCraft Apparel · CS5101 Secure Coding Practices · BOLA / IDOR Verification (CWE-639)
-        </div>
+    <!-- FOOTER -->
+    <footer class="s4-site-footer">
+        <p>&copy; 2026 S4 Fashions. Premium Apparel for Women, Men & Kids.</p>
     </footer>
 
     <script src="/js/core.js"></script>
     <script>
+        function toggleProfileMenu() {
+            const m = document.getElementById("profile-dropdown-card");
+            if (m) m.style.display = (m.style.display === "none" || !m.style.display) ? "block" : "none";
+        }
+
+        document.addEventListener("click", (e) => {
+            const slot = document.getElementById("user-profile-slot");
+            if (slot && !slot.contains(e.target)) {
+                const m = document.getElementById("profile-dropdown-card");
+                if (m) m.style.display = "none";
+            }
+        });
+
+        function syncUserAuth() {
+            const slot = document.getElementById("user-profile-slot");
+            if (!slot) return;
+
+            if (appState.user && appState.token) {
+                slot.innerHTML = `
+                    <button type="button" class="nav-btn" onclick="toggleProfileMenu()" style="display: flex; align-items: center; gap: 8px; border: 1px solid var(--border-color); border-radius: 24px; padding: 6px 14px; background: #ffffff;">
+                        <span style="width: 28px; height: 28px; border-radius: 50%; background: #fbebf4; color: #8e0d5d; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700;">
+                            ${escapeHtml(appState.user.username.charAt(0).toUpperCase())}
+                        </span>
+                        <span style="font-weight: 600; font-size: 13px; color: var(--secondary);">${escapeHtml(appState.user.username)}</span>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+
+                    <div id="profile-dropdown-card" style="display: none; position: absolute; right: 0; top: 120%; width: 280px; background: #ffffff; border: 1px solid var(--border-color); border-radius: var(--radius-md); box-shadow: 0 10px 30px rgba(115,30,72,0.12); z-index: 2000; overflow: hidden;">
+                        <div style="background: #faf6f8; padding: 16px; border-bottom: 1px solid var(--border-color);">
+                            <div style="font-weight: 800; font-size: 14px; color: var(--secondary);">${escapeHtml(appState.user.full_name || appState.user.username)}</div>
+                            <div style="font-size: 11px; color: var(--text-muted);">${escapeHtml(appState.user.email || 'customer@s4fashions.com')}</div>
+                        </div>
+                        <div style="padding: 10px 0;">
+                            <a href="/orders.html" style="display: flex; align-items: center; gap: 10px; padding: 10px 18px; color: var(--text-main); text-decoration: none; font-size: 13px; font-weight: 600;">
+                                <span>📦</span>
+                                <span>My Orders</span>
+                            </a>
+                            <div style="height: 1px; background: #f3f4f6; margin: 6px 0;"></div>
+                            <button onclick="logoutUser()" style="width: 100%; display: flex; align-items: center; gap: 10px; padding: 10px 18px; color: #dc2626; background: none; border: none; font-size: 13px; font-weight: 600; cursor: pointer; text-align: left;">
+                                <span>🚪</span>
+                                <span>Sign Out</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            } else {
+                slot.innerHTML = `<a href="/login.html" class="nav-btn" style="border: 1px solid var(--border-color); border-radius: 20px; padding: 6px 16px;">👤 Sign In</a>`;
+            }
+        }
+
         document.addEventListener("DOMContentLoaded", async () => {
+            syncUserAuth();
+            updateCartCounter();
+
+            if (!appState.token) {
+                document.getElementById("orders-list-container").innerHTML = `
+                    <div style="text-align: center; padding: 60px 20px; background: #ffffff; border-radius: 8px; border: 1px solid var(--border-color);">
+                        <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 8px;">Please Sign In</h3>
+                        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">Sign in to view your order history and live dispatch tracking.</p>
+                        <a href="/login.html" class="btn-action-primary" style="display: inline-block; text-decoration: none;">Sign In Now</a>
+                    </div>
+                `;
+                return;
+            }
+
+            try {
+                const res = await fetch("/api/v1/orders", {
+                    headers: { "Authorization": `Bearer ${appState.token}` }
+                });
+                if (!res.ok) throw new Error("Failed to load orders");
+                const orders = await res.json();
+                renderOrders(orders);
+            } catch (err) {
+                document.getElementById("orders-list-container").innerHTML = `
+                    <div style="text-align: center; padding: 60px 20px; background: #ffffff; border-radius: 8px; border: 1px solid var(--border-color);">
+                        <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 8px;">No Orders Placed Yet</h3>
+                        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">Browse our traditional and modern apparel and place your first order.</p>
+                        <a href="/" class="btn-action-primary" style="display: inline-block; text-decoration: none;">Explore Collections</a>
+                    </div>
+                `;
+            }
+        });
+
+        function renderOrders(orders) {
+            const container = document.getElementById("orders-list-container");
+            if (orders.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 60px 20px; background: #ffffff; border-radius: 8px; border: 1px solid var(--border-color);">
+                        <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 8px;">No Orders Placed Yet</h3>
+                        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">Browse our traditional and modern apparel and place your first order.</p>
+                        <a href="/" class="btn-action-primary" style="display: inline-block; text-decoration: none;">Explore Collections</a>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = orders.map(o => `
+                <div style="background: #ffffff; border: 1px solid var(--border-color); border-radius: 8px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 14px;">
+                        <div>
+                            <span style="font-size: 12px; font-weight: 800; color: #731e48; background: #fbebf4; padding: 2px 8px; border-radius: 4px;">ORDER #${o.id}</span>
+                            <span style="font-size: 12px; color: var(--text-muted); margin-left: 10px;">${new Date(o.created_at).toLocaleDateString()}</span>
+                        </div>
+                        <div>
+                            <span style="font-size: 12px; font-weight: 700; text-transform: uppercase; padding: 3px 10px; border-radius: 12px; background: #eaf5eb; color: #1e7e34;">${escapeHtml(o.status)}</span>
+                        </div>
+                    </div>
+                    <div style="font-size: 14px; margin-bottom: 12px;">
+                        <b>Total Amount:</b> <span style="font-weight: 800; color: #8e0d5d;">₹${o.total_amount.toFixed(0)}</span>
+                    </div>
+                    <div style="font-size: 12px; color: var(--text-muted);">
+                        Shipping to: ${escapeHtml(o.shipping_address)} (Phone: ${escapeHtml(o.phone)})
+                    </div>
+                </div>
+            `).join("");
+        }
+    </script>
+</body>
+</html>
             if (!appState.token || !appState.user) {
                 alert("Please login to view your orders.");
                 window.location.href = "/login.html";
