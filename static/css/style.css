@@ -983,3 +983,39 @@ body {
     font-size: 12px;
     color: var(--meesho-light-gray);
 }
+
+/* ==========================================================================
+   OFFICIAL S4 STICKY FOOTER (PINNED TO BOTTOM OF VIEWPORT)
+   ========================================================================== */
+html, body {
+    min-height: 100vh;
+}
+
+body {
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 100vh !important;
+}
+
+main, .meesho-cart-layout, .meesho-pdp-layout {
+    flex: 1 0 auto !important;
+}
+
+.s4-site-footer {
+    background: #8e0d5d !important;
+    border-top: 1px solid #731e48 !important;
+    padding: 24px 16px !important;
+    text-align: center !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    color: #ffffff !important;
+    margin-top: auto !important;
+    letter-spacing: 0.3px !important;
+    width: 100% !important;
+    flex-shrink: 0 !important;
+}
+
+.s4-site-footer p {
+    color: #ffffff !important;
+    margin: 0 !important;
+}
