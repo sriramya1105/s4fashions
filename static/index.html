@@ -42,7 +42,7 @@
 
             <!-- Actions -->
             <div class="nav-actions">
-                <a href="/admin_portal/index.html" class="nav-btn admin-link">
+                <a href="javascript:void(0)" onclick="handleAdminPortalClick()" class="nav-btn admin-link">
                     ⚙️ Admin Portal
                 </a>
                 <div id="user-auth-slot"></div>
@@ -444,6 +444,14 @@
                     </a>
                 `;
             }).join("");
+        }
+
+        function handleAdminPortalClick() {
+            if (appState.user && appState.token && appState.user.role === 'admin') {
+                window.location.href = "/admin_portal/index.html";
+            } else {
+                window.location.href = "/login.html";
+            }
         }
 
         function syncUserAuth() {
