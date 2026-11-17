@@ -127,6 +127,41 @@ function updateCartCounter() {
     countEl.innerText = totalCount;
 }
 
+// Custom Popup Toast Notification System (Replaces Browser window.alert)
+function showToastPopup(title, message, actionUrl = "/cart.html", actionText = "View Bag &rarr;") {
+    let container = document.getElementById("s4-toast-container");
+    if (!container) {
+        container = document.createElement("div");
+        container.id = "s4-toast-container";
+        container.className = "s4-toast-container";
+        document.body.appendChild(container);
+    }
+
+    const toast = document.createElement("div");
+    toast.className = "s4-toast-popup";
+    toast.innerHTML = `
+        <div class="toast-icon">🛍️</div>
+        <div class="toast-message-box">
+            <div class="toast-title">${escapeHtml(title)}</div>
+            <div class="toast-body">${escapeHtml(message)}</div>
+        </div>
+        ${actionUrl ? `<a href="${actionUrl}" class="toast-action-btn">${actionText}</a>` : ''}
+    `;
+
+    container.appendChild(toast);
+
+    // Trigger animation
+    requestAnimationFrame(() => {
+        toast.classList.add("show");
+    });
+
+    // Auto dismiss after 3.8s
+    setTimeout(() => {
+        toast.classList.remove("show");
+        setTimeout(() => toast.remove(), 350);
+    }, 3800);
+}
+
 // Add Item to Cart
 function addItemToCart(product, size, color, quantity = 1) {
     const existingIndex = appState.cart.findIndex(

@@ -201,15 +201,27 @@
         function handleAddToCart() {
             if (!currentProduct) return;
             addItemToCart(currentProduct, selectedSize, selectedColor, 1);
-            alert(`Added "${currentProduct.title}" to Cart!`);
+            showToastPopup(
+                "Added to Bag!",
+                `"${currentProduct.title}" (${selectedSize}, ${selectedColor}) has been added.`,
+                "/cart.html",
+                "View Bag &rarr;"
+            );
         }
 
         function handleBuyNow() {
             if (!currentProduct) return;
-            handleAddToCart();
+            addItemToCart(currentProduct, selectedSize, selectedColor, 1);
             if (!appState.token || !appState.user) {
-                alert("Please log in to proceed to checkout.");
-                window.location.href = "/login.html";
+                showToastPopup(
+                    "Sign In Required",
+                    "Please sign in with your account to proceed to checkout.",
+                    "/login.html",
+                    "Sign In &rarr;"
+                );
+                setTimeout(() => {
+                    window.location.href = "/login.html";
+                }, 1200);
                 return;
             }
             window.location.href = "/cart.html";
