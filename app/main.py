@@ -52,11 +52,21 @@ app.add_exception_handler(StarletteHTTPException, http_exception_handler)
 app.add_exception_handler(RequestValidationError, validation_exception_handler)
 app.add_exception_handler(Exception, global_unhandled_exception_handler)
 
+from fastapi.responses import RedirectResponse
+
 # Include API Routers under /api/v1
 app.include_router(auth.router, prefix="/api/v1")
 app.include_router(products.router, prefix="/api/v1")
 app.include_router(orders.router, prefix="/api/v1")
 app.include_router(admin.router, prefix="/api/v1")
+
+
+@app.get("/admin")
+@app.get("/admin/")
+def admin_route_redirect():
+    """Direct route for typing /admin in browser to access admin login/portal."""
+    return RedirectResponse(url="/login.html?redirect=/admin_portal/index.html")
+
 
 # Mount Static Files for HTML/CSS/JS Storefront
 app.mount("/", StaticFiles(directory="static", html=True), name="static")
