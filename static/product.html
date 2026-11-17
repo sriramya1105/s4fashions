@@ -3,34 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Details - Meesho Fashion</title>
+    <title>Product Details - S4 Fashions</title>
+    <link rel="stylesheet" href="/css/modern.css">
     <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <!-- TOP HEADER -->
-    <header class="meesho-top-header">
-        <div class="header-inner">
-            <a href="/" class="brand-meesho">
-                <span class="brand-title">S4 Fashions</span>
-                <span class="brand-subtitle">Women · Men · Kids</span>
+    <!-- 1. HEADER NAVIGATION -->
+    <header class="s4-nav">
+        <div class="nav-wrap">
+            <a href="/" class="nav-brand">
+                S4 Fashions <span class="sub-brand">Fashion Hub</span>
             </a>
 
-            <div class="meesho-search-wrapper">
-                <svg class="search-icon-svg" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+            <!-- Search Bar -->
+            <div class="nav-search-bar">
+                <svg class="nav-search-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
                 <input type="text" class="search-field" placeholder="Search for items, brands...">
             </div>
 
-            <div class="header-right-actions">
-                <div id="header-auth-slot"></div>
-                <a href="/orders.html" class="action-column-link">
-                    <svg class="action-icon" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-                    <span>Orders</span>
-                </a>
-                <a href="/cart.html" class="action-column-link" style="position: relative;">
-                    <svg class="action-icon" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-                    <span>Cart</span>
-                    <span class="header-cart-badge" id="cart-count-badge">0</span>
+            <!-- Actions -->
+            <div class="nav-actions">
+                <div id="user-profile-slot" style="position: relative;"></div>
+                <a href="/cart.html" class="nav-btn primary-btn">
+                    Bag <span class="nav-cart-badge" id="nav-cart-count">0</span>
                 </a>
             </div>
         </div>
@@ -46,6 +45,44 @@
     <footer class="s4-site-footer" style="background: #8e0d5d; border-top: 1px solid #731e48; padding: 24px; text-align: center; margin-top: 40px; color: #ffffff;">
         <p style="font-size: 15px; font-weight: 600; color: #ffffff;">S4 Fashions made with love💖</p>
     </footer>
+
+    <!-- SLIDE-OVER CUSTOMER PROFILE SIDEBAR DRAWER -->
+    <div id="profile-drawer-backdrop" class="profile-sidebar-backdrop" onclick="closeProfileSidebar()"></div>
+    <aside id="profile-drawer-sidebar" class="profile-sidebar-drawer">
+        <div class="profile-drawer-header">
+            <div style="display: flex; align-items: center; gap: 14px;">
+                <div id="drawer-user-avatar" style="width: 48px; height: 48px; border-radius: 50%; background: #ffffff; color: #731e48; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 800; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+                    U
+                </div>
+                <div>
+                    <div id="drawer-user-name" style="font-size: 16px; font-weight: 800; line-height: 1.2;">User Profile</div>
+                    <div id="drawer-user-email" style="font-size: 12px; color: #ffd6ec; margin-top: 3px;">customer@s4fashions.com</div>
+                </div>
+            </div>
+            <button type="button" class="profile-drawer-close" onclick="closeProfileSidebar()">&times;</button>
+        </div>
+
+        <div class="profile-drawer-body">
+            <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 12px;">Account & Purchases</div>
+            
+            <a href="/orders.html" class="drawer-menu-item">
+                <span style="font-size: 18px;">📦</span>
+                <span>My Orders & Delivery Tracking</span>
+            </a>
+
+            <a href="/cart.html" class="drawer-menu-item">
+                <span style="font-size: 18px;">🛍️</span>
+                <span>My Shopping Bag</span>
+            </a>
+
+            <div style="height: 1px; background: #f3ecef; margin: 18px 0;"></div>
+
+            <button onclick="logoutUser()" class="drawer-menu-item" style="width: 100%; border: none; background: none; color: #dc2626; cursor: pointer; text-align: left;">
+                <span style="font-size: 18px;">🚪</span>
+                <span>Sign Out Account</span>
+            </button>
+        </div>
+    </aside>
 
     <script src="/js/core.js"></script>
     <script>
@@ -139,7 +176,7 @@
 
                         <div style="display: grid; grid-template-columns: 140px 1fr; gap: 10px; font-size: 13px;">
                             <span style="color: var(--meesho-light-gray);">Category:</span>
-                            <span style="text-transform: capitalize;">${p.category} (${escapeHtml(p.subcategory)})</span>
+                            <span style="text-transform: capitalize;">${escapeHtml(p.category_name || p.category || 'Apparel')} ${p.subcategory_name ? `(${escapeHtml(p.subcategory_name)})` : ''}</span>
 
                             <span style="color: var(--meesho-light-gray);">Fabric:</span>
                             <span>${escapeHtml(p.material || 'Cotton Blend')}</span>

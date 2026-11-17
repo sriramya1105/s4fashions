@@ -1037,6 +1037,123 @@ body {
 }
 
 /* ==========================================================================
+   CUSTOMER PROFILE SLIDE-OVER SIDEBAR
+   ========================================================================== */
+.profile-sidebar-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(2px);
+    z-index: 99998;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.profile-sidebar-backdrop.open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.profile-sidebar-drawer {
+    position: fixed;
+    top: 0;
+    right: -360px;
+    width: 340px;
+    height: 100vh;
+    background: #ffffff;
+    box-shadow: -4px 0 25px rgba(115, 30, 72, 0.15);
+    z-index: 99999;
+    display: flex;
+    flex-direction: column;
+    transition: right 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.profile-sidebar-drawer.open {
+    right: 0;
+}
+
+.profile-drawer-header {
+    background: #731e48;
+    color: #ffffff;
+    padding: 24px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.profile-drawer-close {
+    background: rgba(255, 255, 255, 0.15);
+    border: none;
+    color: #ffffff;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.profile-drawer-close:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.profile-drawer-body {
+    padding: 20px;
+    flex: 1;
+    overflow-y: auto;
+}
+
+.profile-avatar-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #fbebf4;
+    color: #8e0d5d;
+    border: 2px solid #8e0d5d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 2px 6px rgba(142, 13, 93, 0.15);
+}
+
+.profile-avatar-btn:hover {
+    transform: scale(1.05);
+    background: #8e0d5d;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(142, 13, 93, 0.3);
+}
+
+.drawer-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    border-radius: var(--radius-sm);
+    color: var(--text-main);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    transition: background 0.2s;
+    margin-bottom: 6px;
+}
+
+.drawer-menu-item:hover {
+    background: #fbebf4;
+    color: #8e0d5d;
+}
+
+/* ==========================================================================
    FOOTER (MAGENTA THEME)
    ========================================================================== */
 .s4-site-footer {

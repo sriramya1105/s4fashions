@@ -425,77 +425,49 @@
             }).join("");
         }
 
-        function toggleProfileMenu() {
-            const m = document.getElementById("profile-dropdown-card");
-            if (m) {
-                m.style.display = (m.style.display === "none" || !m.style.display) ? "block" : "none";
-            }
-        }
-
-        // Close dropdown when clicking outside
-        document.addEventListener("click", (e) => {
-            const slot = document.getElementById("user-profile-slot");
-            if (slot && !slot.contains(e.target)) {
-                const m = document.getElementById("profile-dropdown-card");
-                if (m) m.style.display = "none";
-            }
-        });
-
         function syncUserAuth() {
-            const slot = document.getElementById("user-profile-slot");
-            if (!slot) return;
-
-            if (appState.user && appState.token) {
-                slot.innerHTML = `
-                    <button type="button" class="nav-btn" onclick="toggleProfileMenu()" style="display: flex; align-items: center; gap: 8px; border: 1px solid var(--border-color); border-radius: 24px; padding: 6px 14px; background: #ffffff;">
-                        <span style="width: 28px; height: 28px; border-radius: 50%; background: #fbebf4; color: #8e0d5d; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700;">
-                            ${escapeHtml(appState.user.username.charAt(0).toUpperCase())}
-                        </span>
-                        <span style="font-weight: 600; font-size: 13px; color: var(--secondary);">${escapeHtml(appState.user.username)}</span>
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                    </button>
-
-                    <!-- DROPDOWN PROFILE MODAL / CARD -->
-                    <div id="profile-dropdown-card" style="display: none; position: absolute; right: 0; top: 120%; width: 280px; background: #ffffff; border: 1px solid var(--border-color); border-radius: var(--radius-md); box-shadow: 0 10px 30px rgba(115,30,72,0.12); z-index: 2000; overflow: hidden;">
-                        <div style="background: #faf6f8; padding: 16px; border-bottom: 1px solid var(--border-color);">
-                            <div style="display: flex; align-items: center; gap: 12px;">
-                                <div style="width: 42px; height: 42px; border-radius: 50%; background: #731e48; color: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 800;">
-                                    ${escapeHtml(appState.user.username.charAt(0).toUpperCase())}
-                                </div>
-                                <div style="overflow: hidden;">
-                                    <div style="font-weight: 800; font-size: 14px; color: var(--secondary);">${escapeHtml(appState.user.full_name || appState.user.username)}</div>
-                                    <div style="font-size: 11px; color: var(--text-muted); text-overflow: ellipsis; overflow: hidden;">${escapeHtml(appState.user.email || 'customer@s4fashions.com')}</div>
-                                </div>
-                            </div>
-                            <div style="margin-top: 10px;">
-                                <span style="display: inline-block; background: #fbebf4; color: #8e0d5d; font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 10px; text-transform: uppercase;">
-                                    ${appState.user.role.toUpperCase()} ACCOUNT
-                                </span>
-                            </div>
-                        </div>
-
-                        <div style="padding: 10px 0;">
-                            <a href="/orders.html" style="display: flex; align-items: center; gap: 10px; padding: 10px 18px; color: var(--text-main); text-decoration: none; font-size: 13px; font-weight: 600; transition: background 0.2s;">
-                                <span>📦</span>
-                                <span>My Orders & Bookings</span>
-                            </a>
-                            <div style="height: 1px; background: #f3f4f6; margin: 6px 0;"></div>
-                            <button onclick="logoutUser()" style="width: 100%; display: flex; align-items: center; gap: 10px; padding: 10px 18px; color: #dc2626; background: none; border: none; font-size: 13px; font-weight: 600; cursor: pointer; text-align: left;">
-                                <span>🚪</span>
-                                <span>Sign Out</span>
-                            </button>
-                        </div>
-                    </div>
-                `;
-            } else {
-                slot.innerHTML = `
-                    <a href="/login.html" class="nav-btn" style="border: 1px solid var(--border-color); border-radius: 20px; padding: 6px 16px;">
-                        👤 Sign In
-                    </a>
-                `;
-            }
+            // Handled automatically by syncAuthHeader() in core.js
+            syncAuthHeader();
         }
     </script>
+    <!-- SLIDE-OVER CUSTOMER PROFILE SIDEBAR DRAWER -->
+    <div id="profile-drawer-backdrop" class="profile-sidebar-backdrop" onclick="closeProfileSidebar()"></div>
+    <aside id="profile-drawer-sidebar" class="profile-sidebar-drawer">
+        <div class="profile-drawer-header">
+            <div style="display: flex; align-items: center; gap: 14px;">
+                <div id="drawer-user-avatar" style="width: 48px; height: 48px; border-radius: 50%; background: #ffffff; color: #731e48; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 800; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+                    U
+                </div>
+                <div>
+                    <div id="drawer-user-name" style="font-size: 16px; font-weight: 800; line-height: 1.2;">User Profile</div>
+                    <div id="drawer-user-email" style="font-size: 12px; color: #ffd6ec; margin-top: 3px;">customer@s4fashions.com</div>
+                </div>
+            </div>
+            <button type="button" class="profile-drawer-close" onclick="closeProfileSidebar()">&times;</button>
+        </div>
+
+        <div class="profile-drawer-body">
+            <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 12px;">Account & Purchases</div>
+            
+            <a href="/orders.html" class="drawer-menu-item">
+                <span style="font-size: 18px;">📦</span>
+                <span>My Orders & Delivery Tracking</span>
+            </a>
+
+            <a href="/cart.html" class="drawer-menu-item">
+                <span style="font-size: 18px;">🛍️</span>
+                <span>My Shopping Bag</span>
+            </a>
+
+            <div style="height: 1px; background: #f3ecef; margin: 18px 0;"></div>
+
+            <button onclick="logoutUser()" class="drawer-menu-item" style="width: 100%; border: none; background: none; color: #dc2626; cursor: pointer; text-align: left;">
+                <span style="font-size: 18px;">🚪</span>
+                <span>Sign Out Account</span>
+            </button>
+        </div>
+    </aside>
+
     <script src="/js/core.js"></script>
 </body>
 </html>

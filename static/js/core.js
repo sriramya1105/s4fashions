@@ -59,55 +59,63 @@ function handleSplashScreen() {
     }, 5500);
 }
 
-// Authentication UI Sync
+// Customer Profile Slide-Over Drawer Controller
+function openProfileSidebar() {
+    const backdrop = document.getElementById("profile-drawer-backdrop");
+    const drawer = document.getElementById("profile-drawer-sidebar");
+    if (backdrop && drawer) {
+        backdrop.classList.add("open");
+        drawer.classList.add("open");
+        document.body.style.overflow = "hidden";
+    }
+}
+
+function closeProfileSidebar() {
+    const backdrop = document.getElementById("profile-drawer-backdrop");
+    const drawer = document.getElementById("profile-drawer-sidebar");
+    if (backdrop && drawer) {
+        backdrop.classList.remove("open");
+        drawer.classList.remove("open");
+        document.body.style.overflow = "";
+    }
+}
+
+// Authentication UI Sync across pages
 function syncAuthHeader() {
-    const authContainer = document.getElementById("header-auth-slot");
+    const authContainer = document.getElementById("header-auth-slot") || document.getElementById("user-profile-slot");
     if (!authContainer) return;
 
     if (appState.user && appState.token) {
+        const initial = (appState.user.username || "U").charAt(0).toUpperCase();
         authContainer.innerHTML = `
-            <div style="position: relative; display: inline-block;">
-                <button class="header-nav-link" onclick="toggleUserDropdown()" style="color: #ffffff;">
-                    <span>${escapeHtml(appState.user.username)}</span>
-                    <span style="font-size: 11px; background: rgba(255,255,255,0.2); padding: 2px 6px; border-radius: 2px;">
-                        ${appState.user.role.toUpperCase()}
-                    </span>
-                </button>
-                <div id="user-dropdown" style="display: none; position: absolute; right: 0; top: 100%; background: #ffffff; color: #212121; box-shadow: 0 4px 16px rgba(0,0,0,0.15); border-radius: 2px; width: 160px; z-index: 1000; margin-top: 8px;">
-                    <a href="/orders.html" style="display: block; padding: 10px 14px; font-size: 13px; text-decoration: none; color: #212121; border-bottom: 1px solid #f0f0f0;">My Orders</a>
-                    ${appState.user.role === 'admin' ? '<a href="/admin.html" style="display: block; padding: 10px 14px; font-size: 13px; text-decoration: none; color: #2874f0; border-bottom: 1px solid #f0f0f0;">Admin Portal</a>' : ''}
-                    <button onclick="logoutUser()" style="width: 100%; text-align: left; padding: 10px 14px; font-size: 13px; border: none; background: none; cursor: pointer; color: #d32f2f;">Logout</button>
-                </div>
-            </div>
+            <button type="button" class="profile-avatar-btn" onclick="openProfileSidebar()" title="View Profile & Orders">
+                ${escapeHtml(initial)}
+            </button>
         `;
+
+        // Populate drawer contents if element exists
+        const nameEl = document.getElementById("drawer-user-name");
+        const emailEl = document.getElementById("drawer-user-email");
+        const avatarEl = document.getElementById("drawer-user-avatar");
+        if (nameEl) nameEl.innerText = appState.user.full_name || appState.user.username;
+        if (emailEl) emailEl.innerText = appState.user.email || "customer@s4fashions.com";
+        if (avatarEl) avatarEl.innerText = initial;
     } else {
         authContainer.innerHTML = `
-            <a href="/login.html" class="login-btn-header">Login</a>
+            <a href="/login.html" class="nav-btn" style="border: 1px solid #e5e7eb; border-radius: 20px; padding: 6px 14px; font-size: 13px; font-weight: 600; text-decoration: none; color: #8e0d5d; background: #ffffff;">
+                👤 Sign In
+            </a>
         `;
     }
 }
-
-function toggleUserDropdown() {
-    const dd = document.getElementById("user-dropdown");
-    if (dd) {
-        dd.style.display = dd.style.display === "block" ? "none" : "block";
-    }
-}
-
-// Global click to close dropdown
-document.addEventListener("click", (e) => {
-    const dd = document.getElementById("user-dropdown");
-    if (dd && !e.target.closest("#header-auth-slot")) {
-        dd.style.display = "none";
-    }
-});
 
 function logoutUser() {
     localStorage.removeItem("tc_token");
     localStorage.removeItem("tc_user");
+    localStorage.removeItem("tc_login_time");
     appState.token = null;
     appState.user = null;
-    syncAuthHeader();
+    closeProfileSidebar();
     window.location.href = "/";
 }
 
