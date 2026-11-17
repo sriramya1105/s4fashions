@@ -10,18 +10,18 @@
    ========================================================================== */
 
 :root {
-    --meesho-pink: #9f2089;
-    --meesho-pink-hover: #82156f;
-    --meesho-light-pink: #fde9f7;
-    --meesho-green: #038d63;
-    --meesho-dark: #333333;
-    --meesho-gray: #666666;
-    --meesho-light-gray: #8b8d97;
-    --meesho-border: #e7e7e7;
-    --meesho-bg: #f9f9f9;
+    --meesho-pink: #8e0d5d;           /* Official S4 Deep Wine / Royal Magenta */
+    --meesho-pink-hover: #731e48;     /* Berry Plum CTA */
+    --meesho-light-pink: #fbebf4;     /* Soft Blush Glow */
+    --meesho-green: #768452;          /* Botanical Olive / Trust Green */
+    --meesho-dark: #221f20;           /* Primary Charcoal Dark */
+    --meesho-gray: #6b7280;           /* Subtle Gray Text */
+    --meesho-light-gray: #9ca3af;
+    --meesho-border: #f0e6e9;         /* Delicate Rose-Tinted Border */
+    --meesho-bg: #faf6f5;             /* Clean Blush Canvas Tint */
     --meesho-card: #ffffff;
-    --shadow-card: 0 1px 4px rgba(0, 0, 0, 0.08);
-    --shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.12);
+    --shadow-card: 0 1px 4px rgba(115, 30, 72, 0.08);
+    --shadow-hover: 0 4px 12px rgba(115, 30, 72, 0.12);
     --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Mier book", Helvetica, Arial, sans-serif;
 }
 
