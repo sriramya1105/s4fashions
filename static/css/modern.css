@@ -263,16 +263,18 @@ body {
     max-width: 1440px;
     margin: 16px auto 0 auto;
     padding: 0 24px;
+    display: block;
+    width: 100%;
 }
 
 .carousel-box {
     position: relative;
-    height: 25vh;
-    min-height: 180px;
-    max-height: 240px;
+    height: 250px;
+    width: 100%;
     border-radius: var(--radius-md);
     overflow: hidden;
-    box-shadow: var(--shadow-sm);
+    box-shadow: 0 4px 16px rgba(115, 30, 72, 0.1);
+    background: #2b0b23;
 }
 
 .carousel-slide {
@@ -282,24 +284,27 @@ body {
     width: 100%;
     height: 100%;
     background-size: cover;
-    background-position: center;
+    background-position: center center;
+    background-repeat: no-repeat;
     display: none;
     align-items: center;
-    padding: 0 48px;
+    padding: 0 54px;
     color: #ffffff;
+    box-sizing: border-box;
 }
 
 .carousel-slide.active {
-    display: flex;
+    display: flex !important;
 }
 
 .carousel-content {
-    background: rgba(30, 8, 22, 0.75);
-    backdrop-filter: blur(4px);
-    padding: 18px 28px;
+    background: rgba(30, 8, 22, 0.82);
+    backdrop-filter: blur(6px);
+    padding: 22px 32px;
     border-radius: var(--radius-md);
-    max-width: 500px;
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    max-width: 520px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
 }
 
 .carousel-pill {
