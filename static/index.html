@@ -3,328 +3,238 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Online Shopping Site for Fashion - Men, Women & Kids Wear | ThreadCraft</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <title>S4 Fashions - Women, Men & Kids Fashion</title>
+    <link rel="stylesheet" href="/css/modern.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <!-- 1. S4 FASHIONS OFFICIAL SPLASH SCREEN (EXACT 2:1 ASPECT RATIO, ZERO GAPS, PERFECT FIT) -->
-    <div id="splash-screen">
-        <div class="s4-ultrawide-wrapper">
-            <img src="/assets/s4_ultrawide_poster.png" alt="S4 Fashions - Women, Men, Kids" class="s4-ultrawide-img">
-            
-            <!-- Clickable 'Shop Now' CTA Button -->
-            <button type="button" class="s4-exact-shop-btn" onclick="dismissSplashNow()">
-                Shop Now &rarr;
-            </button>
-        </div>
-
-        <div class="splash-loader-progress"></div>
-    </div>
-
-    <!-- 2. TOP HEADER (MEESHO REPLICA) -->
-    <header class="meesho-top-header">
-        <div class="header-inner">
-            <!-- Brand Logo -->
-            <a href="/" class="brand-meesho">
-                <span class="brand-title">S4 Fashions</span>
-                <span class="brand-subtitle">Women · Men · Kids</span>
+    <!-- TOP NAVIGATION -->
+    <header class="s4-nav">
+        <div class="nav-wrap">
+            <a href="/" class="nav-brand">
+                S4 Fashions
             </a>
 
             <!-- Search Bar -->
-            <div class="meesho-search-wrapper">
-                <svg class="search-icon-svg" viewBox="0 0 24 24">
-                    <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+            <div class="nav-search-bar">
+                <svg class="nav-search-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
-                <input type="text" id="store-search-input" class="search-field" placeholder="Try Saree, Kurti, Mens Shirt, Kids Frock...">
+                <input type="text" id="store-search" placeholder="Search for Sarees, Kurtis, Shirts, Jeans, Dresses...">
             </div>
 
-            <!-- Right Actions -->
-            <div class="header-right-actions">
-                <a href="/docs" target="_blank" class="action-column-link" style="color: var(--meesho-pink);">
-                    <svg class="action-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                    <span>API Docs</span>
+            <!-- Actions -->
+            <div class="nav-actions">
+                <a href="/admin_portal/index.html" class="nav-btn" style="color: var(--primary); font-weight: 700;">
+                    Merchant Portal
                 </a>
-
-                <div id="header-auth-slot"></div>
-
-                <a href="/orders.html" class="action-column-link">
-                    <svg class="action-icon" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-                    <span>My Orders</span>
+                <div id="auth-slot"></div>
+                <a href="/orders.html" class="nav-btn">
+                    Orders
                 </a>
-
-                <a href="/cart.html" class="action-column-link" style="position: relative;">
-                    <svg class="action-icon" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-                    <span>Cart</span>
-                    <span class="header-cart-badge" id="cart-count-badge">0</span>
+                <a href="/cart.html" class="nav-btn primary-btn">
+                    Bag <span class="nav-cart-badge" id="cart-badge">0</span>
                 </a>
             </div>
         </div>
     </header>
 
-    <!-- 3. MEESHO CATEGORY MEGA NAVBAR -->
-    <nav class="meesho-category-bar">
-        <div class="cat-nav-inner">
-            <span class="cat-nav-tab active" data-category="" data-sub="">All Categories</span>
-            <span class="cat-nav-tab" data-category="women" data-sub="Ethnic">Women Ethnic</span>
-            <span class="cat-nav-tab" data-category="women" data-sub="Kurtis">Kurtis & Kurtas</span>
-            <span class="cat-nav-tab" data-category="women" data-sub="Short Tops">Women Western</span>
-            <span class="cat-nav-tab" data-category="men" data-sub="Traditional">Men Ethnic</span>
-            <span class="cat-nav-tab" data-category="men" data-sub="Modern">Men Western</span>
-            <span class="cat-nav-tab" data-category="kids" data-sub="">Kids Wear</span>
+    <!-- CATEGORY NAVBAR -->
+    <nav class="s4-cat-bar">
+        <div class="cat-bar-wrap">
+            <span class="cat-tab active" data-cat="">All Collections</span>
+            <span class="cat-tab" data-cat="women" data-sub="Ethnic">Women Ethnic</span>
+            <span class="cat-tab" data-cat="women" data-sub="Kurtis">Kurtis & Kurtas</span>
+            <span class="cat-tab" data-cat="women" data-sub="Short Tops">Women Western & Tops</span>
+            <span class="cat-tab" data-cat="men" data-sub="Traditional">Men Traditional</span>
+            <span class="cat-tab" data-cat="men" data-sub="Modern">Men Modern & Shirts</span>
+            <span class="cat-tab" data-cat="kids" data-sub="">Kids Wear</span>
         </div>
     </nav>
 
-    <!-- 4. VALUE PROPOSITION STRIP -->
-    <div class="value-strip">
-        <div class="value-strip-inner">
-            <div class="value-item"><span class="value-dot"></span> Lowest Price Guaranteed</div>
-            <div class="value-item"><span class="value-dot"></span> Free Delivery Across India</div>
-            <div class="value-item"><span class="value-dot"></span> Cash on Delivery Available</div>
-            <div class="value-item"><span class="value-dot"></span> 7 Days Easy Returns</div>
-        </div>
-    </div>
-
-    <!-- 5. PROMOTIONAL HERO BANNER -->
-    <section class="meesho-hero-container">
-        <div class="meesho-banner-box">
-            <div class="meesho-banner-slide active" style="background-image: linear-gradient(to right, rgba(43, 11, 35, 0.9) 35%, rgba(43, 11, 35, 0.2)), url('https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1400');">
-                <div class="banner-glass-card">
-                    <span class="banner-pill">Lowest Prices Best Quality</span>
-                    <h1 class="banner-heading">Top Fashion Styles Starting at ₹199</h1>
-                    <p class="banner-text">Discover authentic Kurtis, Silk Sarees, Mens Formal Shirts, and Kids Festive wear at direct supplier prices.</p>
-                    <button class="banner-action-btn" onclick="filterBySub('Kurtis')">Shop Now</button>
-                </div>
+    <!-- PROMOTIONAL HERO BANNER -->
+    <section class="s4-hero-banner">
+        <div class="hero-box">
+            <div class="hero-content">
+                <span class="hero-tag">Festive & Everyday Wear</span>
+                <h1 class="hero-title">Curated Quality Fashion at Direct Wholesale Prices</h1>
+                <p class="hero-desc">Explore hand-spun Kurtas, Pure Banarasi Silk Sarees, Modern Denim & Designer Kids Sets with Free Nationwide Shipping.</p>
+                <a href="#catalog" class="hero-cta-btn">Shop Current Collection</a>
             </div>
         </div>
     </section>
 
-    <!-- 6. MAIN 2-COLUMN STORE CATALOG -->
-    <main class="store-wrapper">
+    <!-- MAIN PRODUCT BROWSER -->
+    <main class="store-container" id="catalog">
         
-        <!-- SIDEBAR FILTERS (MEESHO STYLE) -->
-        <aside class="meesho-sidebar">
-            <div class="sidebar-header">
-                <span class="sidebar-title">Filters</span>
-                <button class="clear-btn" onclick="resetAllFilters()">RESET</button>
+        <!-- SIDEBAR FILTERS -->
+        <aside class="filter-card">
+            <div class="filter-header">
+                <h3>Filters</h3>
+                <button type="button" class="filter-reset-btn" onclick="resetFilters()">Reset</button>
             </div>
 
             <!-- Subcategory -->
-            <div class="filter-block">
-                <div class="block-title">Subcategory</div>
-                <select id="filter-subcategory" class="filter-dropdown" onchange="applyFilters()">
+            <div class="filter-group">
+                <label class="filter-label">Apparel Style</label>
+                <select id="filter-subcategory" class="filter-select" onchange="filterProducts()">
                     <option value="">All Apparel</option>
-                    <option value="Traditional">Men's Traditional / Kurta</option>
-                    <option value="Modern">Men's Modern / Shirts & Jeans</option>
-                    <option value="Ethnic">Women's Sarees & Ethnic</option>
-                    <option value="Kurtis">Kurtis & Kurtas</option>
-                    <option value="Short Tops">Women's Short Tops & Tees</option>
-                    <option value="Western">Women's Western Dresses</option>
-                    <option value="Boys Ethnic">Kids' Boys Ethnic</option>
-                    <option value="Girls Western">Kids' Girls Frocks</option>
+                    <option value="Traditional">Men Traditional / Kurta</option>
+                    <option value="Modern">Men Modern / Formal & Jeans</option>
+                    <option value="Ethnic">Women Sarees & Anarkali</option>
+                    <option value="Kurtis">Women Kurtis & Kurtas</option>
+                    <option value="Short Tops">Women Short Tops & Western</option>
+                    <option value="Boys Ethnic">Boys Festive Wear</option>
+                    <option value="Girls Western">Girls Frocks & Sets</option>
                     <option value="Infants & Toddlers">Infants & Toddlers</option>
                 </select>
             </div>
 
-            <!-- Brand Selection -->
-            <div class="filter-block">
-                <div class="block-title">Brand</div>
-                <label class="filter-item"><input type="checkbox" name="brand_cb" value="FabIndia" onchange="applyFilters()"> FabIndia</label>
-                <label class="filter-item"><input type="checkbox" name="brand_cb" value="Manyavar" onchange="applyFilters()"> Manyavar</label>
-                <label class="filter-item"><input type="checkbox" name="brand_cb" value="Biba" onchange="applyFilters()"> Biba</label>
-                <label class="filter-item"><input type="checkbox" name="brand_cb" value="W for Woman" onchange="applyFilters()"> W for Woman</label>
-                <label class="filter-item"><input type="checkbox" name="brand_cb" value="Zara" onchange="applyFilters()"> Zara</label>
-                <label class="filter-item"><input type="checkbox" name="brand_cb" value="Peter England" onchange="applyFilters()"> Peter England</label>
-                <label class="filter-item"><input type="checkbox" name="brand_cb" value="Levi's" onchange="applyFilters()"> Levi's</label>
-                <label class="filter-item"><input type="checkbox" name="brand_cb" value="Hopscotch" onchange="applyFilters()"> Hopscotch</label>
+            <!-- Brand Checkboxes -->
+            <div class="filter-group">
+                <label class="filter-label">Brands</label>
+                <label class="filter-checkbox"><input type="checkbox" name="brand" value="FabIndia" onchange="filterProducts()"> FabIndia</label>
+                <label class="filter-checkbox"><input type="checkbox" name="brand" value="Manyavar" onchange="filterProducts()"> Manyavar</label>
+                <label class="filter-checkbox"><input type="checkbox" name="brand" value="Biba" onchange="filterProducts()"> Biba</label>
+                <label class="filter-checkbox"><input type="checkbox" name="brand" value="W for Woman" onchange="filterProducts()"> W for Woman</label>
+                <label class="filter-checkbox"><input type="checkbox" name="brand" value="Peter England" onchange="filterProducts()"> Peter England</label>
+                <label class="filter-checkbox"><input type="checkbox" name="brand" value="Levi's" onchange="filterProducts()"> Levi's</label>
+                <label class="filter-checkbox"><input type="checkbox" name="brand" value="Zara" onchange="filterProducts()"> Zara</label>
+                <label class="filter-checkbox"><input type="checkbox" name="brand" value="Hopscotch" onchange="filterProducts()"> Hopscotch</label>
             </div>
 
             <!-- Price Range -->
-            <div class="filter-block">
-                <div class="block-title">Price Range</div>
-                <select id="filter-price" class="filter-dropdown" onchange="applyFilters()">
-                    <option value="">All Prices</option>
+            <div class="filter-group">
+                <label class="filter-label">Max Budget (₹)</label>
+                <select id="filter-price" class="filter-select" onchange="filterProducts()">
+                    <option value="">Any Price</option>
                     <option value="999">Under ₹999</option>
                     <option value="1499">Under ₹1,499</option>
                     <option value="2499">Under ₹2,499</option>
                     <option value="5000">Under ₹5,000</option>
                 </select>
             </div>
-
-            <!-- Rating Filter -->
-            <div class="filter-block">
-                <div class="block-title">Rating</div>
-                <label class="filter-item"><input type="radio" name="rating_rb" value="" checked onchange="applyFilters()"> All Ratings</label>
-                <label class="filter-item"><input type="radio" name="rating_rb" value="4.5" onchange="applyFilters()"> 4.5 and above</label>
-                <label class="filter-item"><input type="radio" name="rating_rb" value="4.0" onchange="applyFilters()"> 4.0 and above</label>
-            </div>
         </aside>
 
-        <!-- CATALOG AREA -->
-        <section class="catalog-area">
-            <div class="catalog-header-bar">
-                <span class="catalog-title-main" id="catalog-title-text">Products For You</span>
-                <span class="catalog-items-count" id="results-count-text">Loading catalog...</span>
+        <!-- PRODUCTS CATALOG AREA -->
+        <section class="products-area">
+            <div class="products-bar">
+                <div style="font-weight: 700; font-size: 16px;" id="catalog-title">All Products</div>
+                <div style="font-size: 13px; color: var(--text-muted);" id="catalog-count">Loading products...</div>
             </div>
 
-            <div class="meesho-grid" id="meesho-products-grid">
-                <!-- Injected via JavaScript -->
+            <div class="products-grid" id="products-grid">
+                <!-- Dynamically populated -->
             </div>
         </section>
 
     </main>
 
-    <!-- 7. MEESHO FOOTER -->
-    <footer class="meesho-footer">
-        <div class="footer-inner">
-            <div>
-                <div class="brand-title" style="margin-bottom: 8px;">meesho</div>
-                <p style="line-height: 1.6; margin-bottom: 12px;">Shop Millions of High Quality Fashion Products at Direct-From-Supplier Wholesale Prices.</p>
-                <p style="font-size: 11px; color: var(--meesho-light-gray);">CS5101 Secure Coding Practices · M.Tech Cyber Security</p>
-            </div>
-            <div>
-                <div class="footer-col-title">Customer Care</div>
-                <p style="margin-bottom: 6px;">Help Center</p>
-                <p style="margin-bottom: 6px;">How to Order</p>
-                <p style="margin-bottom: 6px;">Returns & Refunds</p>
-            </div>
-            <div>
-                <div class="footer-col-title">Categories</div>
-                <p style="margin-bottom: 6px;">Women Fashion</p>
-                <p style="margin-bottom: 6px;">Men Fashion</p>
-                <p style="margin-bottom: 6px;">Kids Wear</p>
-            </div>
-            <div>
-                <div class="footer-col-title">Security Verifications</div>
-                <p style="margin-bottom: 6px;">CWE-89: Parameterized DB</p>
-                <p style="margin-bottom: 6px;">CWE-639: BOLA Protected</p>
-                <p style="margin-bottom: 6px;">CWE-307: SlowAPI Throttled</p>
-            </div>
-        </div>
-        <div class="footer-bottom-copy">
-            ThreadCraft Apparel · Meesho Replica for CS5101 Project 7 Academic Submission
-        </div>
+    <!-- FOOTER -->
+    <footer class="s4-footer">
+        <p><b>S4 Fashions</b> · CS5101 Secure Coding Practices Laboratory · Group Project 7</p>
+        <p style="margin-top: 4px; font-size: 12px; color: #9ca3af;">Secured with Parameterized Queries (CWE-89), BOLA Defense (CWE-639), and SlowAPI Rate Limiting</p>
     </footer>
 
     <script src="/js/core.js"></script>
     <script>
-        let allProducts = [];
+        let catalog = [];
 
         document.addEventListener("DOMContentLoaded", () => {
             loadCatalog();
             setupSearch();
             setupCategoryTabs();
+            syncAuth();
         });
 
+        function syncAuth() {
+            const slot = document.getElementById("auth-slot");
+            if (appState.user && appState.token) {
+                slot.innerHTML = `
+                    <button class="nav-btn" onclick="logoutUser()">
+                        ${escapeHtml(appState.user.username)} (Logout)
+                    </button>
+                `;
+            } else {
+                slot.innerHTML = `<a href="/login.html" class="nav-btn">Sign In</a>`;
+            }
+        }
+
         function setupCategoryTabs() {
-            document.querySelectorAll(".cat-nav-tab").forEach(tab => {
+            document.querySelectorAll(".cat-tab").forEach(tab => {
                 tab.addEventListener("click", () => {
-                    document.querySelectorAll(".cat-nav-tab").forEach(t => t.classList.remove("active"));
+                    document.querySelectorAll(".cat-tab").forEach(t => t.classList.remove("active"));
                     tab.classList.add("active");
-
-                    appState.selectedCategory = tab.getAttribute("data-category") || "";
-                    const sub = tab.getAttribute("data-sub") || "";
-                    document.getElementById("filter-subcategory").value = sub;
-                    
-                    const titleMap = {
-                        "": "Products For You",
-                        "women": "Women's Collection",
-                        "men": "Men's Collection",
-                        "kids": "Kids' Wear Collection"
-                    };
-                    document.getElementById("catalog-title-text").innerText = titleMap[appState.selectedCategory] || "Products For You";
-
-                    applyFilters();
+                    appState.selectedCategory = tab.getAttribute("data-cat") || "";
+                    document.getElementById("filter-subcategory").value = tab.getAttribute("data-sub") || "";
+                    filterProducts();
                 });
             });
         }
 
-        function filterBySub(sub) {
-            document.getElementById("filter-subcategory").value = sub;
-            applyFilters();
-            window.scrollTo({ top: 500, behavior: "smooth" });
-        }
-
         function setupSearch() {
-            const input = document.getElementById("store-search-input");
+            const s = document.getElementById("store-search");
             let timeout;
-            input.addEventListener("input", () => {
+            s.addEventListener("input", () => {
                 clearTimeout(timeout);
                 timeout = setTimeout(() => {
-                    appState.searchQuery = input.value.trim();
-                    applyFilters();
-                }, 250);
+                    appState.searchQuery = s.value.trim().toLowerCase();
+                    filterProducts();
+                }, 200);
             });
         }
 
         async function loadCatalog() {
             try {
                 const res = await fetch("/api/v1/products");
-                if (!res.ok) throw new Error("Catalog fetch error");
-                allProducts = await res.json();
-                applyFilters();
+                catalog = await res.json();
+                filterProducts();
             } catch (err) {
-                document.getElementById("meesho-products-grid").innerHTML = `
-                    <div style="grid-column: 1/-1; text-align: center; padding: 48px; color: var(--meesho-gray);">
-                        Failed to connect to the backend API server.
-                    </div>
-                `;
+                document.getElementById("products-grid").innerHTML = `<p style="padding: 40px; text-align: center;">Could not load products.</p>`;
             }
         }
 
-        function applyFilters() {
-            const subcat = document.getElementById("filter-subcategory").value;
+        function filterProducts() {
+            const sub = document.getElementById("filter-subcategory").value;
             const maxPrice = parseFloat(document.getElementById("filter-price").value) || null;
-            const ratingRadio = document.querySelector("input[name='rating_rb']:checked");
-            const minRating = ratingRadio && ratingRadio.value ? parseFloat(ratingRadio.value) : null;
-            const selectedBrands = Array.from(document.querySelectorAll("input[name='brand_cb']:checked")).map(cb => cb.value);
+            const brands = Array.from(document.querySelectorAll("input[name='brand']:checked")).map(b => b.value);
 
-            let filtered = allProducts.filter(p => {
+            let list = catalog.filter(p => {
                 if (appState.selectedCategory && p.category !== appState.selectedCategory) return false;
-                if (subcat && !p.subcategory.toLowerCase().includes(subcat.toLowerCase())) return false;
+                if (sub && !p.subcategory.toLowerCase().includes(sub.toLowerCase())) return false;
                 if (maxPrice && p.price > maxPrice) return false;
-                if (minRating && p.rating < minRating) return false;
-                if (selectedBrands.length > 0 && !selectedBrands.includes(p.brand)) return false;
+                if (brands.length > 0 && !brands.includes(p.brand)) return false;
                 if (appState.searchQuery) {
-                    const q = appState.searchQuery.toLowerCase();
-                    const inTitle = p.title.toLowerCase().includes(q);
-                    const inBrand = p.brand.toLowerCase().includes(q);
-                    const inDesc = p.description.toLowerCase().includes(q);
-                    if (!inTitle && !inBrand && !inDesc) return false;
+                    const q = appState.searchQuery;
+                    if (!p.title.toLowerCase().includes(q) && !p.brand.toLowerCase().includes(q) && !p.description.toLowerCase().includes(q)) return false;
                 }
                 return true;
             });
 
-            renderGrid(filtered);
+            renderGrid(list);
         }
 
-        function resetAllFilters() {
-            document.querySelectorAll(".cat-nav-tab").forEach(t => t.classList.remove("active"));
-            document.querySelector(".cat-nav-tab").classList.add("active");
+        function resetFilters() {
+            document.querySelectorAll(".cat-tab").forEach(t => t.classList.remove("active"));
+            document.querySelector(".cat-tab").classList.add("active");
             appState.selectedCategory = "";
             appState.searchQuery = "";
-            document.getElementById("store-search-input").value = "";
+            document.getElementById("store-search").value = "";
             document.getElementById("filter-subcategory").value = "";
             document.getElementById("filter-price").value = "";
-            document.querySelectorAll("input[name='brand_cb']").forEach(cb => cb.checked = false);
-            document.querySelector("input[name='rating_rb'][value='']").checked = true;
-            document.getElementById("catalog-title-text").innerText = "Products For You";
-            applyFilters();
+            document.querySelectorAll("input[name='brand']").forEach(b => b.checked = false);
+            filterProducts();
         }
 
         function renderGrid(products) {
-            const grid = document.getElementById("meesho-products-grid");
-            const countText = document.getElementById("results-count-text");
-
-            countText.innerText = `Showing ${products.length} Products`;
+            const grid = document.getElementById("products-grid");
+            document.getElementById("catalog-count").innerText = `${products.length} Items Available`;
 
             if (products.length === 0) {
-                grid.innerHTML = `
-                    <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px; background: #fff; border-radius: 6px;">
-                        <h3 style="font-size: 16px; margin-bottom: 6px;">No products match your filters</h3>
-                        <p style="font-size: 13px; color: var(--meesho-light-gray);">Try clearing some filter options or changing keywords.</p>
-                    </div>
-                `;
+                grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 48px; color: var(--text-muted);">No products match your filter.</div>`;
                 return;
             }
 
@@ -334,31 +244,22 @@
                     : 0;
 
                 return `
-                    <a href="/product.html?id=${p.id}" class="meesho-card">
-                        <div class="card-img-holder">
-                            <img src="${p.image_url}" alt="${escapeHtml(p.title)}" loading="lazy">
-                            <span class="trusted-tag">Supplier Assured</span>
+                    <a href="/product.html?id=${p.id}" class="product-card">
+                        <div class="product-img-box">
+                            <img src="${p.image_url || 'https://images.unsplash.com/photo-1597983073493-88cd35cf93b0?w=600'}" alt="${escapeHtml(p.title)}" loading="lazy">
+                            <span class="product-badge-verified">Assured</span>
                         </div>
-
-                        <div class="card-body">
-                            <div class="card-title-text" title="${escapeHtml(p.title)}">
-                                <b>${escapeHtml(p.brand)}</b> ${escapeHtml(p.title)}
+                        <div class="product-info">
+                            <div class="product-brand">${escapeHtml(p.brand)}</div>
+                            <div class="product-title" title="${escapeHtml(p.title)}">${escapeHtml(p.title)}</div>
+                            <div class="product-price-box">
+                                <span class="product-price">₹${p.price.toFixed(0)}</span>
+                                ${p.original_price ? `<span class="product-mrp">₹${p.original_price.toFixed(0)}</span>` : ''}
+                                ${discount > 0 ? `<span class="product-discount">${discount}% OFF</span>` : ''}
                             </div>
-
-                            <div class="card-price-container">
-                                <span class="card-price-val">₹${p.price.toFixed(0)}</span>
-                                ${p.original_price ? `<span class="card-mrp-val">₹${p.original_price.toFixed(0)}</span>` : ''}
-                                ${discount > 0 ? `<span class="card-discount-val">${discount}% off</span>` : ''}
-                            </div>
-
-                            <span class="free-delivery-badge">Free Delivery</span>
-
-                            <div class="card-rating-strip">
-                                <span class="rating-chip">
-                                    <span>${p.rating}</span>
-                                    <svg width="10" height="10" viewBox="0 0 24 24" fill="#ffffff"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                                </span>
-                                <span class="rating-count">${p.rating_count} Reviews</span>
+                            <div class="product-card-footer">
+                                <span class="rating-pill">★ ${p.rating}</span>
+                                <span>Free Delivery</span>
                             </div>
                         </div>
                     </a>
