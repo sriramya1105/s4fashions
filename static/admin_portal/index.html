@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S4 Fashions - Merchant Administration Control Portal</title>
+    <link rel="stylesheet" href="/css/modern.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- TOP ADMIN HEADER -->
+    <header class="s4-nav" style="background: #1e1e2d; border-color: #2b2b40;">
+        <div class="nav-wrap">
+            <a href="/admin_portal/index.html" class="nav-brand" style="color: #ffffff;">
+                S4 Fashions <span class="sub-brand" style="background: rgba(233, 69, 96, 0.2); color: #ff6b81; padding: 2px 6px; border-radius: 4px;">Merchant Console</span>
+            </a>
+
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <a href="/" target="_blank" class="nav-btn" style="color: #ffffff; background: rgba(255,255,255,0.08);">
+                    🛍️ Live Storefront &rarr;
+                </a>
+                <span id="admin-user-tag" style="font-size: 13px; color: #a2a3b7;">admin_user (Admin)</span>
+                <button onclick="logoutAdmin()" class="nav-btn" style="color: #ff6b81; border: 1px solid rgba(255, 107, 129, 0.4);">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ADMIN WORKSPACE -->
+    <div class="admin-wrapper">
+        
+        <!-- SIDEBAR NAVIGATION -->
+        <aside class="admin-sidebar">
+            <ul class="admin-nav-list">
+                <li><a class="admin-nav-item active" onclick="switchAdminTab('dashboard')">📊 Dashboard & Revenue</a></li>
+                <li><a class="admin-nav-item" onclick="switchAdminTab('categories')">🏷️ Categories (Men, Women, Kids)</a></li>
+                <li><a class="admin-nav-item" onclick="switchAdminTab('subcategories')">📁 Subcategories (Connect to Categories)</a></li>
+                <li><a class="admin-nav-item" onclick="switchAdminTab('products')">👗 Product Catalog & Stock</a></li>
+                <li><a class="admin-nav-item" onclick="switchAdminTab('orders')">📦 Customer Orders & Dispatch</a></li>
+                <li><a href="/docs" target="_blank" class="admin-nav-item">⚡ Swagger API Sandbox</a></li>
+            </ul>
+
+            <div style="padding: 14px; background: rgba(255,255,255,0.03); border-radius: 6px; font-size: 12px; line-height: 1.5; color: #7e8299;">
+                <b>PostgreSQL Active:</b><br>
+                Connected to <code>s4fashions</code> via port 5432.<br>
+                Protected by RBAC (CWE-284).
+            </div>
+        </aside>
+
+        <!-- MAIN ADMIN VIEWS -->
+        <main class="admin-content-stage">
+
+            <!-- TAB 1: DASHBOARD -->
+            <div id="tab-dashboard" class="admin-tab-pane">
+                <h2 style="font-size: 22px; font-weight: 800; margin-bottom: 4px;">Store Overview</h2>
+                <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 24px;">Live sales metrics and counts queried directly from PostgreSQL.</p>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 18px; margin-bottom: 28px;">
+                    <div style="background: #ffffff; padding: 20px; border-radius: 8px; border: 1px solid var(--border-color); border-left: 4px solid var(--primary);">
+                        <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Total Sales</div>
+                        <div id="stat-revenue" style="font-size: 26px; font-weight: 800; color: var(--primary); margin-top: 6px;">₹0</div>
+                    </div>
+
+                    <div style="background: #ffffff; padding: 20px; border-radius: 8px; border: 1px solid var(--border-color); border-left: 4px solid var(--warning);">
+                        <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Orders Processed</div>
+                        <div id="stat-orders" style="font-size: 26px; font-weight: 800; color: var(--text-main); margin-top: 6px;">0</div>
+                    </div>
+
+                    <div style="background: #ffffff; padding: 20px; border-radius: 8px; border: 1px solid var(--border-color); border-left: 4px solid var(--success);">
+                        <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Catalog Items</div>
+                        <div id="stat-products" style="font-size: 26px; font-weight: 800; color: var(--text-main); margin-top: 6px;">0</div>
+                    </div>
+
+                    <div style="background: #ffffff; padding: 20px; border-radius: 8px; border: 1px solid var(--border-color); border-left: 4px solid #6366f1;">
+                        <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Departments</div>
+                        <div id="stat-categories" style="font-size: 26px; font-weight: 800; color: var(--text-main); margin-top: 6px;">0</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: MANAGE CATEGORIES (MEN, WOMEN, KIDS) -->
+            <div id="tab-categories" class="admin-tab-pane" style="display: none;">
+                <h2 style="font-size: 22px; font-weight: 800; margin-bottom: 4px;">Department Categories</h2>
+                <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 24px;">Manage top-level departments (e.g. Men, Women, Kids) displayed on user bubble navigation.</p>
+
+                <!-- Add Category Form -->
+                <div class="admin-form-card">
+                    <div class="admin-form-title">Add New Department Category</div>
+                    <form id="add-category-form" class="admin-grid-form">
+                        <div>
+                            <label class="form-field-label">Category Name</label>
+                            <input type="text" id="cat-name-input" class="form-input" placeholder="e.g. Men, Women, Kids" required>
+                        </div>
+                        <div>
+                            <label class="form-field-label">Category Image URL</label>
+                            <input type="url" id="cat-img-input" class="form-input" placeholder="https://images.unsplash.com/...">
+                        </div>
+                        <div class="form-full-col">
+                            <label class="form-field-label">Description</label>
+                            <input type="text" id="cat-desc-input" class="form-input" placeholder="Short description of department">
+                        </div>
+                        <div class="form-full-col">
+                            <button type="submit" class="btn-action-primary">+ Create Category</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Existing Categories Table -->
+                <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 12px;">Active Categories</h3>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Slug</th>
+                            <th>Description</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-category-rows">
+                        <tr><td colspan="5" style="text-align: center; padding: 20px;">Loading categories...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- TAB 3: MANAGE SUBCATEGORIES (CONNECT TROUSERS UNDER MEN) -->
+            <div id="tab-subcategories" class="admin-tab-pane" style="display: none;">
+                <h2 style="font-size: 22px; font-weight: 800; margin-bottom: 4px;">Subcategories Management</h2>
+                <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 24px;">Create subcategories (e.g., Trousers, Kurtis, Frocks) and connect them to a parent Category.</p>
+
+                <!-- Add Subcategory Form -->
+                <div class="admin-form-card">
+                    <div class="admin-form-title">Create Subcategory & Link to Category</div>
+                    <form id="add-subcategory-form" class="admin-grid-form">
+                        <div>
+                            <label class="form-field-label">Select Parent Category</label>
+                            <select id="sub-cat-select" class="form-input" required>
+                                <option value="">-- Choose Category (e.g. Men) --</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="form-field-label">Subcategory Name</label>
+                            <input type="text" id="sub-name-input" class="form-input" placeholder="e.g. Trousers, Kurtis, Formal Shirts" required>
+                        </div>
+                        <div class="form-full-col">
+                            <label class="form-field-label">Description</label>
+                            <input type="text" id="sub-desc-input" class="form-input" placeholder="e.g. Executive formal trousers and casual chinos">
+                        </div>
+                        <div class="form-full-col">
+                            <button type="submit" class="btn-action-primary">+ Save Subcategory</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Subcategories Table -->
+                <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 12px;">Existing Subcategory Mappings</h3>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Subcategory Name</th>
+                            <th>Parent Category</th>
+                            <th>Slug</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-subcategory-rows">
+                        <tr><td colspan="5" style="text-align: center; padding: 20px;">Loading subcategories...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- TAB 4: PRODUCTS MANAGEMENT (POST APPAREL WITH DYNAMIC DROPDOWNS) -->
+            <div id="tab-products" class="admin-tab-pane" style="display: none;">
+                <h2 style="font-size: 22px; font-weight: 800; margin-bottom: 4px;">Product Catalog & Inventory</h2>
+                <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 24px;">Add new apparel items with sizes, colors, prices, and stock.</p>
+
+                <!-- Add Product Form -->
+                <div class="admin-form-card">
+                    <div class="admin-form-title">Post New Apparel Product</div>
+                    <form id="add-product-form" class="admin-grid-form">
+                        <div class="form-full-col">
+                            <label class="form-field-label">Product Title</label>
+                            <input type="text" id="p-title" class="form-input" placeholder="e.g. Raymond Charcoal Slim Fit Formal Trousers" required>
+                        </div>
+
+                        <div class="form-full-col">
+                            <label class="form-field-label">Description</label>
+                            <textarea id="p-desc" class="form-input" style="height: 65px; padding: 8px;" placeholder="Detailed cloth specifications, fabric feel, occasions..." required></textarea>
+                        </div>
+
+                        <div>
+                            <label class="form-field-label">Brand Name</label>
+                            <input type="text" id="p-brand" class="form-input" placeholder="e.g. Raymond, FabIndia, Biba, Levi's" required>
+                        </div>
+
+                        <div>
+                            <label class="form-field-label">Department Category</label>
+                            <select id="p-cat-select" class="form-input" onchange="onCategorySelectChange()" required>
+                                <option value="">-- Choose Category --</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="form-field-label">Connected Subcategory</label>
+                            <select id="p-subcat-select" class="form-input">
+                                <option value="">-- Choose Subcategory (e.g. Trousers) --</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="form-field-label">Available Sizes (Comma-separated)</label>
+                            <input type="text" id="p-sizes" class="form-input" value="S,M,L,XL,XXL" required>
+                        </div>
+
+                        <div>
+                            <label class="form-field-label">Available Colors (Comma-separated)</label>
+                            <input type="text" id="p-colors" class="form-input" value="Black,Navy,Charcoal" required>
+                        </div>
+
+                        <div>
+                            <label class="form-field-label">Material / Fabric</label>
+                            <input type="text" id="p-material" class="form-input" value="Poly-Viscose Blend">
+                        </div>
+
+                        <div>
+                            <label class="form-field-label">Selling Price (₹)</label>
+                            <input type="number" id="p-price" class="form-input" min="1" step="1" placeholder="1499" required>
+                        </div>
+
+                        <div>
+                            <label class="form-field-label">Original MRP Price (₹)</label>
+                            <input type="number" id="p-orig-price" class="form-input" min="1" step="1" placeholder="2299">
+                        </div>
+
+                        <div>
+                            <label class="form-field-label">Initial Stock Quantity</label>
+                            <input type="number" id="p-stock" class="form-input" min="0" value="45" required>
+                        </div>
+
+                        <div>
+                            <label class="form-field-label">Image URL</label>
+                            <input type="url" id="p-img" class="form-input" placeholder="https://images.unsplash.com/...">
+                        </div>
+
+                        <div class="form-full-col" style="margin-top: 8px;">
+                            <button type="submit" id="btn-submit-product" class="btn-action-primary" style="padding: 12px 32px;">
+                                🚀 Publish Product to Storefront
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Products Table -->
+                <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 12px;">Active Catalog</h3>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Product</th>
+                            <th>Department</th>
+                            <th>Subcategory</th>
+                            <th>Brand</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-products-table-rows">
+                        <tr><td colspan="8" style="text-align: center; padding: 20px;">Loading catalog...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- TAB 5: ORDERS MANAGEMENT -->
+            <div id="tab-orders" class="admin-tab-pane" style="display: none;">
+                <h2 style="font-size: 22px; font-weight: 800; margin-bottom: 4px;">Customer Orders Fulfillment</h2>
+                <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 24px;">Review purchases and update dispatch status.</p>
+
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer Phone</th>
+                            <th>Total Amount</th>
+                            <th>Items Purchased</th>
+                            <th>Status</th>
+                            <th>Update Tracking</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-orders-table-rows">
+                        <tr><td colspan="6" style="text-align: center; padding: 20px;">Loading orders...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </main>
+    </div>
+
+    <script src="/js/core.js"></script>
+    <script>
+        let adminCategories = [];
+        let adminSubcategories = [];
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            verifyAdmin();
+            await loadAdminInitialData();
+            loadStats();
+        });
+
+        function verifyAdmin() {
+            if (!appState.token || !appState.user || appState.user.role !== "admin") {
+                alert("Administrator access required.");
+                window.location.href = "/login.html";
+                return;
+            }
+            document.getElementById("admin-user-tag").innerText = `${appState.user.username} (Admin)`;
+        }
+
+        function logoutAdmin() {
+            localStorage.removeItem("tc_token");
+            localStorage.removeItem("tc_user");
+            window.location.href = "/login.html";
+        }
+
+        function switchAdminTab(tabName) {
+            document.querySelectorAll(".admin-tab-pane").forEach(p => p.style.display = "none");
+            document.querySelectorAll(".admin-nav-item").forEach(item => item.classList.remove("active"));
+
+            const target = document.getElementById(`tab-${tabName}`);
+            if (target) target.style.display = "block";
+
+            const clicked = Array.from(document.querySelectorAll(".admin-nav-item")).find(l => l.getAttribute("onclick") && l.getAttribute("onclick").includes(tabName));
+            if (clicked) clicked.classList.add("active");
+
+            if (tabName === 'dashboard') loadStats();
+            if (tabName === 'categories') renderCategoriesTable();
+            if (tabName === 'subcategories') renderSubcategoriesTable();
+            if (tabName === 'products') renderProductsTable();
+            if (tabName === 'orders') renderOrdersTable();
+        }
+
+        async function loadAdminInitialData() {
+            try {
+                // Fetch Categories
+                const cRes = await fetch("/api/v1/admin/categories", {
+                    headers: { "Authorization": `Bearer ${appState.token}` }
+                });
+                if (cRes.status === 401 || cRes.status === 403) {
+                    alert("Admin session expired. Please log in again.");
+                    window.location.href = "/login.html";
+                    return;
+                }
+                adminCategories = await cRes.json();
+                populateCategoryDropdowns();
+
+                // Fetch Subcategories
+                const sRes = await fetch("/api/v1/admin/subcategories", {
+                    headers: { "Authorization": `Bearer ${appState.token}` }
+                });
+                adminSubcategories = await sRes.json();
+            } catch (err) {
+                console.error("Admin data fetch error", err);
+            }
+        }
+
+        function populateCategoryDropdowns() {
+            // Dropdown in Subcategory form
+            const subCatSel = document.getElementById("sub-cat-select");
+            subCatSel.innerHTML = `<option value="">-- Choose Category (e.g. Men) --</option>` +
+                adminCategories.map(c => `<option value="${c.id}">${escapeHtml(c.name)}</option>`).join("");
+
+            // Dropdown in Product form
+            const pCatSel = document.getElementById("p-cat-select");
+            pCatSel.innerHTML = `<option value="">-- Choose Category --</option>` +
+                adminCategories.map(c => `<option value="${c.id}">${escapeHtml(c.name)}</option>`).join("");
+        }
+
+        function onCategorySelectChange() {
+            const catId = parseInt(document.getElementById("p-cat-select").value, 10);
+            const pSubSel = document.getElementById("p-subcat-select");
+
+            if (!catId) {
+                pSubSel.innerHTML = `<option value="">-- Choose Subcategory --</option>`;
+                return;
+            }
+
+            const filteredSubs = adminSubcategories.filter(s => s.category_id === catId);
+            pSubSel.innerHTML = `<option value="">-- Choose Subcategory --</option>` +
+                filteredSubs.map(s => `<option value="${s.id}">${escapeHtml(s.name)}</option>`).join("");
+        }
+
+        // ==========================================
+        // 1. STATS
+        // ==========================================
+        async function loadStats() {
+            try {
+                const res = await fetch("/api/v1/admin/stats", {
+                    headers: { "Authorization": `Bearer ${appState.token}` }
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    document.getElementById("stat-revenue").innerText = `₹${data.total_revenue.toFixed(0)}`;
+                    document.getElementById("stat-orders").innerText = data.total_orders_placed;
+                    document.getElementById("stat-products").innerText = data.active_catalog_items;
+                    document.getElementById("stat-categories").innerText = data.total_categories;
+                }
+            } catch (err) {
+                console.error("Stats error", err);
+            }
+        }
+
+        // ==========================================
+        // 2. CATEGORIES
+        // ==========================================
+        async function renderCategoriesTable() {
+            await loadAdminInitialData();
+            const tbody = document.getElementById("admin-category-rows");
+            if (!adminCategories || adminCategories.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 20px;">No categories found.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = adminCategories.map(c => `
+                <tr>
+                    <td><b>#${c.id}</b></td>
+                    <td><b>${escapeHtml(c.name)}</b></td>
+                    <td><code>${escapeHtml(c.slug)}</code></td>
+                    <td>${escapeHtml(c.description || '-')}</td>
+                    <td>
+                        <button class="btn-delete" onclick="deleteCategory(${c.id})">Delete</button>
+                    </td>
+                </tr>
+            `).join("");
+        }
+
+        document.getElementById("add-category-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const name = document.getElementById("cat-name-input").value.trim();
+            const desc = document.getElementById("cat-desc-input").value.trim();
+            const img = document.getElementById("cat-img-input").value.trim() || null;
+
+            try {
+                const res = await fetch("/api/v1/admin/categories", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${appState.token}`
+                    },
+                    body: JSON.stringify({ name, description: desc, image_url: img })
+                });
+
+                if (res.ok) {
+                    alert(`Category '${name}' created!`);
+                    document.getElementById("add-category-form").reset();
+                    renderCategoriesTable();
+                } else {
+                    const err = await res.json();
+                    alert(`Failed: ${err.detail || err.message}`);
+                }
+            } catch (err) {
+                alert("Network communication error.");
+            }
+        });
+
+        async function deleteCategory(id) {
+            if (!confirm(`Delete Category #${id}? This will remove connected subcategories.`)) return;
+            try {
+                const res = await fetch(`/api/v1/admin/categories/${id}`, {
+                    method: "DELETE",
+                    headers: { "Authorization": `Bearer ${appState.token}` }
+                });
+                if (res.ok) {
+                    alert("Category deleted.");
+                    renderCategoriesTable();
+                }
+            } catch (err) { alert("Delete error"); }
+        }
+
+        // ==========================================
+        // 3. SUBCATEGORIES
+        // ==========================================
+        async function renderSubcategoriesTable() {
+            await loadAdminInitialData();
+            const tbody = document.getElementById("admin-subcategory-rows");
+            if (adminSubcategories.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 20px;">No subcategories created yet.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = adminSubcategories.map(s => `
+                <tr>
+                    <td><b>#${s.id}</b></td>
+                    <td><b>${escapeHtml(s.name)}</b></td>
+                    <td><span style="background: var(--primary-light); color: var(--primary); padding: 2px 8px; border-radius: 4px; font-weight: 700; font-size: 11px;">${escapeHtml(s.category_name || '')}</span></td>
+                    <td><code>${escapeHtml(s.slug)}</code></td>
+                    <td>
+                        <button class="btn-delete" onclick="deleteSubcategory(${s.id})">Delete</button>
+                    </td>
+                </tr>
+            `).join("");
+        }
+
+        document.getElementById("add-subcategory-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const catId = parseInt(document.getElementById("sub-cat-select").value, 10);
+            const name = document.getElementById("sub-name-input").value.trim();
+            const desc = document.getElementById("sub-desc-input").value.trim();
+
+            try {
+                const res = await fetch("/api/v1/admin/subcategories", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${appState.token}`
+                    },
+                    body: JSON.stringify({ category_id: catId, name, description: desc })
+                });
+
+                if (res.ok) {
+                    alert(`Subcategory '${name}' linked to Category #${catId}!`);
+                    document.getElementById("add-subcategory-form").reset();
+                    renderSubcategoriesTable();
+                } else {
+                    const err = await res.json();
+                    alert(`Failed: ${err.detail || err.message}`);
+                }
+            } catch (err) {
+                alert("Network communication error.");
+            }
+        });
+
+        async function deleteSubcategory(id) {
+            if (!confirm(`Delete Subcategory #${id}?`)) return;
+            try {
+                const res = await fetch(`/api/v1/admin/subcategories/${id}`, {
+                    method: "DELETE",
+                    headers: { "Authorization": `Bearer ${appState.token}` }
+                });
+                if (res.ok) {
+                    alert("Subcategory deleted.");
+                    renderSubcategoriesTable();
+                }
+            } catch (err) { alert("Delete error"); }
+        }
+
+        // ==========================================
+        // 4. PRODUCTS
+        // ==========================================
+        async function renderProductsTable() {
+            try {
+                const res = await fetch("/api/v1/admin/products", {
+                    headers: { "Authorization": `Bearer ${appState.token}` }
+                });
+                const products = await res.json();
+                const tbody = document.getElementById("admin-products-table-rows");
+
+                if (products.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 20px;">No products in database.</td></tr>`;
+                    return;
+                }
+
+                tbody.innerHTML = products.map(p => `
+                    <tr>
+                        <td><b>#${p.id}</b></td>
+                        <td>
+                            <div style="font-weight: 700;">${escapeHtml(p.title)}</div>
+                            <div style="font-size: 11px; color: var(--text-muted);">${escapeHtml(p.available_sizes)}</div>
+                        </td>
+                        <td><span style="font-weight: 700;">${escapeHtml(p.category_name || '-')}</span></td>
+                        <td>${escapeHtml(p.subcategory_name || '-')}</td>
+                        <td>${escapeHtml(p.brand)}</td>
+                        <td><b>₹${p.price.toFixed(0)}</b></td>
+                        <td><span style="color: ${p.stock > 10 ? 'var(--success)' : 'var(--accent)'}; font-weight: 700;">${p.stock}</span></td>
+                        <td>
+                            <button class="btn-delete" onclick="deleteProduct(${p.id})">Delete</button>
+                        </td>
+                    </tr>
+                `).join("");
+            } catch (err) {
+                console.error("Products error", err);
+            }
+        }
+
+        document.getElementById("add-product-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById("btn-submit-product");
+            btn.disabled = true;
+            btn.innerText = "Publishing Product...";
+
+            const catId = parseInt(document.getElementById("p-cat-select").value, 10);
+            const subVal = document.getElementById("p-subcat-select").value;
+            const subId = subVal ? parseInt(subVal, 10) : null;
+
+            const payload = {
+                title: document.getElementById("p-title").value.trim(),
+                description: document.getElementById("p-desc").value.trim(),
+                brand: document.getElementById("p-brand").value.trim(),
+                category_id: catId,
+                subcategory_id: subId,
+                available_sizes: document.getElementById("p-sizes").value.trim(),
+                available_colors: document.getElementById("p-colors").value.trim(),
+                material: document.getElementById("p-material").value.trim(),
+                price: parseFloat(document.getElementById("p-price").value),
+                original_price: parseFloat(document.getElementById("p-orig-price").value) || null,
+                stock: parseInt(document.getElementById("p-stock").value, 10),
+                image_url: document.getElementById("p-img").value.trim() || "https://images.unsplash.com/photo-1597983073493-88cd35cf93b0?w=600"
+            };
+
+            try {
+                const res = await fetch("/api/v1/admin/products", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${appState.token}`
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    alert(`Product "${data.title}" published successfully to storefront!`);
+                    document.getElementById("add-product-form").reset();
+                    renderProductsTable();
+                } else {
+                    const err = await res.json();
+                    alert(`Failed: ${err.detail || err.message}`);
+                }
+            } catch (err) {
+                alert("Network communication error.");
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "🚀 Publish Product to Storefront";
+            }
+        });
+
+        async function deleteProduct(id) {
+            if (!confirm(`Delete Product #${id}?`)) return;
+            try {
+                const res = await fetch(`/api/v1/admin/products/${id}`, {
+                    method: "DELETE",
+                    headers: { "Authorization": `Bearer ${appState.token}` }
+                });
+                if (res.ok) {
+                    alert("Product deleted.");
+                    renderProductsTable();
+                }
+            } catch (err) { alert("Delete error"); }
+        }
+
+        // ==========================================
+        // 5. ORDERS
+        // ==========================================
+        async function renderOrdersTable() {
+            try {
+                const res = await fetch("/api/v1/admin/orders", {
+                    headers: { "Authorization": `Bearer ${appState.token}` }
+                });
+                const orders = await res.json();
+                const tbody = document.getElementById("admin-orders-table-rows");
+
+                if (orders.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 20px;">No customer orders placed yet.</td></tr>`;
+                    return;
+                }
+
+                tbody.innerHTML = orders.map(o => `
+                    <tr>
+                        <td><b>#${o.id}</b></td>
+                        <td>${escapeHtml(o.phone_number)}</td>
+                        <td><b>₹${o.total_amount.toFixed(0)}</b></td>
+                        <td>${o.items.map(i => `${escapeHtml(i.product_title)} (x${i.quantity})`).join(", ")}</td>
+                        <td><span style="font-weight: 700; text-transform: uppercase; font-size: 11px; color: var(--primary);">${o.status}</span></td>
+                        <td>
+                            <select onchange="updateOrderStatus(${o.id}, this.value)" class="form-input" style="height: 32px; font-size: 12px; width: 140px;">
+                                <option value="confirmed" ${o.status === 'confirmed' ? 'selected' : ''}>Confirmed</option>
+                                <option value="shipped" ${o.status === 'shipped' ? 'selected' : ''}>Shipped</option>
+                                <option value="delivered" ${o.status === 'delivered' ? 'selected' : ''}>Delivered</option>
+                                <option value="cancelled" ${o.status === 'cancelled' ? 'selected' : ''}>Cancelled</option>
+                            </select>
+                        </td>
+                    </tr>
+                `).join("");
+            } catch (err) {
+                console.error("Orders error", err);
+            }
+        }
+
+        async function updateOrderStatus(orderId, newStatus) {
+            try {
+                const res = await fetch(`/api/v1/admin/orders/${orderId}/status?status_val=${newStatus}`, {
+                    method: "PATCH",
+                    headers: { "Authorization": `Bearer ${appState.token}` }
+                });
+                if (res.ok) {
+                    alert(`Order #${orderId} updated to ${newStatus.toUpperCase()}`);
+                }
+            } catch (err) {
+                alert("Update order status failed.");
+            }
+        }
+    </script>
+</body>
+</html>

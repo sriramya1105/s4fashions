@@ -18,7 +18,7 @@ router = APIRouter(prefix="/orders", tags=["Orders & Checkout"])
     "/checkout",
     response_model=OrderResponse,
     status_code=status.HTTP_201_CREATED,
-    summary="Place a new clothing order (Strict price & quantity validation)"
+    summary="Place order with strict server-side price calculation"
 )
 @limiter.limit(settings.CHECKOUT_RATE_LIMIT)
 def checkout_order(
@@ -27,18 +27,10 @@ def checkout_order(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    """
-    Creates an order for the authenticated customer.
-    SECURITY FEATURES:
-    1. Quantity and item structure enforced via Pydantic schema (CWE-20).
-    2. Unit prices are retrieved strictly from server DB (Prevents client-side price tampering).
-    3. Rate limited via SlowAPI (Prevents checkout bot flooding/inventory exhaustion).
-    """
     total_amount = 0.0
     order_items_to_create = []
 
     for item_req in order_data.items:
-        # Retrieve product from DB
         product = db.query(Product).filter(Product.id == item_req.product_id).first()
         if not product:
             raise HTTPException(
@@ -52,11 +44,9 @@ def checkout_order(
                 detail=f"Insufficient inventory stock for '{product.title}'. Only {product.stock} available."
             )
 
-        # Recalculate price server-side
+        # Recalculate price server-side (prevents client price tampering)
         line_item_total = product.price * item_req.quantity
         total_amount += line_item_total
-
-        # Deduct stock
         product.stock -= item_req.quantity
 
         order_item = OrderItem(
@@ -69,7 +59,6 @@ def checkout_order(
         )
         order_items_to_create.append(order_item)
 
-    # Create the Order associated with the currently authenticated user
     new_order = Order(
         user_id=current_user.id,
         total_amount=round(total_amount, 2),
@@ -85,54 +74,30 @@ def checkout_order(
     return new_order
 
 
-@router.get(
-    "",
-    response_model=List[OrderResponse],
-    summary="List all orders belonging to the authenticated customer"
-)
+@router.get("", response_model=List[OrderResponse])
 def list_my_orders(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    """
-    Returns only the orders placed by the current user.
-    Admins may see all or see their own.
-    """
     if current_user.role == UserRole.ADMIN:
-        orders = db.query(Order).order_by(Order.created_at.desc()).all()
-    else:
-        orders = db.query(Order).filter(Order.user_id == current_user.id).order_by(Order.created_at.desc()).all()
-    return orders
+        return db.query(Order).order_by(Order.created_at.desc()).all()
+    return db.query(Order).filter(Order.user_id == current_user.id).order_by(Order.created_at.desc()).all()
 
 
-@router.get(
-    "/{order_id}",
-    response_model=OrderResponse,
-    summary="Get single order details with BOLA / IDOR protection (CWE-639)"
-)
+@router.get("/{order_id}", response_model=OrderResponse)
 def get_order_by_id(
     order_id: int,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    """
-    SECURE OBJECT-LEVEL AUTHORIZATION CHECK (CWE-639 / OWASP API1 Defense):
-    Verifies that the order exists AND that either:
-    1. The order belongs to the requesting customer (order.user_id == current_user.id)
-    2. Or the requester has the 'admin' role.
-    """
     order = db.query(Order).filter(Order.id == order_id).first()
     if not order:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Order #{order_id} was not found."
-        )
+        raise HTTPException(status_code=404, detail="Order not found.")
 
-    # Object-level access control enforcement
+    # BOLA / IDOR Protection (CWE-639)
     if order.user_id != current_user.id and current_user.role != UserRole.ADMIN:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="Access forbidden: You do not have permission to view or manage another customer's order."
+            detail="Access forbidden: You cannot view another customer's order."
         )
-
     return order

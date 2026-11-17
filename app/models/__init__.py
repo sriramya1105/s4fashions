@@ -1,4 +1,10 @@
 from app.db.session import Base
-from app.models.entities import User, Product, Order, OrderItem, UserRole, ProductCategory, OrderStatus
+from app.models.entities import (
+    Category, SubCategory, Product, User, Order, OrderItem,
+    UserRole, OrderStatus
+)
 
-__all__ = ["Base", "User", "Product", "Order", "OrderItem", "UserRole", "ProductCategory", "OrderStatus"]
+__all__ = [
+    "Base", "Category", "SubCategory", "Product", "User",
+    "Order", "OrderItem", "UserRole", "OrderStatus"
+]

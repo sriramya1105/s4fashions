@@ -11,11 +11,25 @@
 </head>
 <body>
 
-    <!-- TOP NAVIGATION -->
+    <!-- 1. OFFICIAL S4 FASHIONS SPLASH SCREEN (2:1 ULTRA-WIDE ASSET WITH SHOP NOW CTA) -->
+    <div id="splash-screen">
+        <div class="s4-ultrawide-wrapper">
+            <img src="/assets/s4_ultrawide_poster.png" alt="S4 Fashions - Women, Men, Kids" class="s4-ultrawide-img">
+            
+            <!-- Clickable 'Shop Now' CTA Button -->
+            <button type="button" class="s4-exact-shop-btn" onclick="dismissSplashNow()">
+                Shop Now &rarr;
+            </button>
+        </div>
+
+        <div class="splash-loader-progress"></div>
+    </div>
+
+    <!-- 2. HEADER NAVIGATION -->
     <header class="s4-nav">
         <div class="nav-wrap">
             <a href="/" class="nav-brand">
-                S4 Fashions
+                S4 Fashions <span class="sub-brand">Fashion Hub</span>
             </a>
 
             <!-- Search Bar -->
@@ -23,94 +37,113 @@
                 <svg class="nav-search-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
-                <input type="text" id="store-search" placeholder="Search for Sarees, Kurtis, Shirts, Jeans, Dresses...">
+                <input type="text" id="global-product-search" placeholder="Search for Sarees, Kurtas, Trousers, Shirts, Frocks...">
             </div>
 
             <!-- Actions -->
             <div class="nav-actions">
-                <a href="/admin_portal/index.html" class="nav-btn" style="color: var(--primary); font-weight: 700;">
-                    Merchant Portal
+                <a href="/admin_portal/index.html" class="nav-btn admin-link">
+                    ⚙️ Admin Portal
                 </a>
-                <div id="auth-slot"></div>
+                <div id="user-auth-slot"></div>
                 <a href="/orders.html" class="nav-btn">
                     Orders
                 </a>
                 <a href="/cart.html" class="nav-btn primary-btn">
-                    Bag <span class="nav-cart-badge" id="cart-badge">0</span>
+                    Bag <span class="nav-cart-badge" id="nav-cart-count">0</span>
                 </a>
             </div>
         </div>
     </header>
 
-    <!-- CATEGORY NAVBAR -->
-    <nav class="s4-cat-bar">
-        <div class="cat-bar-wrap">
-            <span class="cat-tab active" data-cat="">All Collections</span>
-            <span class="cat-tab" data-cat="women" data-sub="Ethnic">Women Ethnic</span>
-            <span class="cat-tab" data-cat="women" data-sub="Kurtis">Kurtis & Kurtas</span>
-            <span class="cat-tab" data-cat="women" data-sub="Short Tops">Women Western & Tops</span>
-            <span class="cat-tab" data-cat="men" data-sub="Traditional">Men Traditional</span>
-            <span class="cat-tab" data-cat="men" data-sub="Modern">Men Modern & Shirts</span>
-            <span class="cat-tab" data-cat="kids" data-sub="">Kids Wear</span>
-        </div>
-    </nav>
+    <!-- 2. TOP HERO CAROUSEL (COVERS 1/4th OF PAGE HEIGHT) -->
+    <section class="s4-hero-carousel">
+        <div class="carousel-box" id="hero-slider">
+            <!-- Slide 1 -->
+            <div class="carousel-slide active" style="background-image: linear-gradient(to right, rgba(30,8,22,0.85) 30%, rgba(30,8,22,0.1)), url('https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1400');">
+                <div class="carousel-content">
+                    <span class="carousel-pill">Grand Festive Drop</span>
+                    <h2 class="carousel-title">Pure Silk Sarees & Designer Kurtas</h2>
+                    <p class="carousel-desc">Handcrafted ethnic wear from certified master artisans with flat 40% discount.</p>
+                </div>
+            </div>
 
-    <!-- PROMOTIONAL HERO BANNER -->
-    <section class="s4-hero-banner">
-        <div class="hero-box">
-            <div class="hero-content">
-                <span class="hero-tag">Festive & Everyday Wear</span>
-                <h1 class="hero-title">Curated Quality Fashion at Direct Wholesale Prices</h1>
-                <p class="hero-desc">Explore hand-spun Kurtas, Pure Banarasi Silk Sarees, Modern Denim & Designer Kids Sets with Free Nationwide Shipping.</p>
-                <a href="#catalog" class="hero-cta-btn">Shop Current Collection</a>
+            <!-- Slide 2 -->
+            <div class="carousel-slide" style="background-image: linear-gradient(to right, rgba(30,8,22,0.85) 30%, rgba(30,8,22,0.1)), url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1400');">
+                <div class="carousel-content">
+                    <span class="carousel-pill">Modern Executive</span>
+                    <h2 class="carousel-title">Slim Fit Trousers & Oxford Shirts</h2>
+                    <p class="carousel-desc">Crisp formal wear tailored for day-long executive comfort.</p>
+                </div>
+            </div>
+
+            <!-- Slide 3 -->
+            <div class="carousel-slide" style="background-image: linear-gradient(to right, rgba(30,8,22,0.85) 30%, rgba(30,8,22,0.1)), url('https://images.unsplash.com/photo-1522771930-78848d9293e8?w=1400');">
+                <div class="carousel-content">
+                    <span class="carousel-pill">Kids Collection</span>
+                    <h2 class="carousel-title">Festive Dhoti Sets & Party Frocks</h2>
+                    <p class="carousel-desc">Pure organic cotton clothing crafted for infants, boys and girls.</p>
+                </div>
+            </div>
+
+            <!-- Dots -->
+            <div class="carousel-dots">
+                <div class="carousel-dot active" onclick="setSlide(0)"></div>
+                <div class="carousel-dot" onclick="setSlide(1)"></div>
+                <div class="carousel-dot" onclick="setSlide(2)"></div>
             </div>
         </div>
     </section>
 
-    <!-- MAIN PRODUCT BROWSER -->
-    <main class="store-container" id="catalog">
+    <!-- 3. THREE CIRCULAR CATEGORY BUBBLES (MEN, WOMEN, KIDS - DYNAMICALLY LOADED) -->
+    <section class="s4-category-bubbles-section">
+        <div class="bubbles-heading">Explore By Department</div>
+        <div class="bubbles-wrapper" id="dynamic-category-bubbles">
+            <!-- Dynamically populated from PostgreSQL /categories API -->
+            <div style="color: var(--text-muted); font-size: 13px;">Loading departments...</div>
+        </div>
+    </section>
+
+    <!-- 4. MAIN STORE LAYOUT (LEFT FILTER SIDEBAR + 5 HORIZONTAL PRODUCTS PER ROW) -->
+    <main class="s4-store-layout">
         
-        <!-- SIDEBAR FILTERS -->
-        <aside class="filter-card">
-            <div class="filter-header">
+        <!-- SIDEBAR FILTERS WITH LIVE TYPEABLE SEARCH -->
+        <aside class="s4-filter-sidebar">
+            <div class="filter-top-bar">
                 <h3>Filters</h3>
-                <button type="button" class="filter-reset-btn" onclick="resetFilters()">Reset</button>
+                <button type="button" class="btn-reset-filters" onclick="resetAllFilters()">Reset All</button>
             </div>
 
-            <!-- Subcategory -->
-            <div class="filter-group">
-                <label class="filter-label">Apparel Style</label>
-                <select id="filter-subcategory" class="filter-select" onchange="filterProducts()">
-                    <option value="">All Apparel</option>
-                    <option value="Traditional">Men Traditional / Kurta</option>
-                    <option value="Modern">Men Modern / Formal & Jeans</option>
-                    <option value="Ethnic">Women Sarees & Anarkali</option>
-                    <option value="Kurtis">Women Kurtis & Kurtas</option>
-                    <option value="Short Tops">Women Short Tops & Western</option>
-                    <option value="Boys Ethnic">Boys Festive Wear</option>
-                    <option value="Girls Western">Girls Frocks & Sets</option>
-                    <option value="Infants & Toddlers">Infants & Toddlers</option>
-                </select>
+            <!-- Live Typeable Filter Search -->
+            <input type="text" id="live-filter-search" class="filter-type-search" placeholder="🔍 Type filter (e.g. Tro, Fab, Saree)..." oninput="handleLiveFilterType()">
+
+            <!-- Subcategories Filter (Dynamically populated based on active category) -->
+            <div class="filter-section">
+                <div class="filter-section-title">
+                    <span>Style / Subcategory</span>
+                    <span id="subcat-filter-count" style="font-size: 11px; color: var(--text-muted);"></span>
+                </div>
+                <div class="filter-checkbox-list" id="dynamic-subcategory-filter">
+                    <div style="font-size: 12px; color: var(--text-muted);">Loading subcategories...</div>
+                </div>
             </div>
 
-            <!-- Brand Checkboxes -->
-            <div class="filter-group">
-                <label class="filter-label">Brands</label>
-                <label class="filter-checkbox"><input type="checkbox" name="brand" value="FabIndia" onchange="filterProducts()"> FabIndia</label>
-                <label class="filter-checkbox"><input type="checkbox" name="brand" value="Manyavar" onchange="filterProducts()"> Manyavar</label>
-                <label class="filter-checkbox"><input type="checkbox" name="brand" value="Biba" onchange="filterProducts()"> Biba</label>
-                <label class="filter-checkbox"><input type="checkbox" name="brand" value="W for Woman" onchange="filterProducts()"> W for Woman</label>
-                <label class="filter-checkbox"><input type="checkbox" name="brand" value="Peter England" onchange="filterProducts()"> Peter England</label>
-                <label class="filter-checkbox"><input type="checkbox" name="brand" value="Levi's" onchange="filterProducts()"> Levi's</label>
-                <label class="filter-checkbox"><input type="checkbox" name="brand" value="Zara" onchange="filterProducts()"> Zara</label>
-                <label class="filter-checkbox"><input type="checkbox" name="brand" value="Hopscotch" onchange="filterProducts()"> Hopscotch</label>
+            <!-- Brands Filter (Dynamically extracted from live products) -->
+            <div class="filter-section">
+                <div class="filter-section-title">
+                    <span>Brand</span>
+                    <span id="brand-filter-count" style="font-size: 11px; color: var(--text-muted);"></span>
+                </div>
+                <div class="filter-checkbox-list" id="dynamic-brand-filter">
+                    <div style="font-size: 12px; color: var(--text-muted);">Loading brands...</div>
+                </div>
             </div>
 
-            <!-- Price Range -->
-            <div class="filter-group">
-                <label class="filter-label">Max Budget (₹)</label>
-                <select id="filter-price" class="filter-select" onchange="filterProducts()">
-                    <option value="">Any Price</option>
+            <!-- Price Range Filter -->
+            <div class="filter-section">
+                <div class="filter-section-title">Max Price (₹)</div>
+                <select id="price-select-filter" class="filter-select" onchange="applyFilters()">
+                    <option value="">Any Budget</option>
                     <option value="999">Under ₹999</option>
                     <option value="1499">Under ₹1,499</option>
                     <option value="2499">Under ₹2,499</option>
@@ -119,122 +152,265 @@
             </div>
         </aside>
 
-        <!-- PRODUCTS CATALOG AREA -->
-        <section class="products-area">
-            <div class="products-bar">
-                <div style="font-weight: 700; font-size: 16px;" id="catalog-title">All Products</div>
-                <div style="font-size: 13px; color: var(--text-muted);" id="catalog-count">Loading products...</div>
+        <!-- PRODUCT CATALOG (EXACTLY 5 PRODUCTS PER ROW) -->
+        <section class="s4-products-area">
+            <div class="catalog-status-bar">
+                <div class="catalog-title" id="catalog-header-text">All Clothing Items</div>
+                <div class="catalog-counter" id="catalog-count-text">Loading catalog...</div>
             </div>
 
-            <div class="products-grid" id="products-grid">
-                <!-- Dynamically populated -->
+            <!-- 5 Products Per Row Grid -->
+            <div class="s4-products-grid-5" id="products-5-grid">
+                <!-- Dynamically populated from PostgreSQL /products API -->
             </div>
         </section>
 
     </main>
 
     <!-- FOOTER -->
-    <footer class="s4-footer">
+    <footer class="s4-site-footer">
         <p><b>S4 Fashions</b> · CS5101 Secure Coding Practices Laboratory · Group Project 7</p>
-        <p style="margin-top: 4px; font-size: 12px; color: #9ca3af;">Secured with Parameterized Queries (CWE-89), BOLA Defense (CWE-639), and SlowAPI Rate Limiting</p>
+        <p style="margin-top: 4px; font-size: 12px; color: #9ca3af;">Backed by PostgreSQL (pgAdmin) · Parameterized Queries (CWE-89) · BOLA Defense (CWE-639)</p>
     </footer>
 
     <script src="/js/core.js"></script>
     <script>
-        let catalog = [];
+        // State
+        let categories = [];
+        let subcategories = [];
+        let allProducts = [];
+        let activeCategoryId = null;
+        let selectedSubcategoryIds = new Set();
+        let selectedBrands = new Set();
+        let currentSlide = 0;
 
-        document.addEventListener("DOMContentLoaded", () => {
-            loadCatalog();
+        document.addEventListener("DOMContentLoaded", async () => {
+            syncUserAuth();
+            updateCartCounter();
+            startCarousel();
+            await loadInitialData();
             setupSearch();
-            setupCategoryTabs();
-            syncAuth();
         });
 
-        function syncAuth() {
-            const slot = document.getElementById("auth-slot");
-            if (appState.user && appState.token) {
-                slot.innerHTML = `
-                    <button class="nav-btn" onclick="logoutUser()">
-                        ${escapeHtml(appState.user.username)} (Logout)
-                    </button>
-                `;
-            } else {
-                slot.innerHTML = `<a href="/login.html" class="nav-btn">Sign In</a>`;
+        // 1. Carousel Animation
+        function setSlide(idx) {
+            const slides = document.querySelectorAll(".carousel-slide");
+            const dots = document.querySelectorAll(".carousel-dot");
+            slides[currentSlide].classList.remove("active");
+            dots[currentSlide].classList.remove("active");
+            currentSlide = idx;
+            slides[currentSlide].classList.add("active");
+            dots[currentSlide].classList.add("active");
+        }
+
+        function startCarousel() {
+            setInterval(() => {
+                const total = document.querySelectorAll(".carousel-slide").length;
+                setSlide((currentSlide + 1) % total);
+            }, 5000);
+        }
+
+        // 2. Load Dynamic Categories, Subcategories, and Products from Database
+        async function loadInitialData() {
+            try {
+                // Fetch Categories
+                const catRes = await fetch("/api/v1/categories");
+                categories = await catRes.json();
+                renderCategoryBubbles();
+
+                // Fetch Subcategories
+                const subRes = await fetch("/api/v1/subcategories");
+                subcategories = await subRes.json();
+                renderSubcategoryFilters();
+
+                // Fetch Products
+                const prodRes = await fetch("/api/v1/products");
+                allProducts = await prodRes.json();
+                renderBrandFilters();
+                applyFilters();
+            } catch (err) {
+                console.error("Failed to load store data", err);
             }
         }
 
-        function setupCategoryTabs() {
-            document.querySelectorAll(".cat-tab").forEach(tab => {
-                tab.addEventListener("click", () => {
-                    document.querySelectorAll(".cat-tab").forEach(t => t.classList.remove("active"));
-                    tab.classList.add("active");
-                    appState.selectedCategory = tab.getAttribute("data-cat") || "";
-                    document.getElementById("filter-subcategory").value = tab.getAttribute("data-sub") || "";
-                    filterProducts();
-                });
+        // 3. Render 3 Circular Category Bubbles (Men, Women, Kids)
+        function renderCategoryBubbles() {
+            const container = document.getElementById("dynamic-category-bubbles");
+            
+            let html = `
+                <div class="category-bubble-item ${activeCategoryId === null ? 'active' : ''}" onclick="selectCategory(null)">
+                    <div class="bubble-circle">
+                        <img src="https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=200" alt="All">
+                    </div>
+                    <span class="bubble-label">All</span>
+                </div>
+            `;
+
+            categories.forEach(c => {
+                html += `
+                    <div class="category-bubble-item ${activeCategoryId === c.id ? 'active' : ''}" onclick="selectCategory(${c.id})">
+                        <div class="bubble-circle">
+                            <img src="${c.image_url || 'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=200'}" alt="${escapeHtml(c.name)}">
+                        </div>
+                        <span class="bubble-label">${escapeHtml(c.name)}</span>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function selectCategory(catId) {
+            activeCategoryId = catId;
+            selectedSubcategoryIds.clear();
+            renderCategoryBubbles();
+            renderSubcategoryFilters();
+
+            const activeCat = categories.find(c => c.id === catId);
+            document.getElementById("catalog-header-text").innerText = activeCat ? `${activeCat.name}'s Collection` : "All Clothing Items";
+
+            applyFilters();
+        }
+
+        // 4. Render Dynamic Subcategory Checkboxes
+        function renderSubcategoryFilters() {
+            const list = document.getElementById("dynamic-subcategory-filter");
+            
+            // Filter by active category if selected
+            const relevantSubs = activeCategoryId 
+                ? subcategories.filter(s => s.category_id === activeCategoryId)
+                : subcategories;
+
+            document.getElementById("subcat-filter-count").innerText = `(${relevantSubs.length})`;
+
+            if (relevantSubs.length === 0) {
+                list.innerHTML = `<div style="font-size: 12px; color: var(--text-muted);">No subcategories for this department.</div>`;
+                return;
+            }
+
+            list.innerHTML = relevantSubs.map(s => `
+                <label class="filter-item-check subcat-label" data-name="${s.name.toLowerCase()}">
+                    <input type="checkbox" value="${s.id}" ${selectedSubcategoryIds.has(s.id) ? 'checked' : ''} onchange="toggleSubcat(${s.id})">
+                    <span>${escapeHtml(s.name)}</span>
+                </label>
+            `).join("");
+        }
+
+        function toggleSubcat(id) {
+            if (selectedSubcategoryIds.has(id)) selectedSubcategoryIds.delete(id);
+            else selectedSubcategoryIds.add(id);
+            applyFilters();
+        }
+
+        // 5. Render Dynamic Brands Checkboxes
+        function renderBrandFilters() {
+            const list = document.getElementById("dynamic-brand-filter");
+            const brands = Array.from(new Set(allProducts.map(p => p.brand))).sort();
+            document.getElementById("brand-filter-count").innerText = `(${brands.length})`;
+
+            list.innerHTML = brands.map(b => `
+                <label class="filter-item-check brand-label" data-name="${b.toLowerCase()}">
+                    <input type="checkbox" value="${escapeHtml(b)}" ${selectedBrands.has(b) ? 'checked' : ''} onchange="toggleBrand('${escapeHtml(b)}')">
+                    <span>${escapeHtml(b)}</span>
+                </label>
+            `).join("");
+        }
+
+        function toggleBrand(b) {
+            if (selectedBrands.has(b)) selectedBrands.delete(b);
+            else selectedBrands.add(b);
+            applyFilters();
+        }
+
+        // 6. Live Typeable Filter Search (User can type "Tro", "Kurt", "Fab" etc.)
+        function handleLiveFilterType() {
+            const q = document.getElementById("live-filter-search").value.trim().toLowerCase();
+            
+            document.querySelectorAll(".subcat-label").forEach(el => {
+                const name = el.getAttribute("data-name") || "";
+                el.style.display = name.includes(q) ? "flex" : "none";
+            });
+
+            document.querySelectorAll(".brand-label").forEach(el => {
+                const name = el.getAttribute("data-name") || "";
+                el.style.display = name.includes(q) ? "flex" : "none";
             });
         }
 
+        // 7. Global Search
         function setupSearch() {
-            const s = document.getElementById("store-search");
+            const s = document.getElementById("global-product-search");
             let timeout;
             s.addEventListener("input", () => {
                 clearTimeout(timeout);
                 timeout = setTimeout(() => {
-                    appState.searchQuery = s.value.trim().toLowerCase();
-                    filterProducts();
+                    applyFilters();
                 }, 200);
             });
         }
 
-        async function loadCatalog() {
-            try {
-                const res = await fetch("/api/v1/products");
-                catalog = await res.json();
-                filterProducts();
-            } catch (err) {
-                document.getElementById("products-grid").innerHTML = `<p style="padding: 40px; text-align: center;">Could not load products.</p>`;
-            }
-        }
+        // 8. Apply All Filters to Product List
+        function applyFilters() {
+            const searchQ = document.getElementById("global-product-search").value.trim().toLowerCase();
+            const maxPrice = parseFloat(document.getElementById("price-select-filter").value) || null;
 
-        function filterProducts() {
-            const sub = document.getElementById("filter-subcategory").value;
-            const maxPrice = parseFloat(document.getElementById("filter-price").value) || null;
-            const brands = Array.from(document.querySelectorAll("input[name='brand']:checked")).map(b => b.value);
+            let filtered = allProducts.filter(p => {
+                // Category Filter
+                if (activeCategoryId !== null && p.category_id !== activeCategoryId) return false;
 
-            let list = catalog.filter(p => {
-                if (appState.selectedCategory && p.category !== appState.selectedCategory) return false;
-                if (sub && !p.subcategory.toLowerCase().includes(sub.toLowerCase())) return false;
-                if (maxPrice && p.price > maxPrice) return false;
-                if (brands.length > 0 && !brands.includes(p.brand)) return false;
-                if (appState.searchQuery) {
-                    const q = appState.searchQuery;
-                    if (!p.title.toLowerCase().includes(q) && !p.brand.toLowerCase().includes(q) && !p.description.toLowerCase().includes(q)) return false;
+                // Subcategory Filter
+                if (selectedSubcategoryIds.size > 0 && !selectedSubcategoryIds.has(p.subcategory_id)) return false;
+
+                // Brand Filter
+                if (selectedBrands.size > 0 && !selectedBrands.has(p.brand)) return false;
+
+                // Price Filter
+                if (maxPrice !== null && p.price > maxPrice) return false;
+
+                // Keyword Search
+                if (searchQ) {
+                    const matchTitle = p.title.toLowerCase().includes(searchQ);
+                    const matchBrand = p.brand.toLowerCase().includes(searchQ);
+                    const matchDesc = p.description.toLowerCase().includes(searchQ);
+                    const matchCat = (p.category_name || "").toLowerCase().includes(searchQ);
+                    const matchSub = (p.subcategory_name || "").toLowerCase().includes(searchQ);
+                    if (!matchTitle && !matchBrand && !matchDesc && !matchCat && !matchSub) return false;
                 }
+
                 return true;
             });
 
-            renderGrid(list);
+            renderProductsGrid(filtered);
         }
 
-        function resetFilters() {
-            document.querySelectorAll(".cat-tab").forEach(t => t.classList.remove("active"));
-            document.querySelector(".cat-tab").classList.add("active");
-            appState.selectedCategory = "";
-            appState.searchQuery = "";
-            document.getElementById("store-search").value = "";
-            document.getElementById("filter-subcategory").value = "";
-            document.getElementById("filter-price").value = "";
-            document.querySelectorAll("input[name='brand']").forEach(b => b.checked = false);
-            filterProducts();
+        function resetAllFilters() {
+            activeCategoryId = null;
+            selectedSubcategoryIds.clear();
+            selectedBrands.clear();
+            document.getElementById("global-product-search").value = "";
+            document.getElementById("live-filter-search").value = "";
+            document.getElementById("price-select-filter").value = "";
+            renderCategoryBubbles();
+            renderSubcategoryFilters();
+            renderBrandFilters();
+            handleLiveFilterType();
+            document.getElementById("catalog-header-text").innerText = "All Clothing Items";
+            applyFilters();
         }
 
-        function renderGrid(products) {
-            const grid = document.getElementById("products-grid");
-            document.getElementById("catalog-count").innerText = `${products.length} Items Available`;
+        // 9. Render Products Exactly 5 Per Row
+        function renderProductsGrid(products) {
+            const grid = document.getElementById("products-5-grid");
+            document.getElementById("catalog-count-text").innerText = `${products.length} Items Available`;
 
             if (products.length === 0) {
-                grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 48px; color: var(--text-muted);">No products match your filter.</div>`;
+                grid.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px; background: #ffffff; border-radius: 8px; border: 1px solid var(--border-color);">
+                        <h4 style="font-size: 16px; margin-bottom: 6px;">No products match your filters</h4>
+                        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 14px;">Try clearing search keywords or resetting brand and price filters.</p>
+                        <button onclick="resetAllFilters()" class="btn-action-primary" style="padding: 8px 20px; font-size: 13px;">Clear All Filters</button>
+                    </div>
+                `;
                 return;
             }
 
@@ -244,21 +420,24 @@
                     : 0;
 
                 return `
-                    <a href="/product.html?id=${p.id}" class="product-card">
-                        <div class="product-img-box">
+                    <a href="/product.html?id=${p.id}" class="product-card-5">
+                        <div class="card-image-stage">
                             <img src="${p.image_url || 'https://images.unsplash.com/photo-1597983073493-88cd35cf93b0?w=600'}" alt="${escapeHtml(p.title)}" loading="lazy">
-                            <span class="product-badge-verified">Assured</span>
+                            <span class="badge-assured">S4 Assured</span>
                         </div>
-                        <div class="product-info">
-                            <div class="product-brand">${escapeHtml(p.brand)}</div>
-                            <div class="product-title" title="${escapeHtml(p.title)}">${escapeHtml(p.title)}</div>
-                            <div class="product-price-box">
-                                <span class="product-price">₹${p.price.toFixed(0)}</span>
-                                ${p.original_price ? `<span class="product-mrp">₹${p.original_price.toFixed(0)}</span>` : ''}
-                                ${discount > 0 ? `<span class="product-discount">${discount}% OFF</span>` : ''}
+
+                        <div class="card-details-box">
+                            <div class="card-brand-name">${escapeHtml(p.brand)}</div>
+                            <div class="card-product-title" title="${escapeHtml(p.title)}">${escapeHtml(p.title)}</div>
+
+                            <div class="card-price-row">
+                                <span class="card-selling-price">₹${p.price.toFixed(0)}</span>
+                                ${p.original_price ? `<span class="card-mrp-price">₹${p.original_price.toFixed(0)}</span>` : ''}
+                                ${discount > 0 ? `<span class="card-discount-tag">${discount}% OFF</span>` : ''}
                             </div>
-                            <div class="product-card-footer">
-                                <span class="rating-pill">★ ${p.rating}</span>
+
+                            <div class="card-meta-bar">
+                                <span class="rating-tag">★ ${p.rating}</span>
                                 <span>Free Delivery</span>
                             </div>
                         </div>
@@ -266,6 +445,20 @@
                 `;
             }).join("");
         }
+
+        function syncUserAuth() {
+            const slot = document.getElementById("user-auth-slot");
+            if (appState.user && appState.token) {
+                slot.innerHTML = `
+                    <button class="nav-btn" onclick="logoutUser()" title="Click to logout">
+                        👤 ${escapeHtml(appState.user.username)}
+                    </button>
+                `;
+            } else {
+                slot.innerHTML = `<a href="/login.html" class="nav-btn">Sign In</a>`;
+            }
+        }
     </script>
+    <script src="/js/core.js"></script>
 </body>
 </html>
