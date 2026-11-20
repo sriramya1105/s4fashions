@@ -62,6 +62,14 @@ class UserLoginRequest(BaseModel):
     password: str = Field(..., min_length=6, max_length=64)
 
 
+class AdminSetupRequest(BaseModel):
+    username: str = Field(..., min_length=3, max_length=30, pattern=r"^[a-zA-Z0-9_-]+$")
+    email: Optional[EmailStr] = None
+    password: Optional[str] = Field(None, min_length=8, max_length=64)
+    full_name: Optional[str] = Field(None, max_length=100)
+    admin_secret: str = Field(..., description="Master admin secret key")
+
+
 class UserResponse(BaseModel):
     id: int
     username: str
@@ -96,6 +104,8 @@ class ProductCreateRequest(BaseModel):
     original_price: Optional[float] = Field(None, gt=0)
     stock: int = Field(..., ge=0)
     image_url: Optional[str] = Field(None, max_length=500)
+    color_images: Optional[str] = Field(None)  # JSON string: {"Black": "https://...", ...}
+    specifications: Optional[str] = Field(None)  # Dynamic specs e.g. "Color: Blue, Bottom: Black"
 
 
 class ProductResponse(BaseModel):
@@ -116,6 +126,8 @@ class ProductResponse(BaseModel):
     rating: float
     rating_count: int
     image_url: Optional[str]
+    color_images: Optional[str] = None  # JSON string: {"Black": "https://...", ...}
+    specifications: Optional[str] = None
     created_at: datetime
 
     class Config:
@@ -154,6 +166,7 @@ class OrderItemResponse(BaseModel):
 class OrderResponse(BaseModel):
     id: int
     user_id: int
+    customer_name: Optional[str] = None  # Populated from User.full_name or User.username
     total_amount: float
     shipping_address: str
     phone_number: str

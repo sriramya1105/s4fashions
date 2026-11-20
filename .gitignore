@@ -12,6 +12,8 @@ htmlcov/
 .env
 *.db
 *.sqlite3
+logs/
+*.log
 
 # IDE / Editor
 .vscode/

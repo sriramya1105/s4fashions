@@ -122,6 +122,28 @@
             selectedSize = sizes[0];
             selectedColor = colors[0];
 
+            // Parse per-color image map
+            let colorImages = {};
+            try { colorImages = JSON.parse(p.color_images || "{}"); } catch(e) {}
+            const getColorImg = (color) => colorImages[color] || p.image_url || "";
+
+            // Initial image = first color's image
+            const initialImage = getColorImg(selectedColor);
+
+            // Parse custom key-value specifications
+            let customSpecs = [];
+            if (p.specifications) {
+                const lines = p.specifications.split(/[,\n]/);
+                lines.forEach(line => {
+                    const parts = line.split(":");
+                    if (parts.length >= 2) {
+                        const k = parts[0].trim();
+                        const v = parts.slice(1).join(":").trim();
+                        if (k && v) customSpecs.push([k, v]);
+                    }
+                });
+            }
+
             const discount = p.original_price && p.original_price > p.price
                 ? Math.round(((p.original_price - p.price) / p.original_price) * 100)
                 : 0;
@@ -131,7 +153,7 @@
                 <!-- LEFT IMAGE & BUTTONS -->
                 <div class="pdp-left-box">
                     <div class="pdp-big-image">
-                        <img src="${p.image_url}" alt="${escapeHtml(p.title)}">
+                        <img id="pdp-main-image" src="${initialImage}" alt="${escapeHtml(p.title)}">
                     </div>
                     <div class="pdp-cta-row">
                         <button id="btn-add-to-cart" class="btn-meesho-cart" onclick="handleAddToCart()">
@@ -165,6 +187,41 @@
                         </div>
                     </div>
 
+                    <!-- SELECT COLOR -->
+                    <div class="pdp-card-section">
+                        <div style="font-size: 15px; font-weight: 700; color: var(--meesho-dark); margin-bottom: 10px;">
+                            Select Color
+                            <span id="selected-color-label" style="font-size:13px; font-weight:500; color: var(--primary); margin-left:8px;">${escapeHtml(selectedColor)}</span>
+                        </div>
+                        <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:center;">
+                            ${colors.map((c, idx) => {
+                                const css = colorNameToCss(c);
+                                const img = getColorImg(c);
+                                return `
+                                <button type="button"
+                                    class="color-swatch-btn ${idx === 0 ? 'selected' : ''}"
+                                    onclick="selectColor('${c.replace(/'/g, "\\'")}')"
+                                    data-color="${escapeHtml(c)}"
+                                    data-img="${escapeHtml(img)}"
+                                    title="${escapeHtml(c)}"
+                                    style="
+                                        display:flex; flex-direction:column; align-items:center; gap:5px;
+                                        background:none; border:none; cursor:pointer; padding:4px;
+                                    ">
+                                    <span style="
+                                        display:block;
+                                        width:32px; height:32px; border-radius:50%;
+                                        background:${css};
+                                        border: 3px solid ${idx === 0 ? 'var(--primary)' : 'rgba(0,0,0,0.12)'};
+                                        box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+                                        transition: border-color 0.2s, transform 0.15s;
+                                    "></span>
+                                    <span style="font-size:10px; font-weight:600; color:var(--meesho-gray); max-width:48px; text-align:center; line-height:1.2;">${escapeHtml(c)}</span>
+                                </button>`;
+                            }).join("")}
+                        </div>
+                    </div>
+
                     <!-- SELECT SIZE -->
                     <div class="pdp-card-section">
                         <div style="font-size: 15px; font-weight: 700; color: var(--meesho-dark); margin-bottom: 8px;">Select Size</div>
@@ -184,14 +241,18 @@
                             <span style="color: var(--meesho-light-gray);">Category:</span>
                             <span style="text-transform: capitalize;">${escapeHtml(p.category_name || p.category || 'Apparel')} ${p.subcategory_name ? `(${escapeHtml(p.subcategory_name)})` : ''}</span>
 
-                            <span style="color: var(--meesho-light-gray);">Fabric:</span>
-                            <span>${escapeHtml(p.material || 'Cotton Blend')}</span>
+                            ${p.material ? `
+                                <span style="color: var(--meesho-light-gray);">Fabric:</span>
+                                <span>${escapeHtml(p.material)}</span>
+                            ` : ''}
 
                             <span style="color: var(--meesho-light-gray);">Available Colors:</span>
                             <span>${escapeHtml(p.available_colors)}</span>
 
-                            <span style="color: var(--meesho-light-gray);">Stock Status:</span>
-                            <span style="color: var(--meesho-green); font-weight: 700;">In Stock (${p.stock} units available)</span>
+                            ${customSpecs.map(([k, v]) => `
+                                <span style="color: var(--meesho-light-gray);">${escapeHtml(k)}:</span>
+                                <span style="font-weight: 600; color: var(--meesho-dark);">${escapeHtml(v)}</span>
+                            `).join('')}
                         </div>
                     </div>
                 </div>
@@ -204,24 +265,66 @@
             btn.classList.add("selected");
         }
 
+        function selectColor(color) {
+            selectedColor = color;
+
+            // Update label
+            const label = document.getElementById("selected-color-label");
+            if (label) label.innerText = color;
+
+            // Swap main product image
+            const btn = document.querySelector(`.color-swatch-btn[data-color="${CSS.escape(color)}"]`);
+            if (btn) {
+                const imgUrl = btn.dataset.img;
+                const mainImg = document.getElementById("pdp-main-image");
+                if (mainImg && imgUrl) {
+                    mainImg.style.opacity = "0.5";
+                    mainImg.style.transition = "opacity 0.15s";
+                    setTimeout(() => {
+                        mainImg.src = imgUrl;
+                        mainImg.style.opacity = "1";
+                    }, 150);
+                }
+
+                // Update swatch border highlights
+                document.querySelectorAll(".color-swatch-btn").forEach(b => {
+                    const dot = b.querySelector("span:first-child");
+                    if (dot) dot.style.border = "3px solid rgba(0,0,0,0.12)";
+                });
+                const selectedDot = btn.querySelector("span:first-child");
+                if (selectedDot) selectedDot.style.border = "3px solid var(--primary)";
+            }
+        }
+
+        // Map common color names to CSS colors (matches admin portal)
+        function colorNameToCss(name) {
+            const map = {
+                "black": "#1a1a1a", "white": "#f8f8f8", "navy": "#001f5b",
+                "charcoal": "#36454F", "grey": "#808080", "gray": "#808080",
+                "red": "#cc2222", "maroon": "#800020", "burgundy": "#800020",
+                "wine": "#722F37", "blue": "#1E5BB0", "skyblue": "#87CEEB",
+                "green": "#2E7D32", "olive": "#708238", "khaki": "#C3B091",
+                "yellow": "#FDD835", "orange": "#E65100", "pink": "#E91E8C",
+                "purple": "#6A1B9A", "lavender": "#967BB6", "brown": "#795548",
+                "beige": "#F5F0DC", "cream": "#FFFDD0", "offwhite": "#FAF9F6",
+                "mustard": "#FFDB58", "coral": "#FF6B6B", "teal": "#008080",
+                "indigo": "#3F51B5", "gold": "#FFD700", "silver": "#C0C0C0",
+                "rust": "#B7410E", "peach": "#FFDAB9", "mint": "#98FF98",
+                "aqua": "#00FFFF", "cyan": "#00BCD4", "magenta": "#8E0D5D",
+                "emerald": "#50C878", "cobalt": "#0047AB", "ivory": "#FFFFF0",
+                "taupe": "#483C32", "tan": "#D2B48C", "denim": "#1560BD",
+                "champagne": "#F7E7CE", "blush": "#FFB6C1",
+            };
+            const key = name.toLowerCase().replace(/\s+/g, "");
+            return map[key] || `hsl(${Math.abs(name.split("").reduce((a, c) => a + c.charCodeAt(0), 0)) % 360}, 55%, 50%)`;
+        }
+
         function handleAddToCart() {
             if (!currentProduct) return;
             addItemToCart(currentProduct, selectedSize, selectedColor, 1);
             
             // Calculate total count immediately
-            let cartItems = [];
-            try {
-                cartItems = JSON.parse(localStorage.getItem("tc_cart") || "[]");
-            } catch(e) {
-                cartItems = appState.cart || [];
-            }
-            const totalCount = cartItems.reduce((acc, item) => acc + (parseInt(item.quantity, 10) || 1), 0);
-            
-            // Update all badge elements immediately in the DOM
-            document.querySelectorAll("#nav-cart-count, .nav-cart-badge, #cart-count-badge").forEach(el => {
-                el.innerText = totalCount;
-            });
-            updateCartCounter();
+            const totalCount = updateCartCounter();
 
             // Update button state visually
             const btn = document.getElementById("btn-add-to-cart");

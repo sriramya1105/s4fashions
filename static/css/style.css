@@ -817,6 +817,19 @@ body {
     background-color: var(--meesho-light-pink);
 }
 
+/* Color Swatch Buttons (product detail page) */
+.color-swatch-btn {
+    transition: transform 0.15s ease;
+}
+
+.color-swatch-btn:hover {
+    transform: scale(1.12);
+}
+
+.color-swatch-btn:hover span:first-child {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25) !important;
+}
+
 /* ==========================================================================
    CART & ORDER SUMMARY (MEESHO 2-COLUMN)
    ========================================================================== */

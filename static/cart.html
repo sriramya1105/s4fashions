@@ -153,14 +153,8 @@
             const list = document.getElementById("meesho-cart-list");
             if (!list) return;
 
-            let cartItems = [];
-            try {
-                cartItems = JSON.parse(localStorage.getItem("tc_cart") || "[]");
-                if (!Array.isArray(cartItems)) cartItems = [];
-                appState.cart = cartItems;
-            } catch(e) {
-                cartItems = appState.cart || [];
-            }
+            let cartItems = getStoredCart();
+            appState.cart = cartItems;
 
             const count = cartItems.reduce((a, b) => a + (parseInt(b.quantity, 10) || 1), 0);
             const navEl = document.getElementById("nav-cart-count");
@@ -239,15 +233,13 @@
             if (appState.cart[idx].quantity <= 0) {
                 appState.cart.splice(idx, 1);
             }
-            localStorage.setItem("tc_cart", JSON.stringify(appState.cart));
-            updateCartCounter();
+            saveStoredCart(appState.cart);
             renderCart();
         }
 
         function removeItem(idx) {
             appState.cart.splice(idx, 1);
-            localStorage.setItem("tc_cart", JSON.stringify(appState.cart));
-            updateCartCounter();
+            saveStoredCart(appState.cart);
             renderCart();
         }
 
@@ -306,9 +298,7 @@
                     return;
                 }
 
-                appState.cart = [];
-                localStorage.removeItem("tc_cart");
-                updateCartCounter();
+                clearUserCart();
 
                 showToastPopup("Order Placed!", `Order #${data.id} placed successfully.`, "/orders.html", "Track Order &rarr;");
                 setTimeout(() => {

@@ -4,71 +4,73 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up - S4 Fashions</title>
-    <link rel="stylesheet" href="/css/modern.css?v=20261117_3">
-    <link rel="stylesheet" href="/css/style.css?v=20261117_3">
+    <link rel="stylesheet" href="/css/modern.css?v=20261118_1">
+    <link rel="stylesheet" href="/css/style.css?v=20261118_1">
 </head>
-<body style="background-color: var(--meesho-bg);">
+<body style="background-color: #fcf4fb;">
 
-    <!-- HEADER -->
+    <!-- TOP HEADER -->
     <header class="meesho-top-header">
         <div class="header-inner" style="justify-content: space-between;">
             <a href="/" class="brand-meesho">
                 <span class="brand-title">S4 Fashions</span>
                 <span class="brand-subtitle">Women · Men · Kids</span>
             </a>
+            <div style="font-size: 13px; color: var(--meesho-gray);">
+                Already registered? 
+                <a href="/login.html" style="color: var(--meesho-pink); font-weight: 700; text-decoration: none; margin-left: 4px;">Sign In</a>
+            </div>
         </div>
     </header>
 
-    <!-- SPLIT-SCREEN AUTH CONTAINER -->
-    <div class="auth-page-container">
-        
-        <!-- LEFT BRAND PANEL -->
-        <div class="auth-sidebar-banner" style="background: linear-gradient(135deg, #731e48 0%, #8e0d5d 100%);">
-            <div>
-                <h2 class="auth-sidebar-title">Looks like you're new here!</h2>
-                <p class="auth-sidebar-sub">Sign up with your details to get started with S4 Fashions apparel shopping</p>
-            </div>
-            <div style="font-size: 12px; color: #ffd6ec; line-height: 1.6;">
-                S4 Fashions · Premium Ethnic & Contemporary Apparel
-            </div>
-        </div>
+    <!-- AUTH CARD -->
+    <main style="flex: 1; display: flex; align-items: center; justify-content: center; padding: 30px 16px;">
+        <div class="meesho-auth-container" style="max-width: 460px; width: 100%; margin: 0 auto;">
+            <div class="meesho-auth-logo">Create Your Account</div>
+            <div class="meesho-auth-sub">Join S4 Fashions for exclusive collections, fast checkout & easy returns</div>
 
-        <!-- RIGHT FORM PANEL -->
-        <div class="auth-form-container">
-            <div id="register-alert" style="display: none; padding: 10px 14px; background-color: #fde8e8; color: #9b1c1c; font-size: 13px; border-radius: 2px; margin-bottom: 16px;"></div>
+            <div id="register-alert" style="display: none; padding: 10px 14px; background-color: #fde8e8; color: #9b1c1c; font-size: 13px; border-radius: 4px; margin-bottom: 16px; border: 1px solid #f8b4b4;"></div>
 
             <form id="register-form">
-                <div class="form-group">
-                    <label class="form-label">Full Name</label>
-                    <input type="text" id="fullname" class="form-control" required placeholder="Enter your full name">
+                <div class="meesho-input-group">
+                    <label class="meesho-label">Full Name</label>
+                    <input type="text" id="fullname" class="meesho-input" required placeholder="e.g. Priya Sharma" autocomplete="name">
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label">Username</label>
-                    <input type="text" id="reg-username" class="form-control" required placeholder="Pick a username (alphanumeric)" pattern="^[a-zA-Z0-9_-]{3,30}$">
+                <div class="meesho-input-group">
+                    <label class="meesho-label">Username</label>
+                    <input type="text" id="reg-username" class="meesho-input" required placeholder="Choose a username (alphanumeric)" pattern="^[a-zA-Z0-9_-]{3,30}$" autocomplete="username">
+                    <span style="font-size: 11px; color: var(--meesho-light-gray); margin-top: 3px; display: block;">3-30 characters, letters, numbers, hyphens or underscores</span>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label">Email Address</label>
-                    <input type="email" id="reg-email" class="form-control" required placeholder="Enter valid email address">
+                <div class="meesho-input-group">
+                    <label class="meesho-label">Email Address</label>
+                    <input type="email" id="reg-email" class="meesho-input" required placeholder="name@example.com" autocomplete="email">
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label">Password (min 8 characters)</label>
-                    <input type="password" id="reg-password" class="form-control" required minlength="8" placeholder="Create strong password">
+                <div class="meesho-input-group">
+                    <label class="meesho-label">Password</label>
+                    <input type="password" id="reg-password" class="meesho-input" required minlength="8" placeholder="At least 8 characters" autocomplete="new-password">
                 </div>
 
-                <button type="submit" id="btn-submit-reg" class="btn-auth-primary" style="background: #8e0d5d; color: #ffffff;">CONTINUE</button>
+                <button type="submit" id="btn-submit-reg" class="btn-meesho-primary" style="margin-top: 12px;">Create Account</button>
             </form>
 
-            <a href="/login.html" class="auth-toggle-link" style="color: #8e0d5d; font-weight: 700;">
-                Existing User? Log in
-            </a>
+            <div style="text-align: center; margin-top: 20px; font-size: 13px; color: var(--meesho-gray); border-top: 1px solid #f0f0f0; padding-top: 16px;">
+                Existing customer? 
+                <a href="/login.html" style="color: var(--meesho-pink); text-decoration: none; font-weight: 700; margin-left: 4px;">
+                    Sign In to Account
+                </a>
+            </div>
         </div>
+    </main>
 
-    </div>
+    <!-- FOOTER -->
+    <footer class="s4-site-footer">
+        <p>&copy; 2026 S4 Fashions Private Limited · All Rights Reserved · Abuse-Resistant E-Commerce Platform</p>
+    </footer>
 
-    <script src="/js/core.js?v=20261117_3"></script>
+    <script src="/js/core.js?v=20261118_1"></script>
     <script>
         document.getElementById("register-form").addEventListener("submit", async (e) => {
             e.preventDefault();
@@ -100,21 +102,30 @@
 
                 if (!res.ok) {
                     alertBox.style.display = "block";
-                    alertBox.innerText = data.message || data.error || "Registration failed.";
+                    alertBox.innerText = data.detail || data.message || data.error || "Registration failed. Please check your information.";
                     btn.disabled = false;
-                    btn.innerText = "CONTINUE";
+                    btn.innerText = "Create Account";
                     return;
                 }
 
-                showToastPopup("Account Created!", "Registration successful! Redirecting to sign in...", "/login.html", "Sign In &rarr;");
+                // Clear any leftover guest cart so the new account starts fresh with 0 items
+                localStorage.removeItem("tc_cart");
+                localStorage.removeItem("tc_cart_guest");
+
+                alertBox.style.display = "block";
+                alertBox.style.backgroundColor = "#def7ec";
+                alertBox.style.color = "#03543f";
+                alertBox.style.borderColor = "#84e1bc";
+                alertBox.innerText = "Registration successful! Redirecting to sign in...";
+
                 setTimeout(() => {
                     window.location.href = "/login.html";
-                }, 1500);
+                }, 1200);
             } catch (err) {
                 alertBox.style.display = "block";
-                alertBox.innerText = "Network connection failed. Ensure server is active.";
+                alertBox.innerText = "Network connection failed. Please ensure the server is active.";
                 btn.disabled = false;
-                btn.innerText = "CONTINUE";
+                btn.innerText = "Create Account";
             }
         });
     </script>

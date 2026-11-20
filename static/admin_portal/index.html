@@ -278,7 +278,8 @@
 
                         <div>
                             <label class="form-field-label">Available Colors (Comma-separated)</label>
-                            <input type="text" id="p-colors" class="form-input" value="Black,Navy,Charcoal" required>
+                            <input type="text" id="p-colors" class="form-input" value="Black,Navy,Charcoal"
+                                oninput="rebuildColorImageInputs()" required>
                         </div>
 
                         <div>
@@ -301,9 +302,24 @@
                             <input type="number" id="p-stock" class="form-input" min="0" value="45" required>
                         </div>
 
-                        <div>
-                            <label class="form-field-label">Image URL</label>
-                            <input type="url" id="p-img" class="form-input" placeholder="https://images.unsplash.com/...">
+                        <!-- DYNAMIC PER-COLOR IMAGE SECTION -->
+                        <div class="form-full-col" id="color-image-section">
+                            <label class="form-field-label" style="display:flex; align-items:center; gap:8px;">
+                                🎨 Color Images
+                                <span style="font-size:11px; font-weight:400; color: var(--text-muted);">(one image URL per color — leave blank to use same image for all)</span>
+                            </label>
+                            <div id="color-image-inputs" style="display:grid; gap:10px; margin-top:6px;">
+                                <!-- JS-generated rows: [Color swatch] [Color name] [Image URL input] -->
+                            </div>
+                        </div>
+
+                        <!-- DYNAMIC SPECIFICATIONS / ATTRIBUTES -->
+                        <div class="form-full-col">
+                            <label class="form-field-label" style="display:flex; align-items:center; gap:8px;">
+                                📋 Custom Product Details / Attributes
+                                <span style="font-size:11px; font-weight:400; color: var(--text-muted);">(e.g. Color: Blue, Bottom: Black, Pattern: Floral, Fit: Slim Fit, Neck: Round, Sleeve: Full)</span>
+                            </label>
+                            <textarea id="p-specs" class="form-input" style="height: 65px; font-family: inherit; resize: vertical;" placeholder="Color: Blue, Bottom: Black, Pattern: Embroidered, Fit: Regular, Neck: Round Neck, Sleeve: Full Sleeve"></textarea>
                         </div>
 
                         <div class="form-full-col" style="margin-top: 8px;">
@@ -347,6 +363,7 @@
                         <thead>
                             <tr>
                                 <th style="width: 90px;">Order ID</th>
+                                <th style="width: 160px;">Customer</th>
                                 <th style="width: 150px;">Customer Phone</th>
                                 <th style="width: 120px;">Total Amount</th>
                                 <th>Items Purchased</th>
@@ -355,7 +372,7 @@
                             </tr>
                         </thead>
                         <tbody id="admin-orders-table-rows">
-                            <tr><td colspan="6" style="text-align: center; padding: 24px; color: var(--text-muted);">Loading orders...</td></tr>
+                            <tr><td colspan="7" style="text-align: center; padding: 24px; color: var(--text-muted);">Loading orders...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -389,8 +406,7 @@
 
         function verifyAdmin() {
             if (!appState.token || !appState.user || appState.user.role !== "admin") {
-                alert("Administrator access required.");
-                window.location.href = "/login.html";
+                window.location.href = "/admin_portal/login.html";
                 return;
             }
 
@@ -425,7 +441,7 @@
             localStorage.removeItem("tc_token");
             localStorage.removeItem("tc_user");
             localStorage.removeItem("tc_login_time");
-            window.location.href = "/login.html";
+            window.location.href = "/admin_portal/login.html";
         }
 
         function switchAdminTab(tabName) {
@@ -453,7 +469,7 @@
                 });
                 if (cRes.status === 401 || cRes.status === 403) {
                     alert("Admin session expired. Please log in again.");
-                    window.location.href = "/login.html";
+                    window.location.href = "/admin_portal/login.html";
                     return;
                 }
                 adminCategories = await cRes.json();
@@ -479,6 +495,75 @@
             const pCatSel = document.getElementById("p-cat-select");
             pCatSel.innerHTML = `<option value="">-- Choose Category --</option>` +
                 adminCategories.map(c => `<option value="${c.id}">${escapeHtml(c.name)}</option>`).join("");
+
+            // Build initial color-image inputs for default colors
+            rebuildColorImageInputs();
+        }
+
+        // ---- DYNAMIC PER-COLOR IMAGE INPUTS ----
+        function rebuildColorImageInputs() {
+            const colorsRaw = document.getElementById("p-colors").value;
+            const container = document.getElementById("color-image-inputs");
+            if (!container) return;
+
+            const colors = colorsRaw.split(",").map(c => c.trim()).filter(Boolean);
+            if (colors.length === 0) {
+                container.innerHTML = `<p style="font-size:12px; color:var(--text-muted); margin:0;">Enter colors above to generate image URL fields.</p>`;
+                return;
+            }
+
+            // Preserve any already-entered URLs when colors list is updated
+            const existing = {};
+            container.querySelectorAll("[data-color-key]").forEach(el => {
+                existing[el.dataset.colorKey] = el.value;
+            });
+
+            container.innerHTML = colors.map(color => {
+                const cssColor = colorNameToCss(color);
+                const savedUrl = existing[color] || "";
+                return `
+                <div style="display:grid; grid-template-columns: 32px 110px 1fr; align-items:center; gap:10px;">
+                    <div style="
+                        width:28px; height:28px; border-radius:50%;
+                        background:${cssColor};
+                        border: 2px solid rgba(0,0,0,0.15);
+                        box-shadow: 0 1px 4px rgba(0,0,0,0.18);
+                        flex-shrink:0;
+                    " title="${escapeHtml(color)}"></div>
+                    <span style="font-size:13px; font-weight:600; color:var(--text-main);">${escapeHtml(color)}</span>
+                    <input
+                        type="url"
+                        class="form-input"
+                        data-color-key="${escapeHtml(color)}"
+                        placeholder="https://images.unsplash.com/... (optional)"
+                        value="${escapeHtml(savedUrl)}"
+                        style="height:36px; font-size:12px;"
+                    >
+                </div>`;
+            }).join("");
+        }
+
+        // Map common color names to CSS color values for swatch rendering
+        function colorNameToCss(name) {
+            const map = {
+                "black": "#1a1a1a", "white": "#f8f8f8", "navy": "#001f5b",
+                "charcoal": "#36454F", "grey": "#808080", "gray": "#808080",
+                "red": "#cc2222", "maroon": "#800020", "burgundy": "#800020",
+                "wine": "#722F37", "blue": "#1E5BB0", "skyblue": "#87CEEB",
+                "green": "#2E7D32", "olive": "#708238", "khaki": "#C3B091",
+                "yellow": "#FDD835", "orange": "#E65100", "pink": "#E91E8C",
+                "purple": "#6A1B9A", "lavender": "#967BB6", "brown": "#795548",
+                "beige": "#F5F0DC", "cream": "#FFFDD0", "offwhite": "#FAF9F6",
+                "mustard": "#FFDB58", "coral": "#FF6B6B", "teal": "#008080",
+                "indigo": "#3F51B5", "gold": "#FFD700", "silver": "#C0C0C0",
+                "rust": "#B7410E", "peach": "#FFDAB9", "mint": "#98FF98",
+                "aqua": "#00FFFF", "cyan": "#00BCD4", "magenta": "#8E0D5D",
+                "emerald": "#50C878", "cobalt": "#0047AB", "ivory": "#FFFFF0",
+                "taupe": "#483C32", "tan": "#D2B48C", "denim": "#1560BD",
+                "champagne": "#F7E7CE", "blush": "#FFB6C1",
+            };
+            const key = name.toLowerCase().replace(/\s+/g, "");
+            return map[key] || `hsl(${Math.abs(name.split("").reduce((a, c) => a + c.charCodeAt(0), 0)) % 360}, 55%, 50%)`;
         }
 
         function onCategorySelectChange() {
@@ -796,6 +881,19 @@
             const subVal = document.getElementById("p-subcat-select").value;
             const subId = subVal ? parseInt(subVal, 10) : null;
 
+            // Build color_images JSON from dynamic per-color URL inputs
+            const colorImgMap = {};
+            let firstImageUrl = "";
+            document.querySelectorAll("#color-image-inputs [data-color-key]").forEach(input => {
+                const url = input.value.trim();
+                if (url) {
+                    colorImgMap[input.dataset.colorKey] = url;
+                    if (!firstImageUrl) firstImageUrl = url;
+                }
+            });
+            const colorImagesJson = Object.keys(colorImgMap).length > 0 ? JSON.stringify(colorImgMap) : null;
+            const fallbackImageUrl = firstImageUrl || "https://images.unsplash.com/photo-1597983073493-88cd35cf93b0?w=600";
+
             const payload = {
                 title: document.getElementById("p-title").value.trim(),
                 description: document.getElementById("p-desc").value.trim(),
@@ -808,7 +906,9 @@
                 price: parseFloat(document.getElementById("p-price").value),
                 original_price: parseFloat(document.getElementById("p-orig-price").value) || null,
                 stock: parseInt(document.getElementById("p-stock").value, 10),
-                image_url: document.getElementById("p-img").value.trim() || "https://images.unsplash.com/photo-1597983073493-88cd35cf93b0?w=600"
+                image_url: fallbackImageUrl,
+                color_images: colorImagesJson,
+                specifications: document.getElementById("p-specs").value.trim() || null
             };
 
             try {
@@ -825,6 +925,9 @@
                     const data = await res.json();
                     alert(`Product "${data.title}" published successfully to storefront!`);
                     document.getElementById("add-product-form").reset();
+                    // Restore default colors and rebuild swatch inputs after form reset
+                    document.getElementById("p-colors").value = "Black,Navy,Charcoal";
+                    rebuildColorImageInputs();
                     renderProductsTable();
                 } else {
                     const err = await res.json();
@@ -839,17 +942,23 @@
         });
 
         async function deleteProduct(id) {
-            if (!confirm(`Delete Product #${id}?`)) return;
+            if (!confirm(`Delete Product #${id}? This will remove it from the catalog immediately.`)) return;
             try {
                 const res = await fetch(`/api/v1/admin/products/${id}`, {
                     method: "DELETE",
                     headers: { "Authorization": `Bearer ${appState.token}` }
                 });
+                const data = await res.json();
                 if (res.ok) {
-                    alert("Product deleted.");
+                    alert(data.message || `Product #${id} deleted.`);
                     renderProductsTable();
+                    loadStats();
+                } else {
+                    alert(`Failed to delete: ${data.detail || data.message || 'Access denied or server error'}`);
                 }
-            } catch (err) { alert("Delete error"); }
+            } catch (err) { 
+                alert("Network communication error while deleting product."); 
+            }
         }
 
         // ==========================================
@@ -870,7 +979,10 @@
 
                 tbody.innerHTML = orders.map(o => `
                     <tr>
-                        <td><b>#${o.id}</b></td>
+                        <td><b>#${o.id}</b><br><span style="font-size:10px; color:var(--text-muted)">${new Date(o.created_at).toLocaleDateString('en-IN')}</span></td>
+                        <td>
+                            <div style="font-weight:700; font-size:13px; color:var(--secondary);">${escapeHtml(o.customer_name || 'Unknown Customer')}</div>
+                        </td>
                         <td>${escapeHtml(o.phone_number)}</td>
                         <td><b>₹${o.total_amount.toFixed(0)}</b></td>
                         <td>${o.items.map(i => `${escapeHtml(i.product_title)} (x${i.quantity})`).join(", ")}</td>

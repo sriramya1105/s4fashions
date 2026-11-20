@@ -74,10 +74,23 @@ app.include_router(admin.router, prefix="/api/v1")
 
 @app.get("/admin")
 @app.get("/admin/")
+@app.get("/admin.html")
+@app.get("/admin/login")
 def admin_route_redirect():
     """Direct route for typing /admin in browser to access admin login/portal."""
-    return RedirectResponse(url="/login.html?redirect=/admin_portal/index.html")
+    return RedirectResponse(url="/admin_portal/login.html")
 
 
-# Mount Static Files for HTML/CSS/JS Storefront
-app.mount("/", StaticFiles(directory="static", html=True), name="static")
+@app.get("/admin/register")
+def admin_register_redirect():
+    """Direct route for admin registration."""
+    return RedirectResponse(url="/admin_portal/register.html")
+
+
+# Mount Static Files for HTML/CSS/JS Storefront with robust absolute path resolution
+import os
+STATIC_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "static")
+if not os.path.exists(STATIC_DIR):
+    STATIC_DIR = "static"
+
+app.mount("/", StaticFiles(directory=STATIC_DIR, html=True), name="static")

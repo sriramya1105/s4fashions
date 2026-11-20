@@ -1,11 +1,55 @@
 // ThreadCraft Apparel - Core Client Engine
 const API_BASE = "/api/v1";
 
+// User-Scoped Cart Helpers
+function getCartKey() {
+    try {
+        const u = JSON.parse(localStorage.getItem("tc_user") || "null");
+        if (u && (u.id || u.username)) {
+            return "tc_cart_u_" + (u.id || u.username);
+        }
+    } catch (e) {}
+    return "tc_cart_guest";
+}
+
+function getStoredCart() {
+    try {
+        const key = getCartKey();
+        const stored = localStorage.getItem(key);
+        if (stored) {
+            const parsed = JSON.parse(stored);
+            if (Array.isArray(parsed)) return parsed;
+        }
+    } catch (e) {}
+    return [];
+}
+
+function saveStoredCart(items) {
+    appState.cart = Array.isArray(items) ? items : [];
+    try {
+        const key = getCartKey();
+        localStorage.setItem(key, JSON.stringify(appState.cart));
+        // Keep active session cart in sync
+        localStorage.setItem("tc_cart", JSON.stringify(appState.cart));
+    } catch (e) {}
+    updateCartCounter();
+}
+
+function clearUserCart() {
+    appState.cart = [];
+    try {
+        localStorage.removeItem(getCartKey());
+        localStorage.removeItem("tc_cart");
+        localStorage.removeItem("tc_cart_guest");
+    } catch (e) {}
+    updateCartCounter();
+}
+
 // State Management
 let appState = {
     products: [],
     filteredProducts: [],
-    cart: JSON.parse(localStorage.getItem("tc_cart") || "[]"),
+    cart: getStoredCart(),
     user: JSON.parse(localStorage.getItem("tc_user") || "null"),
     token: localStorage.getItem("tc_token") || null,
     selectedCategory: "",
@@ -70,8 +114,12 @@ function logoutUser() {
     localStorage.removeItem("tc_token");
     localStorage.removeItem("tc_user");
     localStorage.removeItem("tc_login_time");
+    localStorage.removeItem("tc_cart");
+    localStorage.removeItem("tc_cart_guest");
     appState.token = null;
     appState.user = null;
+    appState.cart = [];
+    updateCartCounter();
     closeProfileSidebar();
     window.location.href = "/";
 }
@@ -109,15 +157,8 @@ window.addEventListener("storage", (e) => {
 
 // Cart Count Update across all pages and headers
 function updateCartCounter() {
-    let items = [];
-    try {
-        const stored = localStorage.getItem("tc_cart");
-        items = stored ? JSON.parse(stored) : [];
-        if (!Array.isArray(items)) items = [];
-        appState.cart = items;
-    } catch (e) {
-        items = [];
-    }
+    let items = getStoredCart();
+    appState.cart = items;
 
     const totalCount = items.reduce((acc, item) => acc + (parseInt(item.quantity, 10) || 1), 0);
     
@@ -168,14 +209,15 @@ function showToastPopup(title, message, actionUrl = "/cart.html", actionText = "
 
 // Add Item to Cart
 function addItemToCart(product, size, color, quantity = 1) {
-    const existingIndex = appState.cart.findIndex(
+    let currentCart = getStoredCart();
+    const existingIndex = currentCart.findIndex(
         i => i.product_id === product.id && i.size === size && i.color === color
     );
 
     if (existingIndex > -1) {
-        appState.cart[existingIndex].quantity += quantity;
+        currentCart[existingIndex].quantity += quantity;
     } else {
-        appState.cart.push({
+        currentCart.push({
             product_id: product.id,
             title: product.title,
             brand: product.brand,
@@ -188,8 +230,7 @@ function addItemToCart(product, size, color, quantity = 1) {
         });
     }
 
-    localStorage.setItem("tc_cart", JSON.stringify(appState.cart));
-    updateCartCounter();
+    saveStoredCart(currentCart);
 }
 
 function escapeHtml(str) {
@@ -200,4 +241,26 @@ function escapeHtml(str) {
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
+}
+
+function colorNameToCss(name) {
+    const map = {
+        "black": "#1a1a1a", "white": "#f8f8f8", "navy": "#001f5b",
+        "charcoal": "#36454F", "grey": "#808080", "gray": "#808080",
+        "red": "#cc2222", "maroon": "#800020", "burgundy": "#800020",
+        "wine": "#722F37", "blue": "#1E5BB0", "skyblue": "#87CEEB",
+        "green": "#2E7D32", "olive": "#708238", "khaki": "#C3B091",
+        "yellow": "#FDD835", "orange": "#E65100", "pink": "#E91E8C",
+        "purple": "#6A1B9A", "lavender": "#967BB6", "brown": "#795548",
+        "beige": "#F5F0DC", "cream": "#FFFDD0", "offwhite": "#FAF9F6",
+        "mustard": "#FFDB58", "coral": "#FF6B6B", "teal": "#008080",
+        "indigo": "#3F51B5", "gold": "#FFD700", "silver": "#C0C0C0",
+        "rust": "#B7410E", "peach": "#FFDAB9", "mint": "#98FF98",
+        "aqua": "#00FFFF", "cyan": "#00BCD4", "magenta": "#8E0D5D",
+        "emerald": "#50C878", "cobalt": "#0047AB", "ivory": "#FFFFF0",
+        "taupe": "#483C32", "tan": "#D2B48C", "denim": "#1560BD",
+        "champagne": "#F7E7CE", "blush": "#FFB6C1",
+    };
+    const key = (name || "").toLowerCase().replace(/\s+/g, "");
+    return map[key] || `hsl(${Math.abs((name || "").split("").reduce((a, c) => a + c.charCodeAt(0), 0)) % 360}, 55%, 50%)`;
 }

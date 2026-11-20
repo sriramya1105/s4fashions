@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from app.db.session import get_db
 from app.models.entities import User, UserRole
 from app.core.security import decode_access_token
+from app.core.logging_config import log_admin_event
 
 security = HTTPBearer(auto_error=False)
 
@@ -50,6 +51,14 @@ def require_admin(current_user: User = Depends(get_current_user)) -> User:
     Rejects regular customers from accessing privileged administrative routes.
     """
     if current_user.role != UserRole.ADMIN:
+        log_admin_event(
+            "UNAUTHORIZED_ADMIN_ROUTE_ATTEMPT",
+            current_user.username,
+            "JWT_Session",
+            f"User with role '{current_user.role.value}' attempted to access admin route",
+            status="BLOCKED",
+            level="warning"
+        )
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Access forbidden: Administrator privileges required.",

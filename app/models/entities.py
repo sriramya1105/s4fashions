@@ -83,6 +83,8 @@ class Product(Base):
     rating = Column(Float, default=4.5)
     rating_count = Column(Integer, default=150)
     image_url = Column(String(500), nullable=True)
+    color_images = Column(Text, nullable=True)  # JSON: {"Black": "https://...", "Navy": "https://..."}
+    specifications = Column(Text, nullable=True)  # Dynamic specs e.g. "Color: Blue, Bottom: Black, Fit: Regular"
     is_active = Column(Boolean, default=True, nullable=False)
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
 

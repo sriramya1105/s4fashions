@@ -1,18 +1,21 @@
 import re
 from typing import List
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Request
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 
+from app.core.config import settings
+from app.core.logging_config import log_admin_event
 from app.db.session import get_db
-from app.models.entities import Product, Category, SubCategory, Order, User, UserRole, OrderStatus
+from app.models.entities import Product, Category, SubCategory, Order, OrderItem, User, UserRole, OrderStatus
 from app.schemas.dto import (
     ProductCreateRequest, ProductResponse,
     CategoryCreateRequest, CategoryResponse,
     SubCategoryCreateRequest, SubCategoryResponse,
-    OrderResponse
+    OrderResponse, AdminSetupRequest, UserResponse
 )
 from app.core.dependencies import require_admin
+from app.core.security import get_password_hash
 
 router = APIRouter(prefix="/admin", tags=["Admin Portal Management"])
 
@@ -20,6 +23,80 @@ router = APIRouter(prefix="/admin", tags=["Admin Portal Management"])
 def generate_slug(text: str) -> str:
     s = text.lower().strip()
     return re.sub(r'[\s_]+', '-', re.sub(r'[^\w\s-]', '', s))
+
+
+# ========================================================
+# 0. ADMIN ONBOARDING / SETUP (Protected by ADMIN_INVITE_SECRET)
+# ========================================================
+@router.post("/setup-admin", response_model=UserResponse)
+def create_or_promote_admin(
+    req: AdminSetupRequest,
+    request: Request,
+    db: Session = Depends(get_db)
+):
+    """
+    Onboard or promote an administrator account using the secure ADMIN_INVITE_SECRET.
+    Mitigates unauthorized privilege escalation while allowing legitimate admin creation.
+    """
+    client_ip = request.client.host if request.client else "unknown"
+    if req.admin_secret != settings.ADMIN_INVITE_SECRET:
+        log_admin_event(
+            "ADMIN_SETUP_REJECTED",
+            req.username,
+            client_ip,
+            "Invalid admin_secret attempted",
+            status="BLOCKED",
+            level="warning"
+        )
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Invalid Admin Secret Key."
+        )
+
+    user = db.query(User).filter(User.username == req.username).first()
+    if user:
+        user.role = UserRole.ADMIN
+        if req.full_name:
+            user.full_name = req.full_name
+        db.commit()
+        db.refresh(user)
+        log_admin_event(
+            "USER_PROMOTED_TO_ADMIN",
+            user.username,
+            client_ip,
+            f"Existing user '{user.username}' promoted to admin"
+        )
+        return user
+
+    if not req.email or not req.password:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Email and password are required to create a new admin account."
+        )
+
+    if db.query(User).filter(User.email == req.email).first():
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Email is already registered."
+        )
+
+    new_admin = User(
+        username=req.username,
+        email=req.email,
+        hashed_password=get_password_hash(req.password),
+        role=UserRole.ADMIN,
+        full_name=req.full_name or "Store Administrator"
+    )
+    db.add(new_admin)
+    db.commit()
+    db.refresh(new_admin)
+    log_admin_event(
+        "ADMIN_CREATED",
+        new_admin.username,
+        client_ip,
+        f"New admin '{new_admin.username}' created via admin secret"
+    )
+    return new_admin
 
 
 # ========================================================
@@ -157,7 +234,9 @@ def admin_create_product(
         price=p_in.price,
         original_price=p_in.original_price or p_in.price,
         stock=p_in.stock,
-        image_url=p_in.image_url
+        image_url=p_in.image_url,
+        color_images=p_in.color_images,
+        specifications=p_in.specifications
     )
     db.add(new_product)
     db.commit()
@@ -187,15 +266,23 @@ def admin_list_products(
 @router.delete("/products/{p_id}")
 def admin_delete_product(
     p_id: int,
+    request: Request,
     current_admin: User = Depends(require_admin),
     db: Session = Depends(get_db)
 ):
     p = db.query(Product).filter(Product.id == p_id).first()
     if not p:
         raise HTTPException(status_code=404, detail="Product not found.")
+    
+    product_title = p.title
+    # Clean up associated order items to avoid foreign key violation
+    db.query(OrderItem).filter(OrderItem.product_id == p_id).delete(synchronize_session=False)
     db.delete(p)
     db.commit()
-    return {"status": "success", "message": f"Product #{p_id} deleted."}
+
+    client_ip = request.client.host if request.client else "unknown"
+    log_admin_event("PRODUCT_DELETED", current_admin.username, client_ip, f"Deleted product #{p_id} ('{product_title}')")
+    return {"status": "success", "message": f"Product #{p_id} ('{product_title}') deleted successfully."}
 
 
 # ========================================================
@@ -206,7 +293,14 @@ def admin_list_orders(
     current_admin: User = Depends(require_admin),
     db: Session = Depends(get_db)
 ):
-    return db.query(Order).order_by(Order.created_at.desc()).all()
+    orders = db.query(Order).order_by(Order.created_at.desc()).all()
+    out = []
+    for order in orders:
+        resp = OrderResponse.model_validate(order)
+        if order.user:
+            resp.customer_name = order.user.full_name or order.user.username
+        out.append(resp)
+    return out
 
 
 @router.patch("/orders/{order_id}/status", response_model=OrderResponse)
@@ -222,7 +316,10 @@ def admin_update_order_status(
     order.status = status_val
     db.commit()
     db.refresh(order)
-    return order
+    resp = OrderResponse.model_validate(order)
+    if order.user:
+        resp.customer_name = order.user.full_name or order.user.username
+    return resp
 
 
 # ========================================================

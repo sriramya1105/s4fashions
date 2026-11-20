@@ -8,6 +8,7 @@ from app.models.entities import User, UserRole
 from app.schemas.dto import UserRegisterRequest, UserLoginRequest, TokenResponse, UserResponse
 from app.core.security import verify_password, get_password_hash, create_access_token
 from app.core.config import settings
+from app.core.logging_config import log_user_event, log_admin_event
 
 limiter = Limiter(key_func=get_remote_address)
 router = APIRouter(prefix="/auth", tags=["Authentication"])
@@ -19,13 +20,16 @@ router = APIRouter(prefix="/auth", tags=["Authentication"])
     status_code=status.HTTP_201_CREATED,
     summary="Register a new customer account"
 )
-def register_user(request: UserRegisterRequest, db: Session = Depends(get_db)):
+def register_user(request: Request, reg_req: UserRegisterRequest, db: Session = Depends(get_db)):
     """Registers a new user with bcrypt password hashing."""
+    client_ip = request.client.host if request.client else "unknown"
+
     # Check if username or email already exists
     existing_user = db.query(User).filter(
-        (User.username == request.username) | (User.email == request.email)
+        (User.username == reg_req.username) | (User.email == reg_req.email)
     ).first()
     if existing_user:
+        log_user_event("REGISTER_FAILED", reg_req.username, client_ip, "Username or email already exists", level="warning")
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Username or email is already registered."
@@ -33,15 +37,17 @@ def register_user(request: UserRegisterRequest, db: Session = Depends(get_db)):
 
     # Force role to customer on self-registration (Defense against Privilege Escalation)
     new_user = User(
-        username=request.username,
-        email=request.email,
-        hashed_password=get_password_hash(request.password),
+        username=reg_req.username,
+        email=reg_req.email,
+        hashed_password=get_password_hash(reg_req.password),
         role=UserRole.CUSTOMER,
-        full_name=request.full_name,
+        full_name=reg_req.full_name,
     )
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
+
+    log_user_event("CUSTOMER_REGISTER_SUCCESS", new_user.username, client_ip, f"Email: {new_user.email}")
     return new_user
 
 
@@ -56,8 +62,10 @@ def login_user(request: Request, user_req: UserLoginRequest, db: Session = Depen
     Authenticates user and returns JWT.
     Protected by Rate Limiting (CWE-307) against automated credential stuffing.
     """
+    client_ip = request.client.host if request.client else "unknown"
     user = db.query(User).filter(User.username == user_req.username).first()
     if not user or not verify_password(user_req.password, user.hashed_password):
+        log_user_event("LOGIN_FAILED", user_req.username, client_ip, "Invalid credentials", level="warning")
         # Generic authentication failure message (CWE-209 / CWE-204)
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -71,6 +79,12 @@ def login_user(request: Request, user_req: UserLoginRequest, db: Session = Depen
         "role": user.role.value,
     }
     token = create_access_token(data=token_data)
+
+    if user.role == UserRole.ADMIN:
+        log_admin_event("ADMIN_LOGIN_SUCCESS", user.username, client_ip, "Admin session started")
+    else:
+        log_user_event("CUSTOMER_LOGIN_SUCCESS", user.username, client_ip, "Customer session started")
+
     return {
         "access_token": token,
         "token_type": "Bearer",
