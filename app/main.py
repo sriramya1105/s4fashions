@@ -90,10 +90,8 @@ def admin_register_redirect():
     return RedirectResponse(url="/admin_portal/register.html")
 
 
-# Mount Static Files for HTML/CSS/JS Storefront with robust absolute path resolution
+# Mount Static Files for HTML/CSS/JS Storefront (Only when running locally; Vercel CDN serves public/ directly)
 import os
 STATIC_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "static")
-if not os.path.exists(STATIC_DIR):
-    STATIC_DIR = "static"
-
-app.mount("/", StaticFiles(directory=STATIC_DIR, html=True), name="static")
+if os.path.exists(STATIC_DIR) and not os.environ.get("VERCEL"):
+    app.mount("/", StaticFiles(directory=STATIC_DIR, html=True), name="static")

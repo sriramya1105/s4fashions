@@ -1,8 +1,24 @@
 {
   "rewrites": [
     {
-      "source": "/(.*)",
+      "source": "/api/(.*)",
       "destination": "/api/index.py"
+    },
+    {
+      "source": "/docs",
+      "destination": "/api/index.py"
+    },
+    {
+      "source": "/openapi.json",
+      "destination": "/api/index.py"
+    },
+    {
+      "source": "/admin",
+      "destination": "/admin_portal/login.html"
+    },
+    {
+      "source": "/admin/",
+      "destination": "/admin_portal/login.html"
     }
   ]
 }

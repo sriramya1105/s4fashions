@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders - S4 Fashions</title>
+    <link rel="stylesheet" href="/css/modern.css?v=20261117_3">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- 1. HEADER NAVIGATION -->
+    <header class="s4-nav">
+        <div class="nav-wrap">
+            <a href="/" class="nav-brand">
+                S4 Fashions <span class="sub-brand">Fashion Hub</span>
+            </a>
+
+            <!-- Search Bar -->
+            <div class="nav-search-bar">
+                <svg class="nav-search-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <input type="text" id="global-product-search" placeholder="Search for Sarees, Kurtas, Trousers, Shirts, Frocks...">
+            </div>
+
+            <!-- Actions -->
+            <div class="nav-actions">
+                <div id="user-profile-slot" style="position: relative;"></div>
+                <a href="/cart.html" class="nav-btn primary-btn">
+                    Bag <span class="nav-cart-badge" id="nav-cart-count">0</span>
+                </a>
+                <script>(function(){try{var c=JSON.parse(localStorage.getItem("tc_cart")||"[]");var n=c.reduce(function(a,b){return a+(parseInt(b.quantity,10)||1);},0);var el=document.getElementById("nav-cart-count");if(el)el.innerText=n;}catch(e){}})();</script>
+            </div>
+        </div>
+    </header>
+
+    <!-- ORDERS CONTAINER -->
+    <main style="max-width: 960px; margin: 32px auto; padding: 0 24px; flex: 1; width: 100%;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+            <div>
+                <h1 style="font-size: 24px; font-weight: 800; color: var(--secondary);">My Orders History</h1>
+                <p style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">Track and view previous purchases and dispatch statuses.</p>
+            </div>
+            <a href="/" class="nav-btn" style="border: 1px solid var(--border-color); border-radius: 6px; font-size: 13px;">
+                &larr; Continue Shopping
+            </a>
+        </div>
+        
+        <div id="orders-list-container" style="display: flex; flex-direction: column; gap: 16px;">
+            <p style="color: var(--text-muted);">Loading your orders...</p>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="s4-site-footer">
+        <p style="color: #ffffff; font-size: 15px; font-weight: 600;">S4 Fashions made with love💖</p>
+    </footer>
+
+    <!-- SLIDE-OVER CUSTOMER PROFILE SIDEBAR DRAWER -->
+    <div id="profile-drawer-backdrop" class="profile-sidebar-backdrop" onclick="closeProfileSidebar()"></div>
+    <aside id="profile-drawer-sidebar" class="profile-sidebar-drawer">
+        <div class="profile-drawer-header">
+            <div style="display: flex; align-items: center; gap: 14px;">
+                <div id="drawer-user-avatar" style="width: 48px; height: 48px; border-radius: 50%; background: #ffffff; color: #731e48; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 800; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+                    U
+                </div>
+                <div>
+                    <div id="drawer-user-name" style="font-size: 16px; font-weight: 800; line-height: 1.2;">User Profile</div>
+                    <div id="drawer-user-email" style="font-size: 12px; color: #ffd6ec; margin-top: 3px;">customer@s4fashions.com</div>
+                </div>
+            </div>
+            <button type="button" class="profile-drawer-close" onclick="closeProfileSidebar()">&times;</button>
+        </div>
+
+        <div class="profile-drawer-body">
+            <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 12px;">Account & Purchases</div>
+            
+            <a href="/orders.html" class="drawer-menu-item">
+                <span style="font-size: 18px;">📦</span>
+                <span>My Orders & Delivery Tracking</span>
+            </a>
+
+            <a href="/cart.html" class="drawer-menu-item">
+                <span style="font-size: 18px;">🛍️</span>
+                <span>My Shopping Bag</span>
+            </a>
+
+            <div style="height: 1px; background: #f3ecef; margin: 18px 0;"></div>
+
+            <button onclick="logoutUser()" class="drawer-menu-item" style="width: 100%; border: none; background: none; color: #dc2626; cursor: pointer; text-align: left;">
+                <span style="font-size: 18px;">🚪</span>
+                <span>Sign Out Account</span>
+            </button>
+        </div>
+    </aside>
+
+    <script src="/js/core.js?v=20261117_3"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            syncAuthHeader();
+            updateCartCounter();
+
+            if (!appState.token) {
+                document.getElementById("orders-list-container").innerHTML = `
+                    <div style="text-align: center; padding: 60px 20px; background: #ffffff; border-radius: 8px; border: 1px solid var(--border-color);">
+                        <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 8px;">Please Sign In</h3>
+                        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">Sign in to view your order history and live dispatch tracking.</p>
+                        <a href="/login.html" class="btn-action-primary" style="display: inline-block; text-decoration: none;">Sign In Now</a>
+                    </div>
+                `;
+                return;
+            }
+
+            try {
+                const res = await fetch("/api/v1/orders", {
+                    headers: { "Authorization": `Bearer ${appState.token}` }
+                });
+                if (!res.ok) throw new Error("Failed to load orders");
+                const orders = await res.json();
+                renderOrders(orders);
+            } catch (err) {
+                document.getElementById("orders-list-container").innerHTML = `
+                    <div style="text-align: center; padding: 60px 20px; background: #ffffff; border-radius: 8px; border: 1px solid var(--border-color);">
+                        <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 8px;">No Orders Placed Yet</h3>
+                        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">Browse our traditional and modern apparel and place your first order.</p>
+                        <a href="/" class="btn-action-primary" style="display: inline-block; text-decoration: none;">Explore Collections</a>
+                    </div>
+                `;
+            }
+        });
+
+        function renderOrders(orders) {
+            const container = document.getElementById("orders-list-container");
+            if (orders.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 60px 20px; background: #ffffff; border-radius: 8px; border: 1px solid var(--border-color);">
+                        <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 8px;">No Orders Placed Yet</h3>
+                        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">Browse our traditional and modern apparel and place your first order.</p>
+                        <a href="/" class="btn-action-primary" style="display: inline-block; text-decoration: none;">Explore Collections</a>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = orders.map(o => `
+                <div style="background: #ffffff; border: 1px solid var(--border-color); border-radius: 8px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 14px;">
+                        <div>
+                            <span style="font-size: 12px; font-weight: 800; color: #731e48; background: #fbebf4; padding: 2px 8px; border-radius: 4px;">ORDER #${o.id}</span>
+                            <span style="font-size: 12px; color: var(--text-muted); margin-left: 10px;">${new Date(o.created_at).toLocaleDateString()}</span>
+                        </div>
+                        <div>
+                            <span style="font-size: 12px; font-weight: 700; text-transform: uppercase; padding: 3px 10px; border-radius: 12px; background: #eaf5eb; color: #1e7e34;">${escapeHtml(o.status)}</span>
+                        </div>
+                    </div>
+                    <div style="font-size: 14px; margin-bottom: 12px;">
+                        <b>Total Amount:</b> <span style="font-weight: 800; color: #8e0d5d;">₹${o.total_amount.toFixed(0)}</span>
+                    </div>
+                    <div style="font-size: 12px; color: var(--text-muted);">
+                        Shipping to: ${escapeHtml(o.shipping_address)} (Phone: ${escapeHtml(o.phone)})
+                    </div>
+                </div>
+            `).join("");
+        }
+    </script>
+</body>
+</html>

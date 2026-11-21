@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details - S4 Fashions</title>
+    <link rel="stylesheet" href="/css/modern.css?v=20261117_3">
+    <link rel="stylesheet" href="/css/style.css?v=20261117_3">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- 1. HEADER NAVIGATION -->
+    <header class="s4-nav">
+        <div class="nav-wrap">
+            <a href="/" class="nav-brand">
+                S4 Fashions <span class="sub-brand">Fashion Hub</span>
+            </a>
+
+            <!-- Search Bar -->
+            <div class="nav-search-bar">
+                <svg class="nav-search-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <input type="text" class="search-field" placeholder="Search for items, brands...">
+            </div>
+
+            <!-- Actions -->
+            <div class="nav-actions">
+                <div id="user-profile-slot" style="position: relative;"></div>
+                <a href="/cart.html" class="nav-btn primary-btn">
+                    Bag <span class="nav-cart-badge" id="nav-cart-count">0</span>
+                </a>
+                <script>(function(){try{var c=JSON.parse(localStorage.getItem("tc_cart")||"[]");var n=c.reduce(function(a,b){return a+(parseInt(b.quantity,10)||1);},0);var el=document.getElementById("nav-cart-count");if(el)el.innerText=n;}catch(e){}})();</script>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN PDP LAYOUT -->
+    <main class="meesho-pdp-layout" id="meesho-pdp-container">
+        <div style="grid-column: 1/-1; text-align: center; padding: 60px;">
+            <p>Loading item details...</p>
+        </div>
+    </main>
+
+    <footer class="s4-site-footer">
+        <p style="font-size: 15px; font-weight: 600; color: #ffffff;">S4 Fashions made with love💖</p>
+    </footer>
+
+    <!-- SLIDE-OVER CUSTOMER PROFILE SIDEBAR DRAWER -->
+    <div id="profile-drawer-backdrop" class="profile-sidebar-backdrop" onclick="closeProfileSidebar()"></div>
+    <aside id="profile-drawer-sidebar" class="profile-sidebar-drawer">
+        <div class="profile-drawer-header">
+            <div style="display: flex; align-items: center; gap: 14px;">
+                <div id="drawer-user-avatar" style="width: 48px; height: 48px; border-radius: 50%; background: #ffffff; color: #731e48; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 800; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+                    U
+                </div>
+                <div>
+                    <div id="drawer-user-name" style="font-size: 16px; font-weight: 800; line-height: 1.2;">User Profile</div>
+                    <div id="drawer-user-email" style="font-size: 12px; color: #ffd6ec; margin-top: 3px;">customer@s4fashions.com</div>
+                </div>
+            </div>
+            <button type="button" class="profile-drawer-close" onclick="closeProfileSidebar()">&times;</button>
+        </div>
+
+        <div class="profile-drawer-body">
+            <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 12px;">Account & Purchases</div>
+            
+            <a href="/orders.html" class="drawer-menu-item">
+                <span style="font-size: 18px;">📦</span>
+                <span>My Orders & Delivery Tracking</span>
+            </a>
+
+            <a href="/cart.html" class="drawer-menu-item">
+                <span style="font-size: 18px;">🛍️</span>
+                <span>My Shopping Bag</span>
+            </a>
+
+            <div style="height: 1px; background: #f3ecef; margin: 18px 0;"></div>
+
+            <button onclick="logoutUser()" class="drawer-menu-item" style="width: 100%; border: none; background: none; color: #dc2626; cursor: pointer; text-align: left;">
+                <span style="font-size: 18px;">🚪</span>
+                <span>Sign Out Account</span>
+            </button>
+        </div>
+    </aside>
+
+    <script src="/js/core.js?v=20261117_3"></script>
+    <script>
+        let currentProduct = null;
+        let selectedSize = null;
+        let selectedColor = null;
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            updateCartCounter();
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get("id");
+
+            if (!productId) {
+                window.location.href = "/";
+                return;
+            }
+
+            try {
+                const res = await fetch(`/api/v1/products/${productId}`);
+                if (!res.ok) throw new Error("Not found");
+                currentProduct = await res.json();
+                renderMeeshoPDP(currentProduct);
+            } catch (err) {
+                document.getElementById("meesho-pdp-container").innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 60px;">
+                        <h3>Item Not Found</h3>
+                        <p style="margin-top: 10px;"><a href="/" style="color: var(--meesho-pink);">Back to Meesho Store</a></p>
+                    </div>
+                `;
+            }
+        });
+
+        function renderMeeshoPDP(p) {
+            const sizes = p.available_sizes.split(",").map(s => s.trim());
+            const colors = p.available_colors.split(",").map(c => c.trim());
+            selectedSize = sizes[0];
+            selectedColor = colors[0];
+
+            // Parse per-color image map
+            let colorImages = {};
+            try { colorImages = JSON.parse(p.color_images || "{}"); } catch(e) {}
+            const getColorImg = (color) => colorImages[color] || p.image_url || "";
+
+            // Initial image = first color's image
+            const initialImage = getColorImg(selectedColor);
+
+            // Parse custom key-value specifications
+            let customSpecs = [];
+            if (p.specifications) {
+                const lines = p.specifications.split(/[,\n]/);
+                lines.forEach(line => {
+                    const parts = line.split(":");
+                    if (parts.length >= 2) {
+                        const k = parts[0].trim();
+                        const v = parts.slice(1).join(":").trim();
+                        if (k && v) customSpecs.push([k, v]);
+                    }
+                });
+            }
+
+            const discount = p.original_price && p.original_price > p.price
+                ? Math.round(((p.original_price - p.price) / p.original_price) * 100)
+                : 0;
+
+            const container = document.getElementById("meesho-pdp-container");
+            container.innerHTML = `
+                <!-- LEFT IMAGE & BUTTONS -->
+                <div class="pdp-left-box">
+                    <div class="pdp-big-image">
+                        <img id="pdp-main-image" src="${initialImage}" alt="${escapeHtml(p.title)}">
+                    </div>
+                    <div class="pdp-cta-row">
+                        <button id="btn-add-to-cart" class="btn-meesho-cart" onclick="handleAddToCart()">
+                            Add to Cart
+                        </button>
+                        <button class="btn-meesho-buy" onclick="handleBuyNow()">
+                            Buy Now
+                        </button>
+                    </div>
+                </div>
+
+                <!-- RIGHT PRODUCT DETAILS -->
+                <div class="pdp-right-box">
+                    <div class="pdp-card-section">
+                        <h1 class="pdp-main-title">${escapeHtml(p.brand)} - ${escapeHtml(p.title)}</h1>
+                        
+                        <div class="pdp-price-row">
+                            <span class="pdp-current-price">₹${p.price.toFixed(0)}</span>
+                            ${p.original_price ? `<span class="pdp-mrp-price">₹${p.original_price.toFixed(0)}</span>` : ''}
+                            ${discount > 0 ? `<span class="pdp-discount-rate">${discount}% off</span>` : ''}
+                        </div>
+
+                        <div class="free-delivery-badge">Free Delivery</div>
+
+                        <div class="card-rating-strip" style="margin-top: 8px;">
+                            <span class="rating-chip">
+                                <span>${p.rating}</span>
+                                <svg width="10" height="10" viewBox="0 0 24 24" fill="#ffffff"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                            </span>
+                            <span class="rating-count">${p.rating_count} Customer Ratings</span>
+                        </div>
+                    </div>
+
+                    <!-- SELECT COLOR -->
+                    <div class="pdp-card-section">
+                        <div style="font-size: 15px; font-weight: 700; color: var(--meesho-dark); margin-bottom: 10px;">
+                            Select Color
+                            <span id="selected-color-label" style="font-size:13px; font-weight:500; color: var(--primary); margin-left:8px;">${escapeHtml(selectedColor)}</span>
+                        </div>
+                        <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:center;">
+                            ${colors.map((c, idx) => {
+                                const css = colorNameToCss(c);
+                                const img = getColorImg(c);
+                                return `
+                                <button type="button"
+                                    class="color-swatch-btn ${idx === 0 ? 'selected' : ''}"
+                                    onclick="selectColor('${c.replace(/'/g, "\\'")}')"
+                                    data-color="${escapeHtml(c)}"
+                                    data-img="${escapeHtml(img)}"
+                                    title="${escapeHtml(c)}"
+                                    style="
+                                        display:flex; flex-direction:column; align-items:center; gap:5px;
+                                        background:none; border:none; cursor:pointer; padding:4px;
+                                    ">
+                                    <span style="
+                                        display:block;
+                                        width:32px; height:32px; border-radius:50%;
+                                        background:${css};
+                                        border: 3px solid ${idx === 0 ? 'var(--primary)' : 'rgba(0,0,0,0.12)'};
+                                        box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+                                        transition: border-color 0.2s, transform 0.15s;
+                                    "></span>
+                                    <span style="font-size:10px; font-weight:600; color:var(--meesho-gray); max-width:48px; text-align:center; line-height:1.2;">${escapeHtml(c)}</span>
+                                </button>`;
+                            }).join("")}
+                        </div>
+                    </div>
+
+                    <!-- SELECT SIZE -->
+                    <div class="pdp-card-section">
+                        <div style="font-size: 15px; font-weight: 700; color: var(--meesho-dark); margin-bottom: 8px;">Select Size</div>
+                        <div class="size-pill-row" id="size-pill-container">
+                            ${sizes.map((s, idx) => `
+                                <button type="button" class="size-pill ${idx === 0 ? 'selected' : ''}" onclick="selectSize('${s}', this)">${s}</button>
+                            `).join("")}
+                        </div>
+                    </div>
+
+                    <!-- PRODUCT SPECIFICATIONS -->
+                    <div class="pdp-card-section">
+                        <div style="font-size: 15px; font-weight: 700; color: var(--meesho-dark); margin-bottom: 12px;">Product Details</div>
+                        <p style="font-size: 13px; color: var(--meesho-gray); line-height: 1.6; margin-bottom: 14px;">${escapeHtml(p.description)}</p>
+
+                        <div style="display: grid; grid-template-columns: 140px 1fr; gap: 10px; font-size: 13px;">
+                            <span style="color: var(--meesho-light-gray);">Category:</span>
+                            <span style="text-transform: capitalize;">${escapeHtml(p.category_name || p.category || 'Apparel')} ${p.subcategory_name ? `(${escapeHtml(p.subcategory_name)})` : ''}</span>
+
+                            ${p.material ? `
+                                <span style="color: var(--meesho-light-gray);">Fabric:</span>
+                                <span>${escapeHtml(p.material)}</span>
+                            ` : ''}
+
+                            <span style="color: var(--meesho-light-gray);">Available Colors:</span>
+                            <span>${escapeHtml(p.available_colors)}</span>
+
+                            ${customSpecs.map(([k, v]) => `
+                                <span style="color: var(--meesho-light-gray);">${escapeHtml(k)}:</span>
+                                <span style="font-weight: 600; color: var(--meesho-dark);">${escapeHtml(v)}</span>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function selectSize(s, btn) {
+            selectedSize = s;
+            document.querySelectorAll(".size-pill").forEach(p => p.classList.remove("selected"));
+            btn.classList.add("selected");
+        }
+
+        function selectColor(color) {
+            selectedColor = color;
+
+            // Update label
+            const label = document.getElementById("selected-color-label");
+            if (label) label.innerText = color;
+
+            // Swap main product image
+            const btn = document.querySelector(`.color-swatch-btn[data-color="${CSS.escape(color)}"]`);
+            if (btn) {
+                const imgUrl = btn.dataset.img;
+                const mainImg = document.getElementById("pdp-main-image");
+                if (mainImg && imgUrl) {
+                    mainImg.style.opacity = "0.5";
+                    mainImg.style.transition = "opacity 0.15s";
+                    setTimeout(() => {
+                        mainImg.src = imgUrl;
+                        mainImg.style.opacity = "1";
+                    }, 150);
+                }
+
+                // Update swatch border highlights
+                document.querySelectorAll(".color-swatch-btn").forEach(b => {
+                    const dot = b.querySelector("span:first-child");
+                    if (dot) dot.style.border = "3px solid rgba(0,0,0,0.12)";
+                });
+                const selectedDot = btn.querySelector("span:first-child");
+                if (selectedDot) selectedDot.style.border = "3px solid var(--primary)";
+            }
+        }
+
+        // Map common color names to CSS colors (matches admin portal)
+        function colorNameToCss(name) {
+            const map = {
+                "black": "#1a1a1a", "white": "#f8f8f8", "navy": "#001f5b",
+                "charcoal": "#36454F", "grey": "#808080", "gray": "#808080",
+                "red": "#cc2222", "maroon": "#800020", "burgundy": "#800020",
+                "wine": "#722F37", "blue": "#1E5BB0", "skyblue": "#87CEEB",
+                "green": "#2E7D32", "olive": "#708238", "khaki": "#C3B091",
+                "yellow": "#FDD835", "orange": "#E65100", "pink": "#E91E8C",
+                "purple": "#6A1B9A", "lavender": "#967BB6", "brown": "#795548",
+                "beige": "#F5F0DC", "cream": "#FFFDD0", "offwhite": "#FAF9F6",
+                "mustard": "#FFDB58", "coral": "#FF6B6B", "teal": "#008080",
+                "indigo": "#3F51B5", "gold": "#FFD700", "silver": "#C0C0C0",
+                "rust": "#B7410E", "peach": "#FFDAB9", "mint": "#98FF98",
+                "aqua": "#00FFFF", "cyan": "#00BCD4", "magenta": "#8E0D5D",
+                "emerald": "#50C878", "cobalt": "#0047AB", "ivory": "#FFFFF0",
+                "taupe": "#483C32", "tan": "#D2B48C", "denim": "#1560BD",
+                "champagne": "#F7E7CE", "blush": "#FFB6C1",
+            };
+            const key = name.toLowerCase().replace(/\s+/g, "");
+            return map[key] || `hsl(${Math.abs(name.split("").reduce((a, c) => a + c.charCodeAt(0), 0)) % 360}, 55%, 50%)`;
+        }
+
+        function handleAddToCart() {
+            if (!currentProduct) return;
+            addItemToCart(currentProduct, selectedSize, selectedColor, 1);
+            
+            // Calculate total count immediately
+            const totalCount = updateCartCounter();
+
+            // Update button state visually
+            const btn = document.getElementById("btn-add-to-cart");
+            if (btn) {
+                btn.innerHTML = `✓ Added to Cart`;
+                btn.style.background = "#768452";
+                btn.style.color = "#ffffff";
+                btn.style.borderColor = "#768452";
+                
+                // Keep '✓ Added to Cart' visible, then refresh count badge
+                setTimeout(() => {
+                    const thisItemCount = (appState.cart || []).filter(i => i.product_id === currentProduct.id).reduce((a, b) => a + (b.quantity || 1), 0);
+                    btn.innerHTML = `✓ Added to Cart (${thisItemCount} in Bag)`;
+                    btn.style.background = "#ffffff";
+                    btn.style.color = "#8e0d5d";
+                    btn.style.borderColor = "#8e0d5d";
+                }, 1800);
+            }
+
+            showToastPopup(
+                "Added to Bag!",
+                `"${currentProduct.title}" (${selectedSize}, ${selectedColor}) has been added.`,
+                "/cart.html",
+                "View Bag &rarr;"
+            );
+        }
+
+        function handleBuyNow() {
+            if (!currentProduct) return;
+            addItemToCart(currentProduct, selectedSize, selectedColor, 1);
+            if (!appState.token || !appState.user) {
+                showToastPopup(
+                    "Sign In Required",
+                    "Please sign in with your account to proceed to checkout.",
+                    "/login.html",
+                    "Sign In &rarr;"
+                );
+                setTimeout(() => {
+                    window.location.href = "/login.html";
+                }, 1200);
+                return;
+            }
+            window.location.href = "/cart.html";
+        }
+    </script>
+</body>
+</html>

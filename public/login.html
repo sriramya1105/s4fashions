@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - S4 Fashions</title>
+    <link rel="stylesheet" href="/css/modern.css?v=20261118_1">
+    <link rel="stylesheet" href="/css/style.css?v=20261118_1">
+</head>
+<body style="background-color: #fcf4fb;">
+
+    <!-- TOP HEADER -->
+    <header class="meesho-top-header">
+        <div class="header-inner" style="justify-content: space-between;">
+            <a href="/" class="brand-meesho">
+                <span class="brand-title">S4 Fashions</span>
+                <span class="brand-subtitle">Women · Men · Kids</span>
+            </a>
+            <div style="font-size: 13px; color: var(--meesho-gray);">
+                New here? 
+                <a href="/register.html" style="color: var(--meesho-pink); font-weight: 700; text-decoration: none; margin-left: 4px;">Sign Up</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- AUTH CARD -->
+    <main style="flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px 16px;">
+        <div class="meesho-auth-container" style="max-width: 420px; width: 100%; margin: 0 auto;">
+            <div class="meesho-auth-logo">Sign In to S4 Fashions</div>
+            <div class="meesho-auth-sub">Access your orders, wishlist, and shopping bag</div>
+
+            <div id="login-alert" style="display: none; padding: 10px 14px; background-color: #fde8e8; color: #9b1c1c; font-size: 13px; border-radius: 4px; margin-bottom: 16px; border: 1px solid #f8b4b4;"></div>
+
+            <form id="meesho-login-form">
+                <div class="meesho-input-group">
+                    <label class="meesho-label">Username</label>
+                    <input type="text" id="username" class="meesho-input" required placeholder="Enter your username" autocomplete="username">
+                </div>
+
+                <div class="meesho-input-group">
+                    <label class="meesho-label">Password</label>
+                    <input type="password" id="password" class="meesho-input" required placeholder="Enter password" autocomplete="current-password">
+                </div>
+
+                <button type="submit" id="btn-login-submit" class="btn-meesho-primary" style="margin-top: 12px;">Continue</button>
+            </form>
+
+            <div style="text-align: center; margin-top: 20px; font-size: 13px; color: var(--meesho-gray); border-top: 1px solid #f0f0f0; padding-top: 16px;">
+                New Customer? 
+                <a href="/register.html" style="color: var(--meesho-pink); text-decoration: none; font-weight: 700; margin-left: 4px;">
+                    Create an Account
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="s4-site-footer">
+        <p>&copy; 2026 S4 Fashions Private Limited · All Rights Reserved · Abuse-Resistant E-Commerce Platform</p>
+    </footer>
+
+    <script src="/js/core.js?v=20261118_1"></script>
+    <script>
+        document.getElementById("meesho-login-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const alertBox = document.getElementById("login-alert");
+            const btn = document.getElementById("btn-login-submit");
+            const u = document.getElementById("username").value.trim();
+            const p = document.getElementById("password").value;
+
+            alertBox.style.display = "none";
+            btn.disabled = true;
+            btn.innerText = "Signing in...";
+
+            try {
+                const res = await fetch("/api/v1/auth/login", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ username: u, password: p })
+                });
+
+                const data = await res.json();
+                if (!res.ok) {
+                    alertBox.style.display = "block";
+                    alertBox.innerText = data.detail || data.message || data.error || "Authentication failed.";
+                    btn.disabled = false;
+                    btn.innerText = "Continue";
+                    return;
+                }
+
+                localStorage.setItem("tc_token", data.access_token);
+                localStorage.setItem("tc_user", JSON.stringify(data.user));
+                localStorage.setItem("tc_login_time", Date.now().toString());
+
+                // Load user-specific cart into session (empty for brand new accounts)
+                const userKey = "tc_cart_u_" + (data.user.id || data.user.username);
+                const userCart = localStorage.getItem(userKey);
+                if (userCart) {
+                    localStorage.setItem("tc_cart", userCart);
+                } else {
+                    localStorage.setItem(userKey, "[]");
+                    localStorage.setItem("tc_cart", "[]");
+                }
+
+                if (data.user.role === "admin") {
+                    window.location.href = "/admin_portal/index.html";
+                } else {
+                    window.location.href = "/";
+                }
+            } catch (err) {
+                alertBox.style.display = "block";
+                alertBox.innerText = "Connection failed. Please ensure backend is active.";
+                btn.disabled = false;
+                btn.innerText = "Continue";
+            }
+        });
+    </script>
+</body>
+</html>

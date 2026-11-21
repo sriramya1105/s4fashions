@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - S4 Fashions</title>
+    <link rel="stylesheet" href="/css/modern.css?v=20261117_3">
+    <link rel="stylesheet" href="/css/style.css?v=20261117_3">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- 1. HEADER NAVIGATION -->
+    <header class="s4-nav">
+        <div class="nav-wrap">
+            <a href="/" class="nav-brand">
+                S4 Fashions <span class="sub-brand">Fashion Hub</span>
+            </a>
+
+            <!-- Search Bar -->
+            <div class="nav-search-bar">
+                <svg class="nav-search-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <input type="text" class="search-field" placeholder="Search for items, brands...">
+            </div>
+
+            <!-- Actions -->
+            <div class="nav-actions">
+                <div id="user-profile-slot" style="position: relative;"></div>
+                <a href="/cart.html" class="nav-btn primary-btn">
+                    Bag <span class="nav-cart-badge" id="nav-cart-count">0</span>
+                </a>
+                <script>(function(){try{var c=JSON.parse(localStorage.getItem("tc_cart")||"[]");var n=c.reduce(function(a,b){return a+(parseInt(b.quantity,10)||1);},0);var el=document.getElementById("nav-cart-count");if(el)el.innerText=n;}catch(e){}})();</script>
+            </div>
+        </div>
+    </header>
+
+    <!-- MEESHO 2-COLUMN CART -->
+    <main class="meesho-cart-layout">
+        
+        <!-- LEFT CART ITEMS & ADDRESS -->
+        <section class="cart-items-panel">
+            <h2 style="font-size: 16px; font-weight: 700; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--meesho-border);">
+                Cart | <span id="cart-header-count">0</span> Item(s)
+            </h2>
+
+            <div id="meesho-cart-list">
+                <!-- Cart items rendered here -->
+            </div>
+
+            <!-- DELIVERY ADDRESS -->
+            <div id="checkout-block" style="margin-top: 24px; border-top: 1px solid var(--meesho-border); padding-top: 18px;">
+                <h3 style="font-size: 15px; font-weight: 700; margin-bottom: 12px; color: var(--meesho-dark);">Delivery Address</h3>
+                
+                <div class="meesho-input-group">
+                    <label class="meesho-label">Complete Delivery Address</label>
+                    <textarea id="ship-address" class="meesho-input" style="height: 60px; padding: 8px;" placeholder="House/Flat No, Street, Colony, City, Pin code"></textarea>
+                </div>
+
+                <div class="meesho-input-group">
+                    <label class="meesho-label">Contact Phone Number</label>
+                    <input type="text" id="ship-phone" class="meesho-input" placeholder="+91 9876543210">
+                </div>
+
+                <button type="button" class="btn-meesho-primary" id="btn-order" onclick="placeOrder()">Continue / Place Order</button>
+            </div>
+        </section>
+
+        <!-- RIGHT PRICE DETAILS -->
+        <aside class="cart-summary-panel">
+            <h3 style="font-size: 15px; font-weight: 700; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--meesho-border);">
+                Price Details
+            </h3>
+
+            <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 10px; color: var(--meesho-gray);">
+                <span>Total Product Price</span>
+                <span id="mrp-total">₹0</span>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 10px; color: var(--meesho-green);">
+                <span>Total Discounts</span>
+                <span id="discount-total">- ₹0</span>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 14px; color: var(--meesho-green);">
+                <span>Delivery Charges</span>
+                <span>FREE</span>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; font-size: 16px; font-weight: 800; border-top: 1px dashed var(--meesho-border); padding-top: 12px; margin-top: 10px; color: var(--meesho-dark);">
+                <span>Order Total</span>
+                <span id="final-total">₹0</span>
+            </div>
+
+            <div style="margin-top: 20px; font-size: 11px; color: var(--meesho-light-gray); line-height: 1.5; background: #fafafa; padding: 10px; border-radius: 4px;">
+                Clicking on "Continue" will place your Cash on Delivery order safely using Server-Side Price Verification (CWE-20).
+            </div>
+        </aside>
+
+    </main>
+
+    <footer class="s4-site-footer">
+        <p style="font-size: 15px; font-weight: 600; color: #ffffff;">S4 Fashions made with love💖</p>
+    </footer>
+
+    <!-- SLIDE-OVER CUSTOMER PROFILE SIDEBAR DRAWER -->
+    <div id="profile-drawer-backdrop" class="profile-sidebar-backdrop" onclick="closeProfileSidebar()"></div>
+    <aside id="profile-drawer-sidebar" class="profile-sidebar-drawer">
+        <div class="profile-drawer-header">
+            <div style="display: flex; align-items: center; gap: 14px;">
+                <div id="drawer-user-avatar" style="width: 48px; height: 48px; border-radius: 50%; background: #ffffff; color: #731e48; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 800; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+                    U
+                </div>
+                <div>
+                    <div id="drawer-user-name" style="font-size: 16px; font-weight: 800; line-height: 1.2;">User Profile</div>
+                    <div id="drawer-user-email" style="font-size: 12px; color: #ffd6ec; margin-top: 3px;">customer@s4fashions.com</div>
+                </div>
+            </div>
+            <button type="button" class="profile-drawer-close" onclick="closeProfileSidebar()">&times;</button>
+        </div>
+
+        <div class="profile-drawer-body">
+            <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 12px;">Account & Purchases</div>
+            
+            <a href="/orders.html" class="drawer-menu-item">
+                <span style="font-size: 18px;">📦</span>
+                <span>My Orders & Delivery Tracking</span>
+            </a>
+
+            <a href="/cart.html" class="drawer-menu-item">
+                <span style="font-size: 18px;">🛍️</span>
+                <span>My Shopping Bag</span>
+            </a>
+
+            <div style="height: 1px; background: #f3ecef; margin: 18px 0;"></div>
+
+            <button onclick="logoutUser()" class="drawer-menu-item" style="width: 100%; border: none; background: none; color: #dc2626; cursor: pointer; text-align: left;">
+                <span style="font-size: 18px;">🚪</span>
+                <span>Sign Out Account</span>
+            </button>
+        </div>
+    </aside>
+
+    <script src="/js/core.js?v=20261117_3"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            updateCartCounter();
+            renderCart();
+        });
+
+        function renderCart() {
+            const list = document.getElementById("meesho-cart-list");
+            if (!list) return;
+
+            let cartItems = getStoredCart();
+            appState.cart = cartItems;
+
+            const count = cartItems.reduce((a, b) => a + (parseInt(b.quantity, 10) || 1), 0);
+            const navEl = document.getElementById("nav-cart-count");
+            if (navEl) navEl.innerText = count;
+            document.querySelectorAll(".nav-cart-badge, #nav-cart-count, #cart-count-badge").forEach(el => {
+                el.innerText = count;
+            });
+            const headerCount = document.getElementById("cart-header-count");
+            if (headerCount) headerCount.innerText = count;
+
+            if (appState.cart.length === 0) {
+                list.innerHTML = `
+                    <div style="text-align: center; padding: 48px 16px;">
+                        <h3 style="font-size: 16px; margin-bottom: 6px;">Your cart is empty</h3>
+                        <p style="font-size: 13px; color: var(--meesho-light-gray); margin-bottom: 16px;">Add items to your cart to checkout.</p>
+                        <a href="/" class="btn-meesho-primary" style="display: inline-block; width: 140px; text-decoration: none; text-align: center; line-height: 44px;">Shop Now</a>
+                    </div>
+                `;
+                document.getElementById("checkout-block").style.display = "none";
+                updateSummary(0, 0);
+                return;
+            }
+
+            document.getElementById("checkout-block").style.display = "block";
+
+            let totalSelling = 0;
+            let totalMRP = 0;
+
+            list.innerHTML = appState.cart.map((item, idx) => {
+                const mrp = item.original_price || item.price;
+                totalMRP += mrp * item.quantity;
+                totalSelling += item.price * item.quantity;
+
+                return `
+                    <div class="cart-item-row">
+                        <div class="cart-item-thumb">
+                            <img src="${item.image_url}">
+                        </div>
+
+                        <div class="cart-item-details">
+                            <div>
+                                <div style="font-size: 14px; font-weight: 700; color: var(--meesho-dark);">${escapeHtml(item.brand)} - ${escapeHtml(item.title)}</div>
+                                <div style="font-size: 12px; color: var(--meesho-gray); margin-top: 4px;">Size: <b>${item.size}</b> | Color: <b>${item.color}</b></div>
+                            </div>
+
+                            <div style="display: flex; align-items: baseline; gap: 8px; margin-top: 8px;">
+                                <span style="font-size: 16px; font-weight: 800;">₹${(item.price * item.quantity).toFixed(0)}</span>
+                                ${mrp > item.price ? `<span style="font-size: 12px; color: var(--meesho-light-gray); text-decoration: line-through;">₹${(mrp * item.quantity).toFixed(0)}</span>` : ''}
+                            </div>
+
+                            <div style="display: flex; align-items: center; gap: 16px; margin-top: 8px;">
+                                <div style="display: flex; align-items: center; border: 1px solid var(--meesho-border); border-radius: 4px;">
+                                    <button onclick="changeQty(${idx}, -1)" style="width: 28px; height: 26px; border: none; background: #f9f9f9; cursor: pointer; font-weight: bold;">-</button>
+                                    <span style="padding: 0 10px; font-size: 12px; font-weight: 700;">${item.quantity}</span>
+                                    <button onclick="changeQty(${idx}, 1)" style="width: 28px; height: 26px; border: none; background: #f9f9f9; cursor: pointer; font-weight: bold;">+</button>
+                                </div>
+                                <button onclick="removeItem(${idx})" style="background: none; border: none; color: var(--meesho-pink); font-size: 12px; font-weight: 700; cursor: pointer;">REMOVE</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join("");
+
+            updateSummary(totalMRP, totalSelling);
+        }
+
+        function updateSummary(mrp, selling) {
+            const discount = mrp - selling;
+            document.getElementById("mrp-total").innerText = `₹${mrp.toFixed(0)}`;
+            document.getElementById("discount-total").innerText = `- ₹${discount > 0 ? discount.toFixed(0) : '0'}`;
+            document.getElementById("final-total").innerText = `₹${selling.toFixed(0)}`;
+        }
+
+        function changeQty(idx, delta) {
+            appState.cart[idx].quantity += delta;
+            if (appState.cart[idx].quantity <= 0) {
+                appState.cart.splice(idx, 1);
+            }
+            saveStoredCart(appState.cart);
+            renderCart();
+        }
+
+        function removeItem(idx) {
+            appState.cart.splice(idx, 1);
+            saveStoredCart(appState.cart);
+            renderCart();
+        }
+
+        async function placeOrder() {
+            if (!appState.token || !appState.user) {
+                showToastPopup("Login Required", "Please log in to complete your purchase.", "/login.html", "Sign In &rarr;");
+                setTimeout(() => {
+                    window.location.href = "/login.html";
+                }, 1500);
+                return;
+            }
+
+            const address = document.getElementById("ship-address").value.trim();
+            const phone = document.getElementById("ship-phone").value.trim();
+
+            if (!address || address.length < 10) {
+                showToastPopup("Incomplete Address", "Please enter a complete delivery address.", null, "");
+                return;
+            }
+
+            if (!phone || phone.length < 10) {
+                showToastPopup("Invalid Phone", "Please enter a valid phone number.", null, "");
+                return;
+            }
+
+            const payload = {
+                items: appState.cart.map(i => ({
+                    product_id: i.product_id,
+                    size: i.size,
+                    color: i.color,
+                    quantity: i.quantity
+                })),
+                shipping_address: address,
+                phone_number: phone
+            };
+
+            const btn = document.getElementById("btn-order");
+            btn.disabled = true;
+            btn.innerText = "Placing Order...";
+
+            try {
+                const res = await fetch("/api/v1/orders/checkout", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${appState.token}`
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await res.json();
+                if (!res.ok) {
+                    showToastPopup("Order Failed", data.message || data.error || "Unable to place order.", null, "");
+                    btn.disabled = false;
+                    btn.innerText = "Continue / Place Order";
+                    return;
+                }
+
+                clearUserCart();
+
+                showToastPopup("Order Placed!", `Order #${data.id} placed successfully.`, "/orders.html", "Track Order &rarr;");
+                setTimeout(() => {
+                    window.location.href = "/orders.html";
+                }, 1800);
+            } catch (err) {
+                showToastPopup("Connection Error", "Network communication error. Please try again.", null, "");
+                btn.disabled = false;
+                btn.innerText = "Continue / Place Order";
+            }
+        }
+    </script>
+</body>
+</html>

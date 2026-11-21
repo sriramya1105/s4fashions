@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S4 Fashions - Merchant Administration Control Portal</title>
+    <link rel="stylesheet" href="/css/modern.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+    <!-- TOP ADMIN HEADER -->
+    <header class="s4-nav" style="background: #5a1437; border-color: #731e48;">
+        <div class="nav-wrap">
+            <a href="/admin_portal/index.html" class="nav-brand" style="color: #ffffff;">
+                S4 Fashions <span class="sub-brand" style="background: rgba(255, 255, 255, 0.15); color: #ffd6ec; padding: 2px 6px; border-radius: 4px;">Merchant Console</span>
+            </a>
+
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <a href="/" target="_blank" class="nav-btn" style="color: #ffffff; background: rgba(255,255,255,0.12);">
+                    🛍️ Live Storefront &rarr;
+                </a>
+                
+                <!-- ADMIN PROFILE BADGE -->
+                <div style="position: relative;">
+                    <button type="button" onclick="toggleAdminProfileMenu()" style="display: flex; align-items: center; gap: 10px; background: rgba(0, 0, 0, 0.25); border: 1px solid rgba(255, 255, 255, 0.2); padding: 5px 14px; border-radius: 20px; color: #ffffff; cursor: pointer;">
+                        <span style="width: 26px; height: 26px; border-radius: 50%; background: #ffffff; color: #731e48; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800;">
+                            A
+                        </span>
+                        <div style="text-align: left; line-height: 1.2;">
+                            <span id="admin-user-tag" style="font-size: 12px; font-weight: 700; color: #ffffff;">admin_user</span>
+                            <span style="display: block; font-size: 10px; color: #ffd6ec;">Merchant Admin</span>
+                        </div>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+
+                    <!-- ADMIN PROFILE CARD -->
+                    <div id="admin-profile-card" style="display: none; position: absolute; right: 0; top: 125%; width: 260px; background: #ffffff; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.25); z-index: 2000; overflow: hidden; color: var(--text-main);">
+                        <div style="background: #faf6f8; padding: 16px; border-bottom: 1px solid #f0e6e9;">
+                            <div style="font-weight: 800; font-size: 14px; color: #221f20;" id="admin-card-name">Master Administrator</div>
+                            <div style="font-size: 12px; color: #6b7280; margin-top: 2px;" id="admin-card-email">admin@s4fashions.com</div>
+                            <span style="display: inline-block; margin-top: 8px; background: #fbebf4; color: #731e48; font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 4px;">SYSTEM SUPERUSER (CWE-284 RBAC)</span>
+                        </div>
+                        <div style="padding: 8px 0;">
+                            <button onclick="logoutAdmin()" style="width: 100%; display: flex; align-items: center; gap: 10px; padding: 10px 18px; color: #dc2626; background: none; border: none; font-size: 13px; font-weight: 600; cursor: pointer; text-align: left;">
+                                <span>🚪</span>
+                                <span>Logout Admin</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ADMIN WORKSPACE -->
+    <div class="admin-wrapper">
+        
+        <!-- SIDEBAR NAVIGATION -->
+        <aside class="admin-sidebar">
+            <ul class="admin-nav-list">
+                <li><a class="admin-nav-item active" onclick="switchAdminTab('dashboard')">Dashboard & Revenue</a></li>
+                <li><a class="admin-nav-item" onclick="switchAdminTab('categories')">Categories (Men, Women, Kids)</a></li>
+                <li><a class="admin-nav-item" onclick="switchAdminTab('subcategories')">Subcategories (Connect to Categories)</a></li>
+                <li><a class="admin-nav-item" onclick="switchAdminTab('products')">Product Catalog & Stock</a></li>
+                <li><a class="admin-nav-item" onclick="switchAdminTab('orders')">Customer Orders & Dispatch</a></li>
+                <li><a href="/docs" target="_blank" class="admin-nav-item">⚡ Swagger API Sandbox</a></li>
+            </ul>
+
+            <!-- <div style="padding: 14px; background: rgba(0, 0, 0, 0.18); border-radius: 6px; font-size: 12px; line-height: 1.5; color: #ffd6ec; border: 1px solid rgba(255, 255, 255, 0.15);">
+                <b style="color: #ffffff;">PostgreSQL Active:</b><br>
+                Connected to <code>s4fashions</code> via port 5432.<br>
+                Protected by RBAC (CWE-284).
+            </div> -->
+        </aside>
+
+        <!-- MAIN ADMIN VIEWS -->
+        <main class="admin-content-stage">
+
+            <!-- TAB 1: DASHBOARD -->
+            <div id="tab-dashboard" class="admin-tab-pane">
+                <h2 style="font-size: 22px; font-weight: 800; margin-bottom: 4px;">Store Overview</h2>
+                <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 24px;">Live sales metrics and counts queried directly from PostgreSQL.</p>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 18px; margin-bottom: 28px;">
+                    <div style="background: #ffffff; padding: 20px; border-radius: 8px; border: 1px solid var(--border-color); border-left: 4px solid #8e0d5d; box-shadow: 0 2px 8px rgba(115, 30, 72, 0.05);">
+                        <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Total Sales</div>
+                        <div id="stat-revenue" style="font-size: 26px; font-weight: 800; color: #8e0d5d; margin-top: 6px;">₹0</div>
+                    </div>
+
+                    <div style="background: #ffffff; padding: 20px; border-radius: 8px; border: 1px solid var(--border-color); border-left: 4px solid #731e48; box-shadow: 0 2px 8px rgba(115, 30, 72, 0.05);">
+                        <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Orders Processed</div>
+                        <div id="stat-orders" style="font-size: 26px; font-weight: 800; color: var(--text-main); margin-top: 6px;">0</div>
+                    </div>
+
+                    <div style="background: #ffffff; padding: 20px; border-radius: 8px; border: 1px solid var(--border-color); border-left: 4px solid #768452; box-shadow: 0 2px 8px rgba(115, 30, 72, 0.05);">
+                        <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Catalog Items</div>
+                        <div id="stat-products" style="font-size: 26px; font-weight: 800; color: var(--text-main); margin-top: 6px;">0</div>
+                    </div>
+
+                    <div style="background: #ffffff; padding: 20px; border-radius: 8px; border: 1px solid var(--border-color); border-left: 4px solid #a25f37; box-shadow: 0 2px 8px rgba(115, 30, 72, 0.05);">
+                        <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Departments</div>
+                        <div id="stat-categories" style="font-size: 26px; font-weight: 800; color: var(--text-main); margin-top: 6px;">0</div>
+                    </div>
+                </div>
+
+                <!-- ANALYTICAL CHARTS SECTION -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px;">
+                    <!-- Chart 1: Donut / Pie Chart for Department Share -->
+                    <div style="background: #ffffff; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 24px; box-shadow: 0 2px 8px rgba(115, 30, 72, 0.05);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                            <div>
+                                <h3 style="font-size: 16px; font-weight: 700; color: var(--secondary);">Department Share (Pie Chart)</h3>
+                                <p style="font-size: 12px; color: var(--text-muted);">Product catalog proportion across Men, Women & Kids</p>
+                            </div>
+                            <span style="font-size: 11px; font-weight: 700; background: #fbebf4; color: #8e0d5d; padding: 4px 10px; border-radius: 12px;">Live PostgreSQL</span>
+                        </div>
+                        <div style="position: relative; height: 260px; display: flex; justify-content: center; align-items: center;">
+                            <canvas id="categoryPieChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Chart 2: Bar Chart for Subcategory Inventory Breakdown -->
+                    <div style="background: #ffffff; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 24px; box-shadow: 0 2px 8px rgba(115, 30, 72, 0.05);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                            <div>
+                                <h3 style="font-size: 16px; font-weight: 700; color: var(--secondary);">Subcategory Inventory Breakdown</h3>
+                                <p style="font-size: 12px; color: var(--text-muted);">Stock depth per subcategory (Trousers, Sarees, Kurtas...)</p>
+                            </div>
+                            <span style="font-size: 11px; font-weight: 700; background: #fbebf4; color: #768452; padding: 4px 10px; border-radius: 12px;">Bar Analysis</span>
+                        </div>
+                        <div style="position: relative; height: 260px;">
+                            <canvas id="subcategoryBarChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: MANAGE CATEGORIES (MEN, WOMEN, KIDS) -->
+            <div id="tab-categories" class="admin-tab-pane" style="display: none;">
+                <h2 style="font-size: 22px; font-weight: 800; margin-bottom: 4px;">Department Categories</h2>
+                <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 24px;">Manage top-level departments (e.g. Men, Women, Kids) displayed on user bubble navigation.</p>
+
+                <!-- Add Category Form -->
+                <div class="admin-form-card">
+                    <div class="admin-form-title">Add New Department Category</div>
+                    <form id="add-category-form" class="admin-grid-form">
+                        <div>
+                            <label class="form-field-label">Category Name</label>
+                            <input type="text" id="cat-name-input" class="form-input" placeholder="e.g. Men, Women, Kids" required>
+                        </div>
+                        <div>
+                            <label class="form-field-label">Category Image URL</label>
+                            <input type="url" id="cat-img-input" class="form-input" placeholder="https://images.unsplash.com/...">
+                        </div>
+                        <div class="form-full-col">
+                            <label class="form-field-label">Description</label>
+                            <input type="text" id="cat-desc-input" class="form-input" placeholder="Short description of department">
+                        </div>
+                        <div class="form-full-col">
+                            <button type="submit" class="btn-action-primary">+ Create Category</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Existing Categories Table -->
+                <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 14px; color: var(--secondary);">Active Categories</h3>
+                <div class="admin-table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 80px;">ID</th>
+                                <th style="width: 180px;">Category Name</th>
+                                <th style="width: 140px;">Slug</th>
+                                <th>Description</th>
+                                <th style="width: 100px; text-align: center;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-category-rows">
+                            <tr><td colspan="5" style="text-align: center; padding: 24px; color: var(--text-muted);">Loading categories...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB 3: MANAGE SUBCATEGORIES (CONNECT TROUSERS UNDER MEN) -->
+            <div id="tab-subcategories" class="admin-tab-pane" style="display: none;">
+                <h2 style="font-size: 22px; font-weight: 800; margin-bottom: 4px;">Subcategories Management</h2>
+                <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 24px;">Create subcategories (e.g., Trousers, Kurtis, Frocks) and connect them to a parent Category.</p>
+
+                <!-- Add Subcategory Form -->
+                <div class="admin-form-card">
+                    <div class="admin-form-title">Create Subcategory & Link to Category</div>
+                    <form id="add-subcategory-form" class="admin-grid-form">
+                        <div>
+                            <label class="form-field-label">Select Parent Category</label>
+                            <select id="sub-cat-select" class="form-input" required>
+                                <option value="">-- Choose Category (e.g. Men) --</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="form-field-label">Subcategory Name</label>
+                            <input type="text" id="sub-name-input" class="form-input" placeholder="e.g. Trousers, Kurtis, Formal Shirts" required>
+                        </div>
+                        <div class="form-full-col">
+                            <label class="form-field-label">Description</label>
+                            <input type="text" id="sub-desc-input" class="form-input" placeholder="e.g. Executive formal trousers and casual chinos">
+                        </div>
+                        <div class="form-full-col">
+                            <button type="submit" class="btn-action-primary">+ Save Subcategory</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Subcategories Table -->
+                <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 14px; color: var(--secondary);">Existing Subcategory Mappings</h3>
+                <div class="admin-table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 80px;">ID</th>
+                                <th style="width: 220px;">Subcategory Name</th>
+                                <th style="width: 150px;">Parent Category</th>
+                                <th style="width: 160px;">Slug</th>
+                                <th style="width: 100px; text-align: center;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-subcategory-rows">
+                            <tr><td colspan="5" style="text-align: center; padding: 24px; color: var(--text-muted);">Loading subcategories...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB 4: PRODUCTS MANAGEMENT (POST APPAREL WITH DYNAMIC DROPDOWNS) -->
+            <div id="tab-products" class="admin-tab-pane" style="display: none;">
+                <h2 style="font-size: 22px; font-weight: 800; margin-bottom: 4px;">Product Catalog & Inventory</h2>
+                <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 24px;">Add new apparel items with sizes, colors, prices, and stock.</p>
+
+                <!-- Add Product Form -->
+                <div class="admin-form-card">
+                    <div class="admin-form-title">Post New Apparel Product</div>
+                    <form id="add-product-form" class="admin-grid-form">
+                        <div class="form-full-col">
+                            <label class="form-field-label">Product Title</label>
+                            <input type="text" id="p-title" class="form-input" placeholder="e.g. Raymond Charcoal Slim Fit Formal Trousers" required>
+                        </div>
+
+                        <div class="form-full-col">
+                            <label class="form-field-label">Description</label>
+                            <textarea id="p-desc" class="form-input" style="height: 65px; padding: 8px;" placeholder="Detailed cloth specifications, fabric feel, occasions..." required></textarea>
+                        </div>
+
+                        <div>
+                            <label class="form-field-label">Brand Name</label>
+                            <input type="text" id="p-brand" class="form-input" placeholder="e.g. Raymond, FabIndia, Biba, Levi's" required>
+                        </div>
+
+                        <div>
+                            <label class="form-field-label">Department Category</label>
+                            <select id="p-cat-select" class="form-input" onchange="onCategorySelectChange()" required>
+                                <option value="">-- Choose Category --</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="form-field-label">Connected Subcategory</label>
+                            <select id="p-subcat-select" class="form-input">
+                                <option value="">-- Choose Subcategory (e.g. Trousers) --</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="form-field-label">Available Sizes (Comma-separated)</label>
+                            <input type="text" id="p-sizes" class="form-input" value="S,M,L,XL,XXL" required>
+                        </div>
+
+                        <div>
+                            <label class="form-field-label">Available Colors (Comma-separated)</label>
+                            <input type="text" id="p-colors" class="form-input" value="Black,Navy,Charcoal"
+                                oninput="rebuildColorImageInputs()" required>
+                        </div>
+
+                        <div>
+                            <label class="form-field-label">Material / Fabric</label>
+                            <input type="text" id="p-material" class="form-input" value="Poly-Viscose Blend">
+                        </div>
+
+                        <div>
+                            <label class="form-field-label">Selling Price (₹)</label>
+                            <input type="number" id="p-price" class="form-input" min="1" step="1" placeholder="1499" required>
+                        </div>
+
+                        <div>
+                            <label class="form-field-label">Original MRP Price (₹)</label>
+                            <input type="number" id="p-orig-price" class="form-input" min="1" step="1" placeholder="2299">
+                        </div>
+
+                        <div>
+                            <label class="form-field-label">Initial Stock Quantity</label>
+                            <input type="number" id="p-stock" class="form-input" min="0" value="45" required>
+                        </div>
+
+                        <!-- DYNAMIC PER-COLOR IMAGE SECTION -->
+                        <div class="form-full-col" id="color-image-section">
+                            <label class="form-field-label" style="display:flex; align-items:center; gap:8px;">
+                                🎨 Color Images
+                                <span style="font-size:11px; font-weight:400; color: var(--text-muted);">(one image URL per color — leave blank to use same image for all)</span>
+                            </label>
+                            <div id="color-image-inputs" style="display:grid; gap:10px; margin-top:6px;">
+                                <!-- JS-generated rows: [Color swatch] [Color name] [Image URL input] -->
+                            </div>
+                        </div>
+
+                        <!-- DYNAMIC SPECIFICATIONS / ATTRIBUTES -->
+                        <div class="form-full-col">
+                            <label class="form-field-label" style="display:flex; align-items:center; gap:8px;">
+                                📋 Custom Product Details / Attributes
+                                <span style="font-size:11px; font-weight:400; color: var(--text-muted);">(e.g. Color: Blue, Bottom: Black, Pattern: Floral, Fit: Slim Fit, Neck: Round, Sleeve: Full)</span>
+                            </label>
+                            <textarea id="p-specs" class="form-input" style="height: 65px; font-family: inherit; resize: vertical;" placeholder="Color: Blue, Bottom: Black, Pattern: Embroidered, Fit: Regular, Neck: Round Neck, Sleeve: Full Sleeve"></textarea>
+                        </div>
+
+                        <div class="form-full-col" style="margin-top: 8px;">
+                            <button type="submit" id="btn-submit-product" class="btn-action-primary" style="padding: 12px 32px;">
+                                🚀 Publish Product to Storefront
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Products Table -->
+                <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 14px; color: var(--secondary);">Active Catalog</h3>
+                <div class="admin-table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 70px;">ID</th>
+                                <th>Product Details</th>
+                                <th style="width: 120px;">Department</th>
+                                <th style="width: 140px;">Subcategory</th>
+                                <th style="width: 120px;">Brand</th>
+                                <th style="width: 110px;">Price</th>
+                                <th style="width: 90px;">Stock</th>
+                                <th style="width: 90px; text-align: center;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-products-table-rows">
+                            <tr><td colspan="8" style="text-align: center; padding: 24px; color: var(--text-muted);">Loading catalog...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB 5: ORDERS MANAGEMENT -->
+            <div id="tab-orders" class="admin-tab-pane" style="display: none;">
+                <h2 style="font-size: 22px; font-weight: 800; margin-bottom: 4px;">Customer Orders Fulfillment</h2>
+                <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 24px;">Review purchases and update dispatch status.</p>
+
+                <div class="admin-table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 90px;">Order ID</th>
+                                <th style="width: 160px;">Customer</th>
+                                <th style="width: 150px;">Customer Phone</th>
+                                <th style="width: 120px;">Total Amount</th>
+                                <th>Items Purchased</th>
+                                <th style="width: 130px;">Status</th>
+                                <th style="width: 150px;">Update Tracking</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-orders-table-rows">
+                            <tr><td colspan="7" style="text-align: center; padding: 24px; color: var(--text-muted);">Loading orders...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script src="/js/core.js"></script>
+    <script>
+        let adminCategories = [];
+        let adminSubcategories = [];
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            verifyAdmin();
+            await loadAdminInitialData();
+            loadStats();
+        });
+
+        function toggleAdminProfileMenu() {
+            const c = document.getElementById("admin-profile-card");
+            if (c) c.style.display = (c.style.display === "none" || !c.style.display) ? "block" : "none";
+        }
+
+        document.addEventListener("click", (e) => {
+            const card = document.getElementById("admin-profile-card");
+            if (card && !e.target.closest("[onclick*='toggleAdminProfileMenu']") && !card.contains(e.target)) {
+                card.style.display = "none";
+            }
+        });
+
+        function verifyAdmin() {
+            if (!appState.token || !appState.user || appState.user.role !== "admin") {
+                window.location.href = "/admin_portal/login.html";
+                return;
+            }
+
+            // Check 10-Minute Session Expiry
+            const loginTimestamp = localStorage.getItem("tc_login_time");
+            const now = Date.now();
+            const TEN_MINUTES_MS = 10 * 60 * 1000;
+
+            if (loginTimestamp && (now - parseInt(loginTimestamp, 10)) > TEN_MINUTES_MS) {
+                alert("Your 10-minute admin session has expired. Please sign in again.");
+                logoutAdmin();
+                return;
+            }
+
+            document.getElementById("admin-user-tag").innerText = appState.user.username;
+            if (document.getElementById("admin-card-name")) {
+                document.getElementById("admin-card-name").innerText = appState.user.full_name || appState.user.username;
+            }
+            if (document.getElementById("admin-card-email")) {
+                document.getElementById("admin-card-email").innerText = appState.user.email || 'admin@s4fashions.com';
+            }
+
+            // Start a live countdown timer to automatically prompt login when 10 minutes pass
+            const remainingTime = loginTimestamp ? (TEN_MINUTES_MS - (now - parseInt(loginTimestamp, 10))) : TEN_MINUTES_MS;
+            setTimeout(() => {
+                alert("Your 10-minute admin session has expired. Please sign in again.");
+                logoutAdmin();
+            }, Math.max(remainingTime, 1000));
+        }
+
+        function logoutAdmin() {
+            localStorage.removeItem("tc_token");
+            localStorage.removeItem("tc_user");
+            localStorage.removeItem("tc_login_time");
+            window.location.href = "/admin_portal/login.html";
+        }
+
+        function switchAdminTab(tabName) {
+            document.querySelectorAll(".admin-tab-pane").forEach(p => p.style.display = "none");
+            document.querySelectorAll(".admin-nav-item").forEach(item => item.classList.remove("active"));
+
+            const target = document.getElementById(`tab-${tabName}`);
+            if (target) target.style.display = "block";
+
+            const clicked = Array.from(document.querySelectorAll(".admin-nav-item")).find(l => l.getAttribute("onclick") && l.getAttribute("onclick").includes(tabName));
+            if (clicked) clicked.classList.add("active");
+
+            if (tabName === 'dashboard') loadStats();
+            if (tabName === 'categories') renderCategoriesTable();
+            if (tabName === 'subcategories') renderSubcategoriesTable();
+            if (tabName === 'products') renderProductsTable();
+            if (tabName === 'orders') renderOrdersTable();
+        }
+
+        async function loadAdminInitialData() {
+            try {
+                // Fetch Categories
+                const cRes = await fetch("/api/v1/admin/categories", {
+                    headers: { "Authorization": `Bearer ${appState.token}` }
+                });
+                if (cRes.status === 401 || cRes.status === 403) {
+                    alert("Admin session expired. Please log in again.");
+                    window.location.href = "/admin_portal/login.html";
+                    return;
+                }
+                adminCategories = await cRes.json();
+                populateCategoryDropdowns();
+
+                // Fetch Subcategories
+                const sRes = await fetch("/api/v1/admin/subcategories", {
+                    headers: { "Authorization": `Bearer ${appState.token}` }
+                });
+                adminSubcategories = await sRes.json();
+            } catch (err) {
+                console.error("Admin data fetch error", err);
+            }
+        }
+
+        function populateCategoryDropdowns() {
+            // Dropdown in Subcategory form
+            const subCatSel = document.getElementById("sub-cat-select");
+            subCatSel.innerHTML = `<option value="">-- Choose Category (e.g. Men) --</option>` +
+                adminCategories.map(c => `<option value="${c.id}">${escapeHtml(c.name)}</option>`).join("");
+
+            // Dropdown in Product form
+            const pCatSel = document.getElementById("p-cat-select");
+            pCatSel.innerHTML = `<option value="">-- Choose Category --</option>` +
+                adminCategories.map(c => `<option value="${c.id}">${escapeHtml(c.name)}</option>`).join("");
+
+            // Build initial color-image inputs for default colors
+            rebuildColorImageInputs();
+        }
+
+        // ---- DYNAMIC PER-COLOR IMAGE INPUTS ----
+        function rebuildColorImageInputs() {
+            const colorsRaw = document.getElementById("p-colors").value;
+            const container = document.getElementById("color-image-inputs");
+            if (!container) return;
+
+            const colors = colorsRaw.split(",").map(c => c.trim()).filter(Boolean);
+            if (colors.length === 0) {
+                container.innerHTML = `<p style="font-size:12px; color:var(--text-muted); margin:0;">Enter colors above to generate image URL fields.</p>`;
+                return;
+            }
+
+            // Preserve any already-entered URLs when colors list is updated
+            const existing = {};
+            container.querySelectorAll("[data-color-key]").forEach(el => {
+                existing[el.dataset.colorKey] = el.value;
+            });
+
+            container.innerHTML = colors.map(color => {
+                const cssColor = colorNameToCss(color);
+                const savedUrl = existing[color] || "";
+                return `
+                <div style="display:grid; grid-template-columns: 32px 110px 1fr; align-items:center; gap:10px;">
+                    <div style="
+                        width:28px; height:28px; border-radius:50%;
+                        background:${cssColor};
+                        border: 2px solid rgba(0,0,0,0.15);
+                        box-shadow: 0 1px 4px rgba(0,0,0,0.18);
+                        flex-shrink:0;
+                    " title="${escapeHtml(color)}"></div>
+                    <span style="font-size:13px; font-weight:600; color:var(--text-main);">${escapeHtml(color)}</span>
+                    <input
+                        type="url"
+                        class="form-input"
+                        data-color-key="${escapeHtml(color)}"
+                        placeholder="https://images.unsplash.com/... (optional)"
+                        value="${escapeHtml(savedUrl)}"
+                        style="height:36px; font-size:12px;"
+                    >
+                </div>`;
+            }).join("");
+        }
+
+        // Map common color names to CSS color values for swatch rendering
+        function colorNameToCss(name) {
+            const map = {
+                "black": "#1a1a1a", "white": "#f8f8f8", "navy": "#001f5b",
+                "charcoal": "#36454F", "grey": "#808080", "gray": "#808080",
+                "red": "#cc2222", "maroon": "#800020", "burgundy": "#800020",
+                "wine": "#722F37", "blue": "#1E5BB0", "skyblue": "#87CEEB",
+                "green": "#2E7D32", "olive": "#708238", "khaki": "#C3B091",
+                "yellow": "#FDD835", "orange": "#E65100", "pink": "#E91E8C",
+                "purple": "#6A1B9A", "lavender": "#967BB6", "brown": "#795548",
+                "beige": "#F5F0DC", "cream": "#FFFDD0", "offwhite": "#FAF9F6",
+                "mustard": "#FFDB58", "coral": "#FF6B6B", "teal": "#008080",
+                "indigo": "#3F51B5", "gold": "#FFD700", "silver": "#C0C0C0",
+                "rust": "#B7410E", "peach": "#FFDAB9", "mint": "#98FF98",
+                "aqua": "#00FFFF", "cyan": "#00BCD4", "magenta": "#8E0D5D",
+                "emerald": "#50C878", "cobalt": "#0047AB", "ivory": "#FFFFF0",
+                "taupe": "#483C32", "tan": "#D2B48C", "denim": "#1560BD",
+                "champagne": "#F7E7CE", "blush": "#FFB6C1",
+            };
+            const key = name.toLowerCase().replace(/\s+/g, "");
+            return map[key] || `hsl(${Math.abs(name.split("").reduce((a, c) => a + c.charCodeAt(0), 0)) % 360}, 55%, 50%)`;
+        }
+
+        function onCategorySelectChange() {
+            const catId = parseInt(document.getElementById("p-cat-select").value, 10);
+            const pSubSel = document.getElementById("p-subcat-select");
+
+            if (!catId) {
+                pSubSel.innerHTML = `<option value="">-- Choose Subcategory --</option>`;
+                return;
+            }
+
+            const filteredSubs = adminSubcategories.filter(s => s.category_id === catId);
+            pSubSel.innerHTML = `<option value="">-- Choose Subcategory --</option>` +
+                filteredSubs.map(s => `<option value="${s.id}">${escapeHtml(s.name)}</option>`).join("");
+        }
+
+        let categoryPieChartInstance = null;
+        let subcategoryBarChartInstance = null;
+
+        // ==========================================
+        // 1. STATS & ANALYTICAL CHARTS
+        // ==========================================
+        async function loadStats() {
+            try {
+                const res = await fetch("/api/v1/admin/stats", {
+                    headers: { "Authorization": `Bearer ${appState.token}` }
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    document.getElementById("stat-revenue").innerText = `₹${data.total_revenue.toFixed(0)}`;
+                    document.getElementById("stat-orders").innerText = data.total_orders_placed;
+                    document.getElementById("stat-products").innerText = data.active_catalog_items;
+                    document.getElementById("stat-categories").innerText = data.total_categories;
+
+                    // Render Analytics
+                    renderAnalyticalCharts(data);
+                }
+            } catch (err) {
+                console.error("Stats error", err);
+            }
+        }
+
+        function renderAnalyticalCharts(data) {
+            if (typeof Chart === 'undefined') return;
+
+            // Brand palette for charts
+            const brandColors = ['#8e0d5d', '#731e48', '#768452', '#a25f37', '#eab8c3', '#3b6c9b'];
+
+            // 1. Department Donut/Pie Chart
+            const pieCtx = document.getElementById('categoryPieChart');
+            if (pieCtx && data.category_distribution) {
+                if (categoryPieChartInstance) categoryPieChartInstance.destroy();
+
+                const labels = data.category_distribution.map(c => c.name);
+                const counts = data.category_distribution.map(c => c.count);
+
+                categoryPieChartInstance = new Chart(pieCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            data: counts,
+                            backgroundColor: ['#8e0d5d', '#731e48', '#768452'],
+                            borderWidth: 2,
+                            borderColor: '#ffffff',
+                            hoverOffset: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: { boxWidth: 12, font: { weight: 600 } }
+                            }
+                        },
+                        cutout: '62%'
+                    }
+                });
+            }
+
+            // 2. Subcategory Bar Chart Breakdown
+            const barCtx = document.getElementById('subcategoryBarChart');
+            if (barCtx && data.subcategory_distribution) {
+                if (subcategoryBarChartInstance) subcategoryBarChartInstance.destroy();
+
+                const barLabels = data.subcategory_distribution.map(s => s.name);
+                const barCounts = data.subcategory_distribution.map(s => s.count);
+
+                subcategoryBarChartInstance = new Chart(barCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: barLabels,
+                        datasets: [{
+                            label: 'Items in Stock',
+                            data: barCounts,
+                            backgroundColor: '#731e48',
+                            borderRadius: 6,
+                            borderSkipped: false
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: { precision: 0 }
+                            },
+                            x: {
+                                ticks: {
+                                    font: { size: 10 },
+                                    maxRotation: 45,
+                                    minRotation: 25
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        // ==========================================
+        // 2. CATEGORIES
+        // ==========================================
+        async function renderCategoriesTable() {
+            await loadAdminInitialData();
+            const tbody = document.getElementById("admin-category-rows");
+            if (!adminCategories || adminCategories.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 24px; color: var(--text-muted);">No categories found.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = adminCategories.map(c => `
+                <tr>
+                    <td><span class="tag-badge-id">#${c.id}</span></td>
+                    <td><strong style="color: var(--secondary); font-size: 14px;">${escapeHtml(c.name)}</strong></td>
+                    <td><span class="tag-badge-slug">${escapeHtml(c.slug)}</span></td>
+                    <td style="color: #4b5563;">${escapeHtml(c.description || '-')}</td>
+                    <td style="text-align: center;">
+                        <button class="btn-delete" onclick="deleteCategory(${c.id})">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+            `).join("");
+        }
+
+        document.getElementById("add-category-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const name = document.getElementById("cat-name-input").value.trim();
+            const desc = document.getElementById("cat-desc-input").value.trim();
+            const img = document.getElementById("cat-img-input").value.trim() || null;
+
+            try {
+                const res = await fetch("/api/v1/admin/categories", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${appState.token}`
+                    },
+                    body: JSON.stringify({ name, description: desc, image_url: img })
+                });
+
+                if (res.ok) {
+                    alert(`Category '${name}' created!`);
+                    document.getElementById("add-category-form").reset();
+                    renderCategoriesTable();
+                } else {
+                    const err = await res.json();
+                    alert(`Failed: ${err.detail || err.message}`);
+                }
+            } catch (err) {
+                alert("Network communication error.");
+            }
+        });
+
+        async function deleteCategory(id) {
+            if (!confirm(`Delete Category #${id}? This will remove connected subcategories.`)) return;
+            try {
+                const res = await fetch(`/api/v1/admin/categories/${id}`, {
+                    method: "DELETE",
+                    headers: { "Authorization": `Bearer ${appState.token}` }
+                });
+                if (res.ok) {
+                    alert("Category deleted.");
+                    renderCategoriesTable();
+                }
+            } catch (err) { alert("Delete error"); }
+        }
+
+        // ==========================================
+        // 3. SUBCATEGORIES
+        // ==========================================
+        async function renderSubcategoriesTable() {
+            await loadAdminInitialData();
+            const tbody = document.getElementById("admin-subcategory-rows");
+            if (adminSubcategories.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 24px; color: var(--text-muted);">No subcategories created yet.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = adminSubcategories.map(s => `
+                <tr>
+                    <td><span class="tag-badge-id">#${s.id}</span></td>
+                    <td><strong style="color: var(--secondary); font-size: 14px;">${escapeHtml(s.name)}</strong></td>
+                    <td><span class="tag-badge-dept">${escapeHtml(s.category_name || '')}</span></td>
+                    <td><span class="tag-badge-slug">${escapeHtml(s.slug)}</span></td>
+                    <td style="text-align: center;">
+                        <button class="btn-delete" onclick="deleteSubcategory(${s.id})">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+            `).join("");
+        }
+
+        document.getElementById("add-subcategory-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const catId = parseInt(document.getElementById("sub-cat-select").value, 10);
+            const name = document.getElementById("sub-name-input").value.trim();
+            const desc = document.getElementById("sub-desc-input").value.trim();
+
+            try {
+                const res = await fetch("/api/v1/admin/subcategories", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${appState.token}`
+                    },
+                    body: JSON.stringify({ category_id: catId, name, description: desc })
+                });
+
+                if (res.ok) {
+                    alert(`Subcategory '${name}' linked to Category #${catId}!`);
+                    document.getElementById("add-subcategory-form").reset();
+                    renderSubcategoriesTable();
+                } else {
+                    const err = await res.json();
+                    alert(`Failed: ${err.detail || err.message}`);
+                }
+            } catch (err) {
+                alert("Network communication error.");
+            }
+        });
+
+        async function deleteSubcategory(id) {
+            if (!confirm(`Delete Subcategory #${id}?`)) return;
+            try {
+                const res = await fetch(`/api/v1/admin/subcategories/${id}`, {
+                    method: "DELETE",
+                    headers: { "Authorization": `Bearer ${appState.token}` }
+                });
+                if (res.ok) {
+                    alert("Subcategory deleted.");
+                    renderSubcategoriesTable();
+                }
+            } catch (err) { alert("Delete error"); }
+        }
+
+        // ==========================================
+        // 4. PRODUCTS
+        // ==========================================
+        async function renderProductsTable() {
+            try {
+                const res = await fetch("/api/v1/admin/products", {
+                    headers: { "Authorization": `Bearer ${appState.token}` }
+                });
+                const products = await res.json();
+                const tbody = document.getElementById("admin-products-table-rows");
+
+                if (products.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 24px; color: var(--text-muted);">No products in database.</td></tr>`;
+                    return;
+                }
+
+                tbody.innerHTML = products.map(p => `
+                    <tr>
+                        <td><span class="tag-badge-id">#${p.id}</span></td>
+                        <td>
+                            <div class="product-cell-title">${escapeHtml(p.title)}</div>
+                            <div class="product-cell-sub">Sizes: ${escapeHtml(p.available_sizes || '-')} | Colors: ${escapeHtml(p.available_colors || '-')}</div>
+                        </td>
+                        <td><span class="tag-badge-dept">${escapeHtml(p.category_name || '-')}</span></td>
+                        <td><span class="tag-badge-subcat">${escapeHtml(p.subcategory_name || '-')}</span></td>
+                        <td><strong style="color: var(--secondary);">${escapeHtml(p.brand)}</strong></td>
+                        <td><span class="product-cell-price">₹${p.price.toFixed(0)}</span></td>
+                        <td><span class="product-cell-stock ${p.stock > 10 ? 'stock-good' : 'stock-low'}">${p.stock} in stock</span></td>
+                        <td style="text-align: center;">
+                            <button class="btn-delete" onclick="deleteProduct(${p.id})">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                                Delete
+                            </button>
+                        </td>
+                    </tr>
+                `).join("");
+            } catch (err) {
+                console.error("Products error", err);
+            }
+        }
+
+        document.getElementById("add-product-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById("btn-submit-product");
+            btn.disabled = true;
+            btn.innerText = "Publishing Product...";
+
+            const catId = parseInt(document.getElementById("p-cat-select").value, 10);
+            const subVal = document.getElementById("p-subcat-select").value;
+            const subId = subVal ? parseInt(subVal, 10) : null;
+
+            // Build color_images JSON from dynamic per-color URL inputs
+            const colorImgMap = {};
+            let firstImageUrl = "";
+            document.querySelectorAll("#color-image-inputs [data-color-key]").forEach(input => {
+                const url = input.value.trim();
+                if (url) {
+                    colorImgMap[input.dataset.colorKey] = url;
+                    if (!firstImageUrl) firstImageUrl = url;
+                }
+            });
+            const colorImagesJson = Object.keys(colorImgMap).length > 0 ? JSON.stringify(colorImgMap) : null;
+            const fallbackImageUrl = firstImageUrl || "https://images.unsplash.com/photo-1597983073493-88cd35cf93b0?w=600";
+
+            const payload = {
+                title: document.getElementById("p-title").value.trim(),
+                description: document.getElementById("p-desc").value.trim(),
+                brand: document.getElementById("p-brand").value.trim(),
+                category_id: catId,
+                subcategory_id: subId,
+                available_sizes: document.getElementById("p-sizes").value.trim(),
+                available_colors: document.getElementById("p-colors").value.trim(),
+                material: document.getElementById("p-material").value.trim(),
+                price: parseFloat(document.getElementById("p-price").value),
+                original_price: parseFloat(document.getElementById("p-orig-price").value) || null,
+                stock: parseInt(document.getElementById("p-stock").value, 10),
+                image_url: fallbackImageUrl,
+                color_images: colorImagesJson,
+                specifications: document.getElementById("p-specs").value.trim() || null
+            };
+
+            try {
+                const res = await fetch("/api/v1/admin/products", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${appState.token}`
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    alert(`Product "${data.title}" published successfully to storefront!`);
+                    document.getElementById("add-product-form").reset();
+                    // Restore default colors and rebuild swatch inputs after form reset
+                    document.getElementById("p-colors").value = "Black,Navy,Charcoal";
+                    rebuildColorImageInputs();
+                    renderProductsTable();
+                } else {
+                    const err = await res.json();
+                    alert(`Failed: ${err.detail || err.message}`);
+                }
+            } catch (err) {
+                alert("Network communication error.");
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "🚀 Publish Product to Storefront";
+            }
+        });
+
+        async function deleteProduct(id) {
+            if (!confirm(`Delete Product #${id}? This will remove it from the catalog immediately.`)) return;
+            try {
+                const res = await fetch(`/api/v1/admin/products/${id}`, {
+                    method: "DELETE",
+                    headers: { "Authorization": `Bearer ${appState.token}` }
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    alert(data.message || `Product #${id} deleted.`);
+                    renderProductsTable();
+                    loadStats();
+                } else {
+                    alert(`Failed to delete: ${data.detail || data.message || 'Access denied or server error'}`);
+                }
+            } catch (err) { 
+                alert("Network communication error while deleting product."); 
+            }
+        }
+
+        // ==========================================
+        // 5. ORDERS
+        // ==========================================
+        async function renderOrdersTable() {
+            try {
+                const res = await fetch("/api/v1/admin/orders", {
+                    headers: { "Authorization": `Bearer ${appState.token}` }
+                });
+                const orders = await res.json();
+                const tbody = document.getElementById("admin-orders-table-rows");
+
+                if (orders.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 20px;">No customer orders placed yet.</td></tr>`;
+                    return;
+                }
+
+                tbody.innerHTML = orders.map(o => `
+                    <tr>
+                        <td><b>#${o.id}</b><br><span style="font-size:10px; color:var(--text-muted)">${new Date(o.created_at).toLocaleDateString('en-IN')}</span></td>
+                        <td>
+                            <div style="font-weight:700; font-size:13px; color:var(--secondary);">${escapeHtml(o.customer_name || 'Unknown Customer')}</div>
+                        </td>
+                        <td>${escapeHtml(o.phone_number)}</td>
+                        <td><b>₹${o.total_amount.toFixed(0)}</b></td>
+                        <td>${o.items.map(i => `${escapeHtml(i.product_title)} (x${i.quantity})`).join(", ")}</td>
+                        <td><span style="font-weight: 700; text-transform: uppercase; font-size: 11px; color: var(--primary);">${o.status}</span></td>
+                        <td>
+                            <select onchange="updateOrderStatus(${o.id}, this.value)" class="form-input" style="height: 32px; font-size: 12px; width: 140px;">
+                                <option value="confirmed" ${o.status === 'confirmed' ? 'selected' : ''}>Confirmed</option>
+                                <option value="shipped" ${o.status === 'shipped' ? 'selected' : ''}>Shipped</option>
+                                <option value="delivered" ${o.status === 'delivered' ? 'selected' : ''}>Delivered</option>
+                                <option value="cancelled" ${o.status === 'cancelled' ? 'selected' : ''}>Cancelled</option>
+                            </select>
+                        </td>
+                    </tr>
+                `).join("");
+            } catch (err) {
+                console.error("Orders error", err);
+            }
+        }
+
+        async function updateOrderStatus(orderId, newStatus) {
+            try {
+                const res = await fetch(`/api/v1/admin/orders/${orderId}/status?status_val=${newStatus}`, {
+                    method: "PATCH",
+                    headers: { "Authorization": `Bearer ${appState.token}` }
+                });
+                if (res.ok) {
+                    alert(`Order #${orderId} updated to ${newStatus.toUpperCase()}`);
+                }
+            } catch (err) {
+                alert("Update order status failed.");
+            }
+        }
+    </script>
+</body>
+</html>

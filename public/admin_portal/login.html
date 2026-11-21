@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Portal Sign In - S4 Fashions</title>
+    <link rel="stylesheet" href="/css/modern.css?v=20261118_1">
+    <link rel="stylesheet" href="/css/style.css?v=20261118_1">
+    <style>
+        :root {
+            --admin-dark: #160e1d;
+            --admin-panel: #21152c;
+            --admin-primary: #8e0d5d;
+            --admin-primary-hover: #a5136f;
+            --admin-border: #382449;
+            --admin-text-main: #f3e8f4;
+            --admin-text-muted: #b9a2c2;
+        }
+
+        body {
+            background: linear-gradient(135deg, #120a17 0%, #1e1127 50%, #2b1137 100%);
+            min-height: 100vh;
+            color: var(--admin-text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+        }
+
+        .admin-nav {
+            background-color: rgba(22, 14, 29, 0.85);
+            border-bottom: 1px solid var(--admin-border);
+            backdrop-filter: blur(8px);
+            padding: 16px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .admin-badge {
+            background-color: var(--admin-primary);
+            color: #ffffff;
+            font-size: 11px;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 4px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .admin-auth-card {
+            background-color: var(--admin-panel);
+            border: 1px solid var(--admin-border);
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+            max-width: 440px;
+            width: 100%;
+            margin: auto;
+            padding: 36px 32px;
+        }
+
+        .admin-tab-bar {
+            display: flex;
+            border-bottom: 1px solid var(--admin-border);
+            margin-bottom: 24px;
+        }
+
+        .admin-tab {
+            flex: 1;
+            text-align: center;
+            padding: 10px 0;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--admin-text-muted);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            background: none;
+            border-top: none;
+            border-left: none;
+            border-right: none;
+            transition: all 0.2s;
+        }
+
+        .admin-tab.active {
+            color: #ffffff;
+            border-bottom-color: var(--admin-primary);
+        }
+
+        .admin-input-group {
+            margin-bottom: 16px;
+        }
+
+        .admin-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--admin-text-muted);
+            margin-bottom: 6px;
+            letter-spacing: 0.2px;
+        }
+
+        .admin-input {
+            width: 100%;
+            box-sizing: border-box;
+            height: 42px;
+            background-color: #170d20;
+            border: 1px solid var(--admin-border);
+            border-radius: 6px;
+            padding: 0 14px;
+            color: #ffffff;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .admin-input:focus {
+            border-color: var(--admin-primary);
+        }
+
+        .btn-admin-submit {
+            width: 100%;
+            height: 44px;
+            background-color: var(--admin-primary);
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 700;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: background-color 0.2s;
+        }
+
+        .btn-admin-submit:hover {
+            background-color: var(--admin-primary-hover);
+        }
+
+        .alert-box {
+            display: none;
+            padding: 12px 14px;
+            font-size: 13px;
+            border-radius: 6px;
+            margin-bottom: 18px;
+            line-height: 1.4;
+        }
+
+        .alert-error {
+            background-color: rgba(224, 36, 36, 0.15);
+            border: 1px solid #9b1c1c;
+            color: #f8b4b4;
+        }
+
+        .alert-success {
+            background-color: rgba(4, 108, 78, 0.2);
+            border: 1px solid #046c4e;
+            color: #84e1bc;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAV BAR -->
+    <header class="admin-nav">
+        <a href="/" class="admin-brand">
+            <span style="font-size: 20px; font-weight: 800; color: #ffffff;">S4 Fashions</span>
+            <span class="admin-badge">Admin Portal</span>
+        </a>
+        <a href="/" style="color: var(--admin-text-muted); font-size: 13px; text-decoration: none;">
+            &larr; Back to Storefront
+        </a>
+    </header>
+
+    <!-- MAIN AUTH CONTAINER -->
+    <main style="flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px 16px;">
+        <div class="admin-auth-card">
+            
+            <div style="text-align: center; margin-bottom: 20px;">
+                <h1 style="font-size: 22px; font-weight: 800; margin: 0 0 6px 0; color: #ffffff;">Merchant & Admin Console</h1>
+                <p style="font-size: 13px; color: var(--admin-text-muted); margin: 0;">Authorized Administrators & Merchandisers Only</p>
+            </div>
+
+            <!-- TABS -->
+            <div class="admin-tab-bar">
+                <button type="button" class="admin-tab active" id="tab-login" onclick="switchTab('login')">Admin Sign In</button>
+                <button type="button" class="admin-tab" id="tab-onboard" onclick="switchTab('onboard')">Create / Promote Admin</button>
+            </div>
+
+            <div id="admin-alert" class="alert-box alert-error"></div>
+
+            <!-- FORM 1: ADMIN LOGIN -->
+            <form id="form-admin-login">
+                <div class="admin-input-group">
+                    <label class="admin-label">Admin Username</label>
+                    <input type="text" id="admin-username" class="admin-input" required placeholder="Enter admin username" autocomplete="username">
+                </div>
+
+                <div class="admin-input-group">
+                    <label class="admin-label">Password</label>
+                    <input type="password" id="admin-password" class="admin-input" required placeholder="Enter password" autocomplete="current-password">
+                </div>
+
+                <button type="submit" id="btn-admin-login" class="btn-admin-submit">Sign In to Admin Console &rarr;</button>
+            </form>
+
+            <!-- FORM 2: ONBOARD / PROMOTE ADMIN -->
+            <form id="form-admin-onboard" style="display: none;">
+                <div class="admin-input-group">
+                    <label class="admin-label">Username to Promote / Create</label>
+                    <input type="text" id="onboard-username" class="admin-input" required placeholder="e.g. test or new_admin">
+                </div>
+
+                <div class="admin-input-group">
+                    <label class="admin-label">Admin Master Secret Key</label>
+                    <input type="password" id="onboard-secret" class="admin-input" required placeholder="Default: s4-admin-secret-2026">
+                </div>
+
+                <div id="new-user-fields" style="display: none;">
+                    <div class="admin-input-group">
+                        <label class="admin-label">Email (required for brand new admin)</label>
+                        <input type="email" id="onboard-email" class="admin-input" placeholder="admin@s4fashions.com">
+                    </div>
+
+                    <div class="admin-input-group">
+                        <label class="admin-label">Password (required for brand new admin)</label>
+                        <input type="password" id="onboard-password" class="admin-input" placeholder="At least 8 characters">
+                    </div>
+                </div>
+
+                <div style="font-size: 11px; color: var(--admin-text-muted); margin-bottom: 12px; line-height: 1.4;">
+                    If the account already exists (e.g. <strong>test</strong>), entering the secret key will promote it to Admin immediately.
+                    <a href="javascript:void(0)" onclick="toggleNewUserFields()" id="toggle-fields-link" style="color: #ff85d0; margin-left: 4px;">Creating a brand new user?</a>
+                </div>
+
+                <button type="submit" id="btn-admin-onboard" class="btn-admin-submit" style="background-color: #6c1250;">Authorize Admin Account</button>
+            </form>
+
+            <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--admin-border); text-align: center; font-size: 12px; color: var(--admin-text-muted);">
+                Customer looking for clothes? 
+                <a href="/login.html" style="color: #ff85d0; text-decoration: none; font-weight: 600; margin-left: 4px;">Customer Sign In</a>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="s4-site-footer" style="background: #100816 !important; border-top: 1px solid #23122c !important;">
+        <p>&copy; 2026 S4 Fashions · Internal Merchant Administration Systems</p>
+    </footer>
+
+    <script src="/js/core.js?v=20261118_1"></script>
+    <script>
+        function switchTab(tab) {
+            const loginForm = document.getElementById("form-admin-login");
+            const onboardForm = document.getElementById("form-admin-onboard");
+            const tabLogin = document.getElementById("tab-login");
+            const tabOnboard = document.getElementById("tab-onboard");
+            const alertBox = document.getElementById("admin-alert");
+
+            alertBox.style.display = "none";
+
+            if (tab === "login") {
+                loginForm.style.display = "block";
+                onboardForm.style.display = "none";
+                tabLogin.classList.add("active");
+                tabOnboard.classList.remove("active");
+            } else {
+                loginForm.style.display = "none";
+                onboardForm.style.display = "block";
+                tabLogin.classList.remove("active");
+                tabOnboard.classList.add("active");
+            }
+        }
+
+        function toggleNewUserFields() {
+            const el = document.getElementById("new-user-fields");
+            const link = document.getElementById("toggle-fields-link");
+            if (el.style.display === "none") {
+                el.style.display = "block";
+                link.innerText = "Hide new user fields";
+            } else {
+                el.style.display = "none";
+                link.innerText = "Creating a brand new user?";
+            }
+        }
+
+        // --- SUBMIT 1: ADMIN LOGIN ---
+        document.getElementById("form-admin-login").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const alertBox = document.getElementById("admin-alert");
+            const btn = document.getElementById("btn-admin-login");
+            const u = document.getElementById("admin-username").value.trim();
+            const p = document.getElementById("admin-password").value;
+
+            alertBox.style.display = "none";
+            btn.disabled = true;
+            btn.innerText = "Authenticating...";
+
+            try {
+                const res = await fetch("/api/v1/auth/login", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ username: u, password: p })
+                });
+
+                const data = await res.json();
+                if (!res.ok) {
+                    alertBox.className = "alert-box alert-error";
+                    alertBox.style.display = "block";
+                    alertBox.innerText = data.detail || data.message || "Invalid credentials.";
+                    btn.disabled = false;
+                    btn.innerText = "Sign In to Admin Console \u2192";
+                    return;
+                }
+
+                // Verify Administrator Role (CWE-269 / RBAC Protection)
+                if (data.user.role !== "admin") {
+                    alertBox.className = "alert-box alert-error";
+                    alertBox.style.display = "block";
+                    alertBox.innerHTML = `<strong>Access Denied:</strong> Account <em>${escapeHtml(u)}</em> is registered as a <strong>Customer</strong>, not an Administrator.<br>Use the "Create / Promote Admin" tab to authorize this account.`;
+                    btn.disabled = false;
+                    btn.innerText = "Sign In to Admin Console \u2192";
+                    return;
+                }
+
+                // Store Admin Session
+                localStorage.setItem("tc_token", data.access_token);
+                localStorage.setItem("tc_user", JSON.stringify(data.user));
+                localStorage.setItem("tc_login_time", Date.now().toString());
+
+                window.location.href = "/admin_portal/index.html";
+            } catch (err) {
+                alertBox.className = "alert-box alert-error";
+                alertBox.style.display = "block";
+                alertBox.innerText = "Server connection failure. Ensure backend is active.";
+                btn.disabled = false;
+                btn.innerText = "Sign In to Admin Console \u2192";
+            }
+        });
+
+        // --- SUBMIT 2: ONBOARD / PROMOTE ADMIN ---
+        document.getElementById("form-admin-onboard").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const alertBox = document.getElementById("admin-alert");
+            const btn = document.getElementById("btn-admin-onboard");
+
+            const username = document.getElementById("onboard-username").value.trim();
+            const secret = document.getElementById("onboard-secret").value.trim();
+            const email = document.getElementById("onboard-email").value.trim() || null;
+            const password = document.getElementById("onboard-password").value || null;
+
+            alertBox.style.display = "none";
+            btn.disabled = true;
+            btn.innerText = "Authorizing...";
+
+            try {
+                const res = await fetch("/api/v1/admin/setup-admin", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        username: username,
+                        admin_secret: secret,
+                        email: email,
+                        password: password
+                    })
+                });
+
+                const data = await res.json();
+                if (!res.ok) {
+                    alertBox.className = "alert-box alert-error";
+                    alertBox.style.display = "block";
+                    alertBox.innerText = data.detail || "Authorization failed. Check your secret key.";
+                    btn.disabled = false;
+                    btn.innerText = "Authorize Admin Account";
+                    return;
+                }
+
+                alertBox.className = "alert-box alert-success";
+                alertBox.style.display = "block";
+                alertBox.innerHTML = `<strong>Success!</strong> Account <strong>${escapeHtml(data.username)}</strong> is now authorized with role <strong>admin</strong>! Switch to "Admin Sign In" above to log in.`;
+                
+                // Pre-fill username on login tab
+                document.getElementById("admin-username").value = data.username;
+                btn.disabled = false;
+                btn.innerText = "Authorize Admin Account";
+            } catch (err) {
+                alertBox.className = "alert-box alert-error";
+                alertBox.style.display = "block";
+                alertBox.innerText = "Network error during authorization.";
+                btn.disabled = false;
+                btn.innerText = "Authorize Admin Account";
+            }
+        });
+
+        function escapeHtml(str) {
+            if (!str) return "";
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+    </script>
+</body>
+</html>
