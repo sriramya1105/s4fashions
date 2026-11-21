@@ -1,24 +1,24 @@
 {
-  "rewrites": [
+  "routes": [
     {
-      "source": "/api/:match*",
-      "destination": "/api"
+      "src": "/api/(.*)",
+      "dest": "/api/index.py"
     },
     {
-      "source": "/docs",
-      "destination": "/api?match=docs"
+      "src": "/docs",
+      "dest": "/api/index.py"
     },
     {
-      "source": "/openapi.json",
-      "destination": "/api?match=openapi.json"
+      "src": "/openapi.json",
+      "dest": "/api/index.py"
     },
     {
-      "source": "/admin",
-      "destination": "/admin_portal/login.html"
+      "src": "/admin",
+      "dest": "/admin_portal/login.html"
     },
     {
-      "source": "/admin/",
-      "destination": "/admin_portal/login.html"
+      "src": "/admin/",
+      "dest": "/admin_portal/login.html"
     }
   ]
 }
