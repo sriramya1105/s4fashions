@@ -21,8 +21,11 @@ from app.middleware.error_handlers import (
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Ensure database schema exists on startup
-    Base.metadata.create_all(bind=engine)
+    # Ensure database schema exists on startup without failing cold-starts
+    try:
+        Base.metadata.create_all(bind=engine)
+    except Exception as e:
+        print(f"Warning: DB startup check skipped: {e}")
     yield
 
 

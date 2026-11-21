@@ -22,11 +22,23 @@ class Settings(BaseSettings):
     @classmethod
     def assemble_db_connection(cls, v: str) -> str:
         if isinstance(v, str):
-            # Vercel / Heroku / Neon connection string normalization
-            if v.startswith("postgres://"):
-                return v.replace("postgres://", "postgresql+psycopg2://", 1)
+            v = v.strip().strip("'\"")
+            # If protocol prefix was accidentally truncated or altered during copy-paste
+            if not v.startswith(("postgresql", "sqlite")):
+                if "@" in v and "neon.tech" in v:
+                    # Restore protocol
+                    parts = v.split("@", 1)
+                    creds = parts[0].lstrip("1.").strip()
+                    host_part = parts[1].strip()
+                    if ":" in creds:
+                        user, pwd = creds.split(":", 1)
+                    else:
+                        user, pwd = "neondb_owner", creds
+                    v = f"postgresql+psycopg2://{user}:{pwd}@{host_part}"
+            elif v.startswith("postgres://"):
+                v = v.replace("postgres://", "postgresql+psycopg2://", 1)
             elif v.startswith("postgresql://") and not v.startswith("postgresql+"):
-                return v.replace("postgresql://", "postgresql+psycopg2://", 1)
+                v = v.replace("postgresql://", "postgresql+psycopg2://", 1)
         return v
 
     # Rate Limiting (SlowAPI)
