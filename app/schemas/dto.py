@@ -1,4 +1,11 @@
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, Field
+try:
+    import email_validator
+    from pydantic import EmailStr
+except ImportError:
+    # Fail-safe email string validation fallback if email-validator package is absent
+    EmailStr = str
+
 from typing import Optional, List
 from datetime import datetime
 from app.models.entities import UserRole, OrderStatus
