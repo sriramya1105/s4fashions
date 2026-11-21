@@ -90,21 +90,6 @@ def admin_register_redirect():
     return RedirectResponse(url="/admin_portal/register.html")
 
 
-from fastapi import Request
-from fastapi.responses import JSONResponse
-
-# Diagnostics catch-all to see exact path on Vercel
-@app.api_route("/api/{full_path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH"])
-async def debug_api_catchall(request: Request, full_path: str):
-    return JSONResponse(status_code=404, content={
-        "debug": "unmatched_api_route",
-        "received_path": request.url.path,
-        "full_path_param": full_path,
-        "root_path": request.scope.get("root_path"),
-        "x_matched_path": request.headers.get("x-matched-path")
-    })
-
-
 # Mount Static Files for HTML/CSS/JS Storefront (Only when running locally; Vercel CDN serves public/ directly)
 import os
 STATIC_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "static")

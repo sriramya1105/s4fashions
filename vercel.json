@@ -6,11 +6,11 @@
     },
     {
       "source": "/docs",
-      "destination": "/api"
+      "destination": "/api?match=docs"
     },
     {
       "source": "/openapi.json",
-      "destination": "/api"
+      "destination": "/api?match=openapi.json"
     },
     {
       "source": "/admin",
