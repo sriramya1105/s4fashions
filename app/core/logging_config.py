@@ -3,9 +3,12 @@ import logging
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
 
-# Ensure logs directory exists
+# Ensure logs directory exists (safe against read-only serverless filesystems)
 LOGS_DIR = Path(__file__).resolve().parent.parent.parent / "logs"
-LOGS_DIR.mkdir(parents=True, exist_ok=True)
+try:
+    LOGS_DIR.mkdir(parents=True, exist_ok=True)
+except Exception:
+    pass
 
 USER_LOG_PATH = LOGS_DIR / "user.log"
 ADMIN_LOG_PATH = LOGS_DIR / "admin.log"
@@ -27,15 +30,25 @@ def _setup_logger(name: str, log_file: Path, formatter: logging.Formatter, level
     
     # Avoid duplicate handlers if reloaded
     if not logger.handlers:
-        # File Handler (5 MB per file, up to 5 backups)
-        file_handler = RotatingFileHandler(
-            log_file, maxBytes=5 * 1024 * 1024, backupCount=5, encoding="utf-8"
-        )
-        file_handler.setFormatter(formatter)
-        file_handler.setLevel(level)
-        logger.addHandler(file_handler)
+        # File Handler (redirect to /tmp in serverless or fallback safely on read-only environments)
+        try:
+            target_file = log_file
+            if os.environ.get("VERCEL") or os.environ.get("AWS_LAMBDA_FUNCTION_NAME"):
+                tmp_dir = Path("/tmp/logs")
+                tmp_dir.mkdir(parents=True, exist_ok=True)
+                target_file = tmp_dir / log_file.name
 
-        # Console Handler
+            file_handler = RotatingFileHandler(
+                target_file, maxBytes=5 * 1024 * 1024, backupCount=5, encoding="utf-8"
+            )
+            file_handler.setFormatter(formatter)
+            file_handler.setLevel(level)
+            logger.addHandler(file_handler)
+        except Exception:
+            # Serverless read-only filesystem: continue safely with console handler
+            pass
+
+        # Console Handler (Streams directly into Vercel runtime logs)
         console_handler = logging.StreamHandler()
         console_handler.setFormatter(formatter)
         console_handler.setLevel(level)
