@@ -1,6 +1,7 @@
 import os
 import sys
 import urllib.parse
+from fastapi.responses import JSONResponse
 
 root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if root_dir not in sys.path:
@@ -10,12 +11,6 @@ from app.main import app as fastapi_app
 
 
 class VercelASGIAdapter:
-    """
-    Handles Vercel serverless request path rewriting.
-    Vercel passes sub-paths via query parameters ('match', '1', or 'path')
-    or sets path to '/api' or '/api/index.py'.
-    This middleware reconstructs the clean FastAPI path.
-    """
     def __init__(self, asgi_app):
         self.asgi_app = asgi_app
 
@@ -23,6 +18,17 @@ class VercelASGIAdapter:
         if scope["type"] in ("http", "websocket"):
             path = scope.get("path", "")
             query_string = scope.get("query_string", b"").decode("latin-1")
+
+            # Instant debug probe
+            if "debug-vercel" in path or "debug-vercel" in query_string:
+                resp = JSONResponse({
+                    "initial_scope_path": path,
+                    "initial_query_string": query_string,
+                    "headers": {k.decode("latin-1"): v.decode("latin-1") for k, v in scope.get("headers", []) if "cookie" not in k.decode("latin-1").lower() and "auth" not in k.decode("latin-1").lower()}
+                })
+                await resp(scope, receive, send)
+                return
+
             query_params = urllib.parse.parse_qs(query_string)
 
             subpath = None
