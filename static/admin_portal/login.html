@@ -187,14 +187,13 @@
             </div>
 
             <!-- TABS -->
-            <div class="admin-tab-bar">
-                <button type="button" class="admin-tab active" id="tab-login" onclick="switchTab('login')">Admin Sign In</button>
-                <button type="button" class="admin-tab" id="tab-onboard" onclick="switchTab('onboard')">Create / Promote Admin</button>
+            <div class="admin-tab-bar" style="border-bottom: none; margin-bottom: 24px;">
+                <h2 style="font-size: 16px; font-weight: 700; color: #ffffff; margin: 0;">Authorized Personnel Sign In</h2>
             </div>
 
             <div id="admin-alert" class="alert-box alert-error"></div>
 
-            <!-- FORM 1: ADMIN LOGIN -->
+            <!-- FORM 1: ADMIN LOGIN ONLY -->
             <form id="form-admin-login">
                 <div class="admin-input-group">
                     <label class="admin-label">Admin Username</label>
@@ -207,38 +206,6 @@
                 </div>
 
                 <button type="submit" id="btn-admin-login" class="btn-admin-submit">Sign In to Admin Console &rarr;</button>
-            </form>
-
-            <!-- FORM 2: ONBOARD / PROMOTE ADMIN -->
-            <form id="form-admin-onboard" style="display: none;">
-                <div class="admin-input-group">
-                    <label class="admin-label">Username to Promote / Create</label>
-                    <input type="text" id="onboard-username" class="admin-input" required placeholder="e.g. test or new_admin">
-                </div>
-
-                <div class="admin-input-group">
-                    <label class="admin-label">Admin Master Secret Key</label>
-                    <input type="password" id="onboard-secret" class="admin-input" required placeholder="Default: s4-admin-secret-2026">
-                </div>
-
-                <div id="new-user-fields" style="display: none;">
-                    <div class="admin-input-group">
-                        <label class="admin-label">Email (required for brand new admin)</label>
-                        <input type="email" id="onboard-email" class="admin-input" placeholder="admin@s4fashions.com">
-                    </div>
-
-                    <div class="admin-input-group">
-                        <label class="admin-label">Password (required for brand new admin)</label>
-                        <input type="password" id="onboard-password" class="admin-input" placeholder="At least 8 characters">
-                    </div>
-                </div>
-
-                <div style="font-size: 11px; color: var(--admin-text-muted); margin-bottom: 12px; line-height: 1.4;">
-                    If the account already exists (e.g. <strong>test</strong>), entering the secret key will promote it to Admin immediately.
-                    <a href="javascript:void(0)" onclick="toggleNewUserFields()" id="toggle-fields-link" style="color: #ff85d0; margin-left: 4px;">Creating a brand new user?</a>
-                </div>
-
-                <button type="submit" id="btn-admin-onboard" class="btn-admin-submit" style="background-color: #6c1250;">Authorize Admin Account</button>
             </form>
 
             <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--admin-border); text-align: center; font-size: 12px; color: var(--admin-text-muted);">
