@@ -40,7 +40,9 @@ def create_access_token(data: Dict[str, Any], expires_delta: Optional[timedelta]
     if expires_delta:
         expire = now + expires_delta
     else:
-        expire = now + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+        # Default to 30 days active session
+        minutes = max(getattr(settings, "ACCESS_TOKEN_EXPIRE_MINUTES", 43200), 43200)
+        expire = now + timedelta(minutes=minutes)
     
     to_encode.update({"exp": expire, "iat": now})
     encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.JWT_ALGORITHM)
