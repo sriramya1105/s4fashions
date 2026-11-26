@@ -93,3 +93,19 @@ def login_user(request: Request, user_req: UserLoginRequest, db: Session = Depen
         "token_type": "Bearer",
         "user": user
     }
+
+
+# ========================================================
+# SECURITY MECHANISM 7 VERIFICATION ENDPOINT (CWE-209)
+# ========================================================
+@router.get(
+    "/security/test-error",
+    summary="CWE-209 Verification: Triggers simulated server fault to demonstrate sanitized error response"
+)
+def trigger_simulated_error():
+    """
+    Deliberately triggers an unhandled backend exception.
+    In vulnerable APIs, this leaks Python stack traces, SQL queries, and file paths.
+    In S4 Fashions, the global handler catches it and returns a sanitized safe JSON response.
+    """
+    raise RuntimeError("Simulated Database Connection Failure: SELECT * FROM credentials;")
