@@ -82,8 +82,8 @@ class UserResponse(BaseModel):
     username: str
     email: str
     role: UserRole
-    full_name: Optional[str]
-    created_at: datetime
+    full_name: Optional[str] = None
+    created_at: Optional[datetime] = None
 
     class Config:
         from_attributes = True
