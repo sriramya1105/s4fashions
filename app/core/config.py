@@ -12,7 +12,7 @@ class Settings(BaseSettings):
     # JWT Settings (Pinned algorithm CWE-347, loaded from env CWE-798)
     SECRET_KEY: str = "default-unsafe-dev-secret-key-must-be-replaced-in-prod"
     JWT_ALGORITHM: str = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 43200  # 30 days active session
     ADMIN_INVITE_SECRET: str = "s4-admin-secret-2026"
 
     # Database
